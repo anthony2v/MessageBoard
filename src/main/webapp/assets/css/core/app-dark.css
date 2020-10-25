@@ -1,0 +1,75 @@
+/********************
+ * App Dark Theme   *
+ ********************/
+/* Styles specific to this app's dark theme go here... */
+
+@media not print {
+	.app-dark {
+		background-color: #212121;
+		color: #fafafa;
+	}
+
+
+	.app-dark *::selection { background-color: #fff; color: #333; }
+
+
+	.app-dark *::-webkit-scrollbar-thumb {
+		background-color: #000;
+	}
+
+
+	.app-dark a:hover { color: #29B6F6; }
+	.app-dark a, .app-dark a:focus { color: #e0e0e0; }
+
+
+	.app-dark .list-group-item {
+		background-color: #1f1f1f;
+		border-color: #424242;
+	}
+
+
+	.app-dark .form-control {
+		background-color: #111111;
+		border-color: #424242;
+		color: #fafafa;
+	}
+	.app-dark .form-control:focus {
+		background-color: #111111;
+		color: #fafafa;
+	}
+
+
+	.app-dark pre {
+		background-color: #111111;
+		color: #fafafa;
+	}
+
+
+	.app-dark table { color: #fafafa; }
+
+
+	.app-dark header .theme-switch { border-color: #fff; }
+	@media (max-width: 991px) {
+		.app-dark header .sidenav{ background-color: #212121; }
+	}
+	.app-dark header .theme-switch input:before {
+		content: '\f186';
+		transform: translate(3.4em, 0);
+		color: #fff;
+	}
+	header .theme-switch input:checked:after {
+		border: 2px solid #fff;
+		background-color: #000;
+	}
+	.app-dark header .navbar { background-color: #212121; }
+	.app-dark header .navbar .navbar-nav .nav-item::after { background-color: #fff; }
+	.app-dark header .navbar-toggler { color: #fafafa; }
+
+
+	.app-dark #chat-form { background-color: #212121; }
+
+
+	.app-dark .dropdown-menu { background-color: #000; }
+	.app-dark .dropdown-item { color: #fafafa; }
+	.app-dark .dropdown-item:focus, .app-dark .dropdown-item:hover { background-color: #424242; }
+}

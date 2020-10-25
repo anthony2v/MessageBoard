@@ -1,0 +1,45 @@
+/* --- GENERAL / HELPERS --- */
+.cursor-pointer {
+	cursor: pointer;
+}
+.rotate-180 {
+	transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+}
+/* --- END - GENERAL / HELPERS --- */
+
+/* --- TYPOGRAPHY --- */
+.text-uppercase { text-transform: uppercase; }
+.text-lowercase { text-transform: lowercase; }
+.text-capitalize { text-transform: capitalize; }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+/* --- END - TYPOGRAPHY --- */
+
+/* --- DISPLAY --- */
+.display-none { display: none !important; }
+/* --- END - DISPLAY --- */
+
+/* --- SELECTION --- */
+*::selection { background-color: #0288D1; color: #fff; }
+/* --- END - SELECTION --- */
+
+/* --- MEDIA --- */
+@media all {
+	.media-print-page-break	{ display: none; }
+	.media-print-only { display: none !important; }
+}
+
+@media print {
+	.media-print-page-break	{ display: block; page-break-after: always; }
+	.media-print-only { display: block !important; }
+	.media-print-hidden { display: none !important; }
+
+	a[href]:after { content: none; }
+	a[href].media-print-show-url:after { content: " (" attr(href) ")"; }
+	a[href].media-print-hide-url:after { content: ""; }
+}

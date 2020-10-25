@@ -1,0 +1,83 @@
+/********************
+ * App Theme        *
+ ********************/
+/* Styles specific to this app's theme go here... */
+
+/*** general ***/
+html, body {
+    /* place 'Roboto' before 'Segoe UI' in the font stack */
+    font-family: -apple-system,BlinkMacSystemFont,"Roboto","Segoe UI","Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 100%;
+    background-color: #fafafa;
+    color: #212121;
+}
+@media print {
+	/* optimize page for printing */
+    body { color: #212121; background-color: #ffffff; }
+    body.dark_mode { color: #212121; background-color: #ffffff; }
+}
+
+*::selection { background-color: #333; color: #fff; }
+
+main > section { padding: 25px 0; }
+
+hr { border-top: 1px solid #cfcfcf; }
+hr.hr-thin { margin: 5px 0; }
+
+pre {
+    padding: 15px;
+	background-color: #fff;
+}
+
+/*** general - end ***/
+
+/*** paragraph ***/
+p:last-child { margin-bottom: 0; }
+/*** paragraph - end ***/
+
+/*** anchor ***/
+a {
+    color: #444;
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-webkit-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	font-weight: bold;
+}
+a:hover { color: #29B6F6; }
+a:focus { color: #444; }
+/*** anchor - end ***/
+
+/*** dropdown ***/
+.dropdown-item { color: #fafafa; }
+.dropdown-item.btn:not(.btn-warning):not(.btn-light):not(.btn-link):focus, 
+.dropdown-item.btn:not(.btn-warning):not(.btn-light):not(.btn-link):hover { 
+    color: #fafafa; 
+}
+/*** dropdown - end ***/
+
+/*** scrollbars ***/
+::-webkit-scrollbar {
+	width: 10px;
+    height: 10px;
+	background-color: transparent;
+}
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb {
+    border-left: 1px solid #424242;
+    border-right: 1px solid #424242;
+    border-top: 1px solid #424242;
+    border-bottom: 1px solid #424242;
+	background-color: #757575;
+	border-radius: 4px;
+	box-shadow: 0 0 6px rgb(0,0,0);
+}
+/*** scrollbars - end ***/
