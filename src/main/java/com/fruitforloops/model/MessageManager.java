@@ -6,29 +6,27 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.fruitforloops.model.beans.PostMessage;
-
-public class PostMessageManager
+public class MessageManager
 {
-	private TreeMap<Date, PostMessage> messageList;
+	private TreeMap<Date, Message> messageList;
 
-	public PostMessageManager()
+	public MessageManager()
 	{
-		messageList = new TreeMap<Date, PostMessage>();
+		messageList = new TreeMap<Date, Message>();
 	}
 
 	// GetMessage
-	public ArrayList<PostMessage> listMessages(Date fromDate, Date toDate)
+	public ArrayList<Message> listMessages(Date fromDate, Date toDate)
 	{
 		fromDate = fromDate == null ? new Date(0) : fromDate;
 		toDate = toDate == null ? new Date(Long.MAX_VALUE) : toDate;
 		
-		ArrayList<PostMessage> messageRangeToReturn = new ArrayList<PostMessage>();
+		ArrayList<Message> messageRangeToReturn = new ArrayList<Message>();
 		if (fromDate.compareTo(toDate) <= 0)
 		{
-			SortedMap<Date, PostMessage> messageRange = messageList.subMap(fromDate, toDate);
+			SortedMap<Date, Message> messageRange = messageList.subMap(fromDate, toDate);
 			
-			for (PostMessage message : messageRange.values())
+			for (Message message : messageRange.values())
 				messageRangeToReturn.add(message);
 		}
 		
@@ -39,7 +37,7 @@ public class PostMessageManager
 	public void postMessage(String user, String messageText)
 	{
 		Date currentDate = new Date();
-		messageList.put(currentDate, new PostMessage(user, messageText, currentDate));
+		messageList.put(currentDate, new Message(user, messageText, currentDate));
 	}
 
 	// DeleteMessage
@@ -50,10 +48,10 @@ public class PostMessageManager
 		
 		if (fromDate.compareTo(toDate) <= 0)
 		{
-			SortedMap<Date, PostMessage> messageRange = messageList.subMap(fromDate, toDate);
+			SortedMap<Date, Message> messageRange = messageList.subMap(fromDate, toDate);
 			
 			List<Date> keysToRemove = new ArrayList<Date>();
-			for (PostMessage message : messageRange.values())
+			for (Message message : messageRange.values())
 				keysToRemove.add(message.getCreatedDate());
 			
 			for (Date d : keysToRemove)

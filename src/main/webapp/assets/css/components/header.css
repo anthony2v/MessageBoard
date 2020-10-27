@@ -17,15 +17,15 @@ header .navbar .navbar-nav .nav-item::after {
     transition: all .3s ease;
 }
 @media (max-width: 991px) {
-    header .navbar .navbar-nav .nav-item::after {
+    header .navbar .navbar-nav.navbar-nav-left .nav-item::after {
         height: 0; width: 3px;
         left: 0; bottom: 0;
     }
-    header .navbar .navbar-nav .nav-item.active::after {
+    header .navbar .navbar-nav.navbar-nav-left .nav-item.active::after {
         bottom: 37.5%;
         height: 25%;
     }
-    header .navbar .navbar-nav .nav-item:hover::after {
+    header .navbar .navbar-nav.navbar-nav-left .nav-item:hover::after {
         bottom: 0;
         height: 100%;
     }

@@ -1,4 +1,4 @@
-package com.fruitforloops.servlets;
+package com.fruitforloops.controllers;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -9,82 +9,95 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fruitforloops.Constants;
 import com.fruitforloops.ResponseUtil;
+import com.fruitforloops.model.Message;
+import com.fruitforloops.model.dao.MessageDAO;
 
 @WebServlet(Constants.API_PATH + "message")
-public class MessageServlet extends HttpServlet
+public class MessageController extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 
-	public MessageServlet()
+	public MessageController()
 	{
 		super();
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// extract parameters (request data)
 		// ... = request.getParameter(~~url_querystring_parameter_name~~);
-		
+
 		// validation of request data (if any is needed)
 		// ...
-		
+
 		// get messages from MessageManager (business layer)
 		// ...
-		
+
 		// send appropriate response
 		// response.setStatus(HttpServletResponse.~~http_status_code~~);
 		// response.setHeader(~~name~~, ~~value~~); // set header if necessary
-		// ResponseUtil.sendJSON(response, ~~optional message (for example, if there is an error) or null~~, ~~data_to_send_back~~);
+		// ResponseUtil.sendJSON(response, ~~optional message (for example, if there is
+		// an error) or null~~, ~~data_to_send_back~~);
 	}
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// extract request data
-		// PostMessage postMessage = ResponseUtil.gson.fromJson(request.getReader(), PostMessage.class);
-		
+		// Message message = ResponseUtil.gson.fromJson(request.getReader(),
+		// Message.class);
+
 		// validation of request data (if any is needed)
 		// ...
-		
-		// create PostMessage using MessageManager (business layer)
+
+		// create Message using MessageManager (business layer)
 		// ...
-		
+
 		// send appropriate response
 		// response.setStatus(HttpServletResponse.~~http_status_code~~);
 		// response.setHeader(~~name~~, ~~value~~); // set header if necessary
-		// ResponseUtil.sendJSON(response, ~~optional message (for example, if there is an error) or null~~, ~~optional_data or null~~);
+		// ResponseUtil.sendJSON(response, ~~optional message (for example, if there is
+		// an error) or null~~, ~~optional_data or null~~);
 	}
-	
+
+	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// extract request data
-		// PostMessage postMessage = ResponseUtil.gson.fromJson(request.getReader(), PostMessage.class);
-		
+		// Message message = ResponseUtil.gson.fromJson(request.getReader(),
+		// Message.class);
+
 		// validation of request data (if any is needed)
 		// ...
-		
-		// update PostMessage using MessageManager (business layer)
+
+		// update Message using MessageManager (business layer)
 		// ...
-		
+
 		// send appropriate response
 		// response.setStatus(HttpServletResponse.~~http_status_code~~);
 		// response.setHeader(~~name~~, ~~value~~); // set header if necessary
-		// ResponseUtil.sendJSON(response, ~~optional message (for example, if there is an error) or null~~, ~~optional_data or null~~);
+		// ResponseUtil.sendJSON(response, ~~optional message (for example, if there is
+		// an error) or null~~, ~~optional_data or null~~);
 	}
-	
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+
+	@Override
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException
 	{
 		// extract parameters (request data)
 		// ... = request.getParameter(~~url_querystring_parameter_name~~);
-		
+
 		// validation of request data (if any is needed)
 		// ...
-		
+
 		// delete messages from MessageManager (business layer)
 		// ...
-		
+
 		// send appropriate response
 		// response.setStatus(HttpServletResponse.~~http_status_code~~);
 		// response.setHeader(~~name~~, ~~value~~); // set header if necessary
-		// ResponseUtil.sendJSON(response, ~~optional message (for example, if there is an error) or null~~, ~~data_to_send_back~~);
+		// ResponseUtil.sendJSON(response, ~~optional message (for example, if there is
+		// an error) or null~~, ~~data_to_send_back~~);
 	}
 }

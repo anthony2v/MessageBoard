@@ -129,9 +129,12 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,java,gradle,java-web,maven
 
-### Assignment1 ###
+### Assignment ###
 
 # ignore any files inside any folder named 'gitignore'
 gitignore/
 
-# End of Assignment1
+# ignore the config file so that we each have to add our own db connection configuration
+src/main/webapp/WEB-INF/hibernate.cfg.properties
+
+# End of Assignment

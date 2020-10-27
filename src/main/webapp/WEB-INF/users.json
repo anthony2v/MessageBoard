@@ -1,0 +1,24 @@
+{
+	"users": [
+		{
+			"id": "1",
+			"username": "Daniel",
+			"password": "CBFDAC6008F9CAB4083784CBD1874F76618D2A97"
+		},
+		{
+			"id": "2",
+			"username": "Anthony",
+			"password": "CBFDAC6008F9CAB4083784CBD1874F76618D2A97"
+		},
+		{
+			"id": "3",
+			"username": "Khadija",
+			"password": "CBFDAC6008F9CAB4083784CBD1874F76618D2A97"
+		},
+		{
+			"id": "4",
+			"username": "Tiffany",
+			"password": "CBFDAC6008F9CAB4083784CBD1874F76618D2A97"
+		}
+	]
+}
