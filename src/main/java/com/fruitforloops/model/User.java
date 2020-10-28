@@ -5,20 +5,20 @@ public class User
 	private String username;
 	private String password;
 	
-	public getUsername()
+	public String getUsername()
 	{
 		return username;
 	}
-	public setUsername()
+	public void setUsername()
 	{
 		this.username = username;
 	}
 	
-	public getPassword()
+	public String getPassword()
 	{
 		return password;
 	}
-	public setPassword()
+	public void setPassword()
 	{
 		this.password = password;
 	}
