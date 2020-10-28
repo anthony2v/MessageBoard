@@ -26,11 +26,13 @@ See `documentation/SOEN387_Assignment2.pdf` for more details.
 <br/>
 
 ## Getting Started
-### Create local database configuration file
-Make a copy of the file located at `src/main/webapp/WEB-INF/hibernate.cfg.example.properties` and name the copy `hibernate.cfg.properties`. This file will contain the local db credentials.
-
 ### Create local MySql database
-All of the DDL required to create the database structure and fill it with any initial data is located at `documentation/db_structure_and_initial_data.sql`. Simply run this sql script and you should have the correct database setup.
+All of the DDL required to create the database structure and fill it with any initial data is located at `database/db_structure_and_initial_data.sql`. 
+Simply run this sql script and you should have the correct database setup.
+
+### Create local database configuration file
+Make a copy of the file located at `src/main/webapp/WEB-INF/hibernate.cfg.example.properties` and name the copy `hibernate.cfg.properties`. 
+This file will contain the local db credentials and you have to fill it in.
 
 <br/>
 
