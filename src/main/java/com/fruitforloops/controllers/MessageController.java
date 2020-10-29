@@ -10,16 +10,21 @@ import javax.servlet.http.HttpServletResponse;
 import com.fruitforloops.Constants;
 import com.fruitforloops.ResponseUtil;
 import com.fruitforloops.model.Message;
+import com.fruitforloops.model.MessageService;
 import com.fruitforloops.model.dao.MessageDAO;
 
 @WebServlet(Constants.API_PATH + "message")
 public class MessageController extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-
+	
+	private MessageService messageService;
+	
 	public MessageController()
 	{
 		super();
+		
+		messageService = new MessageService();
 	}
 
 	@Override

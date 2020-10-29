@@ -7,9 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletResponse;
 
 import com.fruitforloops.Constants;
-import com.fruitforloops.model.LoginRequest;
+import com.fruitforloops.model.User;
 
 @WebFilter(filterName="AuthFilter", urlPatterns = {Constants.API_PATH + "auth", Constants.API_PATH + "auth/*"})
 public class AuthFilter implements Filter
@@ -17,15 +18,21 @@ public class AuthFilter implements Filter
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
-		// authenticate user
-		LoginRequest loginRequest = processLoginRequest(request, response);
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		
-		chain.doFilter(request, response);
-	}
-	
-	private LoginRequest processLoginRequest(ServletRequest request, ServletResponse response)
-	{
-		// TODO
-		return null;
+		// extract user from request data
+		User user = null; // TODO
+		
+		if (user.authenticate())
+		{
+			// user is authenticated, continue the chain
+			chain.doFilter(request, response);
+		}
+		else
+		{
+			// authentication failed
+			httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			request.getRequestDispatcher(Constants.WEBAPP_JSP_VIEW_PATH + "401.jsp").forward(request, httpResponse);
+		}
 	}
 }

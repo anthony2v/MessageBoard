@@ -1,7 +1,11 @@
 package com.fruitforloops.model;
 
-public class User
+import java.io.Serializable;
+
+public class User implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private String username;
 	private String password;
 	
@@ -9,7 +13,7 @@ public class User
 	{
 		return username;
 	}
-	public void setUsername()
+	public void setUsername(String username)
 	{
 		this.username = username;
 	}
@@ -18,8 +22,20 @@ public class User
 	{
 		return password;
 	}
-	public void setPassword()
+	public void setPassword(String password)
 	{
 		this.password = password;
+	}
+	
+	public boolean authenticate()
+	{
+		// TODO 
+		return true;
+	}
+	
+	@Override
+	public String toString() 
+	{
+		return "LoginRequest: {username:\"" + username + "\"}";
 	}
 }
