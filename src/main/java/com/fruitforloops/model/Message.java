@@ -2,12 +2,14 @@ package com.fruitforloops.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,14 +21,21 @@ public class Message implements Serializable
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
 	@Column
 	private String author;
+	
 	@Column(name = "message_text")
 	private String messageText;
+	
 	@Column(name = "created_date")
 	private Date createdDate;
+	
 	@Column(name = "last_modified_date")
 	private Date lastModifiedDate;
+	
+	@OneToMany
+	private Set<MessageAttachment> attachments;
 	
 	public Message(){ this(null, null); }
 	public Message(String author, String messageText) { this(-1, author, messageText); }
@@ -87,10 +96,19 @@ public class Message implements Serializable
 		this.lastModifiedDate = lastModifiedDate;
 	}
 	
+	public Set<MessageAttachment> getAttachments()
+	{
+		return attachments;
+	}
+	public void setAttachments(Set<MessageAttachment> attachments)
+	{
+		this.attachments = attachments;
+	}
+	
 	@Override
 	public String toString()
 	{
 		return "PostMessage [id=" + id + ", author=" + author + ", messageText=" + messageText + ", createdDate=" 
-				+ createdDate + ", lastModifiedDate=" + lastModifiedDate + "]";
+				+ createdDate + ", lastModifiedDate=" + lastModifiedDate + ", attachments=" + attachments == null ? "0" : attachments.size() + "]";
 	}
 }

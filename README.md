@@ -46,7 +46,7 @@ This file will contain the local db credentials and you have to fill it in.
 | Front-End                   | 25        |
 | Source Control              | 5         |
 | Documentation               | 10        |
-| DAL and BLOBs               | 10        |
+| DAL [and BLOBs (bonus)]     | 10        |
 | Total                       | 100 (+10) |
 
 <br/>

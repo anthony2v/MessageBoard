@@ -32,7 +32,7 @@ CREATE TABLE `message` (
   `author` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,9 +41,58 @@ CREATE TABLE `message` (
 
 LOCK TABLES `message` WRITE;
 /*!40000 ALTER TABLE `message` DISABLE KEYS */;
-INSERT INTO `message` VALUES (3,'wwww','2020-10-26 20:17:37','2020-10-26 20:17:37','Daniel'),(4,'wwww','2020-10-26 20:22:42','2020-10-26 20:22:42','Daniel'),(5,'wwww','2020-10-26 20:23:59','2020-10-26 20:23:59','Daniel');
 /*!40000 ALTER TABLE `message` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `message_board`.`message_AFTER_DELETE` AFTER DELETE ON `message` FOR EACH ROW
+BEGIN
+	DELETE FROM message_board.message_attachment
+    WHERE message_board.message_attachment.message_id = old.id;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `message_attachment`
+--
+
+DROP TABLE IF EXISTS `message_attachment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `message_attachment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `message_id` int(11) NOT NULL,
+  `filename` varchar(300) DEFAULT NULL,
+  `data` blob,
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `fk_message_id_idx` (`message_id`),
+  CONSTRAINT `fk_message_id` FOREIGN KEY (`message_id`) REFERENCES `message` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `message_attachment`
+--
+
+LOCK TABLES `message_attachment` WRITE;
+/*!40000 ALTER TABLE `message_attachment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `message_attachment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping events for database 'message_board'
+--
 
 --
 -- Dumping routines for database 'message_board'
@@ -58,4 +107,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-26 20:27:18
+-- Dump completed on 2020-10-29 14:22:43

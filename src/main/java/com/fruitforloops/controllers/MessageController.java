@@ -13,7 +13,7 @@ import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageService;
 import com.fruitforloops.model.dao.MessageDAO;
 
-@WebServlet(Constants.API_PATH + "message")
+@WebServlet(Constants.API_PATH + "/auth/message")
 public class MessageController extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
