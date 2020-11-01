@@ -9,6 +9,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.cfg.Configuration;
 
 import com.fruitforloops.model.Message;
+import com.fruitforloops.model.MessageAttachment;
 
 public final class HibernateUtil
 {
@@ -33,6 +34,7 @@ public final class HibernateUtil
 				configuration.setProperties(hibernateConfig);
 				
 				configuration.addAnnotatedClass(Message.class);
+				configuration.addAnnotatedClass(MessageAttachment.class);
 				
 				registry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
 				sessionFactory = configuration.buildSessionFactory(registry);

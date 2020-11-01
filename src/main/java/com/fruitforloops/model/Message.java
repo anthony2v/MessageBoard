@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +36,7 @@ public class Message implements Serializable
 	@Column(name = "last_modified_date")
 	private Date lastModifiedDate;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "message", fetch = FetchType.EAGER)
 	private Set<MessageAttachment> attachments;
 	
 	public Message(){ this(null, null); }
@@ -109,6 +111,6 @@ public class Message implements Serializable
 	public String toString()
 	{
 		return "PostMessage [id=" + id + ", author=" + author + ", messageText=" + messageText + ", createdDate=" 
-				+ createdDate + ", lastModifiedDate=" + lastModifiedDate + ", attachments=" + attachments == null ? "0" : attachments.size() + "]";
+				+ createdDate + ", lastModifiedDate=" + lastModifiedDate + ", attachments=" + (attachments == null ? "0" : attachments.size()) + "]";
 	}
 }

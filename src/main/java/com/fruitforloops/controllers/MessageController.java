@@ -1,6 +1,8 @@
 package com.fruitforloops.controllers;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +15,7 @@ import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageService;
 import com.fruitforloops.model.dao.MessageDAO;
 
-@WebServlet(Constants.API_PATH + "/auth/message")
+@WebServlet(Constants.API_PATH + "auth/message")
 public class MessageController extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
@@ -30,6 +32,12 @@ public class MessageController extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		MessageDAO messageDAO = new MessageDAO();
+		List<Message> list = messageDAO.getAll();
+		
+		for (Message m : list)
+			System.out.println(m);
+		
 		// extract parameters (request data)
 		// ... = request.getParameter(~~url_querystring_parameter_name~~);
 
