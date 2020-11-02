@@ -1,15 +1,15 @@
-CREATE DATABASE  IF NOT EXISTS `message_board` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE  IF NOT EXISTS `message_board` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `message_board`;
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: message_board
+-- Host: localhost    Database: message_board
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	8.0.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -33,10 +33,9 @@ UNLOCK TABLES;
 /*!50003 SET character_set_results = utf8 */ ;
 /*!50003 SET collation_connection  = utf8_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `message_board`.`message_AFTER_DELETE` AFTER DELETE ON `message` FOR EACH ROW
-BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `message_AFTER_DELETE` AFTER DELETE ON `message` FOR EACH ROW BEGIN
 	DELETE FROM message_board.message_attachment
     WHERE message_board.message_attachment.message_id = old.id;
 END */;;
@@ -73,4 +72,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-01 19:01:12
+-- Dump completed on 2020-11-01 22:31:16

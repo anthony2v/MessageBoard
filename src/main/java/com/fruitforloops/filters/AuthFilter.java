@@ -20,21 +20,19 @@ public class AuthFilter implements Filter
 	{
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		
-		chain.doFilter(request, response);
+		// extract user from request data
+		User user = new User(); // TODO
 		
-//		// extract user from request data
-//		User user = null; // TODO
-//		
-//		if (user.authenticate())
-//		{
-//			// user is authenticated, continue the chain
-//			chain.doFilter(request, response);
-//		}
-//		else
-//		{
-//			// authentication failed
-//			httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//			request.getRequestDispatcher(Constants.WEBAPP_JSP_VIEW_PATH + "401.jsp").forward(request, httpResponse);
-//		}
+		if (user.authenticate())
+		{
+			// user is authenticated, continue the chain
+			chain.doFilter(request, response);
+		}
+		else
+		{
+			// authentication failed
+			httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			request.getRequestDispatcher(Constants.WEBAPP_JSP_VIEW_PATH + "401.jsp").forward(request, httpResponse);
+		}
 	}
 }
