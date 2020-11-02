@@ -10,9 +10,10 @@ import org.hibernate.Transaction;
 import com.fruitforloops.HibernateUtil;
 import com.fruitforloops.model.Message;
 
-public class MessageDAO
+public class MessageDAO implements IDAO<Message>
 {
-	public void save(Message postMessage)
+	@Override
+	public boolean save(Message postMessage)
 	{
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession())
@@ -29,9 +30,14 @@ public class MessageDAO
 			
 			if (transaction != null)
 				transaction.rollback();
+			
+			return false;
 		}
+		
+		return true;
 	}
 	
+	@Override
 	public List<Message> getAll()
 	{
 		List<Message> messageList = new ArrayList<Message>();
@@ -45,5 +51,24 @@ public class MessageDAO
 		}
 		
 		return messageList;
+	}
+
+	@Override
+	public Message get(long id)
+	{
+		//
+		return null;
+	}
+
+	@Override
+	public void update(Message object)
+	{
+		// TODO
+	}
+
+	@Override
+	public void delete(Message object)
+	{
+		//
 	}
 }

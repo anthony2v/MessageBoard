@@ -5,8 +5,9 @@ import java.util.List;
 
 import com.fruitforloops.model.User;
 
-public class UserDAO
+public class UserDAO implements IDAO<User>
 {
+	@Override
 	public List<User> getAll()
 	{
 		List<User> messageList = new ArrayList<User>();
@@ -20,5 +21,31 @@ public class UserDAO
 		}
 		
 		return messageList;
+	}
+
+	@Override
+	public User get(long id)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean save(User object)
+	{
+		//
+		return false;
+	}
+
+	@Override
+	public void update(User object)
+	{
+		//
+	}
+
+	@Override
+	public void delete(User object)
+	{
+		//
 	}
 }
