@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `message_board` /*!40100 DEFAULT CHARACTER SET ut
 USE `message_board`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
--- Host: localhost    Database: message_board
+-- Host: 127.0.0.1    Database: message_board
 -- ------------------------------------------------------
 -- Server version	8.0.22
 
@@ -16,6 +16,22 @@ USE `message_board`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `hashtag`
+--
+
+DROP TABLE IF EXISTS `hashtag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `hashtag` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `tag` varchar(80) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `tag_UNIQUE` (`tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `message`
@@ -72,6 +88,23 @@ CREATE TABLE `message_attachment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `message_hashtag`
+--
+
+DROP TABLE IF EXISTS `message_hashtag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `message_hashtag` (
+  `message_id` int NOT NULL,
+  `hashtag_id` int NOT NULL,
+  KEY `fk_message_idx` (`message_id`),
+  KEY `fk_hashtag_idx` (`hashtag_id`),
+  CONSTRAINT `fk_hashtag` FOREIGN KEY (`hashtag_id`) REFERENCES `hashtag` (`id`),
+  CONSTRAINT `fk_message` FOREIGN KEY (`message_id`) REFERENCES `message` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping events for database 'message_board'
 --
 
@@ -88,4 +121,4 @@ CREATE TABLE `message_attachment` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-01 22:30:31
+-- Dump completed on 2020-11-02 11:36:34

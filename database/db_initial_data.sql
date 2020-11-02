@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `message_board` /*!40100 DEFAULT CHARACTER SET ut
 USE `message_board`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
--- Host: localhost    Database: message_board
+-- Host: 127.0.0.1    Database: message_board
 -- ------------------------------------------------------
 -- Server version	8.0.22
 
@@ -16,6 +16,15 @@ USE `message_board`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Dumping data for table `hashtag`
+--
+
+LOCK TABLES `hashtag` WRITE;
+/*!40000 ALTER TABLE `hashtag` DISABLE KEYS */;
+/*!40000 ALTER TABLE `hashtag` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Dumping data for table `message`
@@ -56,6 +65,15 @@ INSERT INTO `message_attachment` VALUES (1,1,'test.txt',NULL),(2,2,'test2.txt',N
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `message_hashtag`
+--
+
+LOCK TABLES `message_hashtag` WRITE;
+/*!40000 ALTER TABLE `message_hashtag` DISABLE KEYS */;
+/*!40000 ALTER TABLE `message_hashtag` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping events for database 'message_board'
 --
 
@@ -72,4 +90,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-01 22:31:16
+-- Dump completed on 2020-11-02 11:36:57
