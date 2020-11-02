@@ -8,6 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.cfg.Configuration;
 
+import com.fruitforloops.model.HashTag;
 import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageAttachment;
 
@@ -33,8 +34,10 @@ public final class HibernateUtil
 				hibernateConfig.load(HibernateUtil.class.getClassLoader().getResourceAsStream("/WEB-INF/hibernate.cfg.properties"));
 				configuration.setProperties(hibernateConfig);
 				
+				// mappings for annotated classes
 				configuration.addAnnotatedClass(Message.class);
 				configuration.addAnnotatedClass(MessageAttachment.class);
+				configuration.addAnnotatedClass(HashTag.class);
 				
 				registry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
 				sessionFactory = configuration.buildSessionFactory(registry);

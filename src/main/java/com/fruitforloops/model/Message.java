@@ -4,13 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -38,6 +40,10 @@ public class Message implements Serializable
 	
 	@OneToMany(mappedBy = "message", fetch = FetchType.EAGER)
 	private Set<MessageAttachment> attachments;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "message_hashtag", joinColumns = @JoinColumn(name = "message_id"), inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
+	private Set<HashTag> hashtags;
 	
 	public Message(){ this(null, null); }
 	public Message(String author, String messageText) { this(-1, author, messageText); }
@@ -107,10 +113,19 @@ public class Message implements Serializable
 		this.attachments = attachments;
 	}
 	
+	public Set<HashTag> getHashtags()
+	{
+		return hashtags;
+	}
+	public void setHashtags(Set<HashTag> hashtags)
+	{
+		this.hashtags = hashtags;
+	}
+	
 	@Override
 	public String toString()
 	{
 		return "PostMessage [id=" + id + ", author=" + author + ", messageText=" + messageText + ", createdDate=" 
-				+ createdDate + ", lastModifiedDate=" + lastModifiedDate + ", attachments=" + (attachments == null ? "0" : attachments.size()) + "]";
+				+ createdDate + ", lastModifiedDate=" + lastModifiedDate + "]";
 	}
 }

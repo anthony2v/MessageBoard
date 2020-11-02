@@ -23,6 +23,7 @@ USE `message_board`;
 
 LOCK TABLES `hashtag` WRITE;
 /*!40000 ALTER TABLE `hashtag` DISABLE KEYS */;
+INSERT INTO `hashtag` VALUES (1,'test');
 /*!40000 ALTER TABLE `hashtag` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -70,6 +71,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `message_hashtag` WRITE;
 /*!40000 ALTER TABLE `message_hashtag` DISABLE KEYS */;
+INSERT INTO `message_hashtag` VALUES (1,1);
 /*!40000 ALTER TABLE `message_hashtag` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,4 +92,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-02 11:36:57
+-- Dump completed on 2020-11-02 15:05:57

@@ -26,11 +26,11 @@ DROP TABLE IF EXISTS `hashtag`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hashtag` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `tag` varchar(80) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `tag_UNIQUE` (`tag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `tag` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`,`tag`),
+  UNIQUE KEY `tag_UNIQUE` (`tag`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,6 +97,7 @@ DROP TABLE IF EXISTS `message_hashtag`;
 CREATE TABLE `message_hashtag` (
   `message_id` int NOT NULL,
   `hashtag_id` int NOT NULL,
+  PRIMARY KEY (`hashtag_id`,`message_id`),
   KEY `fk_message_idx` (`message_id`),
   KEY `fk_hashtag_idx` (`hashtag_id`),
   CONSTRAINT `fk_hashtag` FOREIGN KEY (`hashtag_id`) REFERENCES `hashtag` (`id`),
@@ -121,4 +122,4 @@ CREATE TABLE `message_hashtag` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-02 11:36:34
+-- Dump completed on 2020-11-02 15:05:37
