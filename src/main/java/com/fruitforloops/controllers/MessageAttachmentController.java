@@ -11,7 +11,7 @@ import com.fruitforloops.Constants;
 import com.fruitforloops.model.MessageService;
 
 
-@WebServlet(Constants.API_PATH + "/auth/message/attachment")
+@WebServlet(Constants.API_PATH + "auth/message/attachment")
 public class MessageAttachmentController extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
