@@ -1,4 +1,10 @@
 
+const MessageBoard = {
+    onReady: () => {
+        
+    }
+};
+
 // const MessageBoard = {
 //     onReady: () => {
 //         let chatMsgBox = document.querySelector("#chat-form [name='message']");
@@ -122,6 +128,6 @@
 //     }
 // };
 
-// document.addEventListener("DOMContentLoaded", function(event) { 
-//     MessageBoard.onReady();
-// });
+document.addEventListener("DOMContentLoaded", function(event) { 
+    MessageBoard.onReady();
+});

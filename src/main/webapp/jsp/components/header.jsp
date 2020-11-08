@@ -8,9 +8,6 @@
         <div class="sidenav">
             <ul class="navbar-nav navbar-nav-left mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link text-decoration-none" href="/">Home</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link text-decoration-none" href="/message_board">Message Board</a>
                 </li>
             </ul>
@@ -18,9 +15,9 @@
         <div class="sidenav-overlay"></div>
 
         <ul class="navbar-nav navbar-nav-right ml-auto">
-            <!--<li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link text-decoration-none" href="/"><i class="fas fa-user-plus mr-2"></i>Sign up</a>
-            </li>-->
+            </li>
             <li class="nav-item">
                 <a class="nav-link text-decoration-none" href="/"><i class="fas fa-sign-in-alt mr-2"></i>Log in</a>
             </li>
