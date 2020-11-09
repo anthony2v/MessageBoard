@@ -15,15 +15,21 @@
         <div class="sidenav-overlay"></div>
 
         <ul class="navbar-nav navbar-nav-right ml-auto">
+<%          if (session == null || session.getAttribute("user") == null)
+            { %>
             <li class="nav-item">
-                <a class="nav-link text-decoration-none" href="/"><i class="fas fa-user-plus mr-2"></i>Sign up</a>
+                <a class="nav-link text-decoration-none" href="/register"><i class="fas fa-user-plus mr-2"></i>Sign up</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-decoration-none" href="/"><i class="fas fa-sign-in-alt mr-2"></i>Log in</a>
+            <li id="btn-login" class="nav-item">
+                <a class="nav-link text-decoration-none" href="/login"><i class="fas fa-sign-in-alt mr-2"></i>Log in</a>
             </li>
-            <!--<li class="nav-item">
-                <a class="nav-link text-decoration-none" href="/"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
-            </li>-->
+<%          } 
+            else 
+            { %>
+            <li id="btn-logout" class="nav-item">
+                <a class="nav-link text-decoration-none" href="/logout"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+            </li>
+<%          } %>
             <li>
                 <button class="nav-link ml-3 theme-switch btn btn-link text-decoration-none">
                     <input type="checkbox" id="cbox-theme" />

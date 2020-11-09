@@ -17,23 +17,23 @@
                             <img src="/assets/media/favicon.png" class="brand_img">
                         </div>
                     </div>
-                    <div id="div-error" class="mt-4">fsdfsdfsdf</div>
+                    <div id="div-error" class="mt-4 display-none"></div>
                     <div class="d-flex justify-content-center mt-4 small">
-                        <form>
+                        <form class="login-form">
                             <div class="input-group mb-3">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                                 </div>
-                                <input type="text" name="" class="form-control input_user" value="" placeholder="username">
+                                <input type="text" name="username" class="form-control input_user" value="" placeholder="username">
                             </div>
                             <div class="input-group mb-2">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fas fa-key"></i></span>
                                 </div>
-                                <input type="password" name="" class="form-control input_pass" value="" placeholder="password">
+                                <input type="password" name="password" class="form-control input_pass" value="" placeholder="password">
                             </div>
                             <div class="mt-4 pl-4 pr-4">
-                                <button type="button" name="button" class="btn btn-success login_btn">Login</button>
+                                <button id="btn-login" type="button" class="btn btn-success login_btn">Login</button>
                             </div>
                         </form>
                     </div>

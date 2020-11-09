@@ -1,7 +1,51 @@
 
 const MessageBoard = {
+    searchCriteria: {},
+
     onReady: () => {
-        
+        let msgBox = document.querySelector("#msgboard-form [name='message']");
+        msgBox.addEventListener("keydown", MessageBoard.msgBoxKeyPressHandler);
+        msgBox.addEventListener("keydown", () => { MessageBoard.resizeTextArea(msgBox) });
+        msgBox.addEventListener("keyup", () => { MessageBoard.resizeTextArea(msgBox) });
+        MessageBoard.resizeTextArea(msgBox);
+
+        flatpickr("#msgboard-search-form [name='fromDate']", {enableTime: true, dateFormat: "Y-m-d H:i:S"});
+        flatpickr("#msgboard-search-form [name='toDate']", {enableTime: true, dateFormat: "Y-m-d H:i:S"});
+
+        //MessageBoard.getMessages(null, null, null, null);
+    },
+
+    msgBoxKeyPressHandler: (event) => {
+        if (event.keyCode == 13 && !event.shiftKey) {
+            MessageBoard.postMessage(event.target.value);
+            event.target.value = "";
+            event.preventDefault();
+        }
+    },
+
+    resizeTextArea: (el) =>
+    {
+        let borderTop = parseInt(window.getComputedStyle(el).getPropertyValue('border-top'), 10);
+        let borderBottom = parseInt(window.getComputedStyle(el).getPropertyValue('border-bottom'), 10);
+        let prevScrollTop = document.documentElement.scrollTop;
+        el.style.height = 'auto';
+        el.style.height = (el.scrollHeight + borderTop + borderBottom) + 'px';
+        document.documentElement.scrollTop = prevScrollTop;
+    },
+
+    postMessage: (msgText) => {
+        username = String(username).trim().length == 0 ? "Anon" : username;
+
+        axios.post('/api/auth/message', {
+            message: msgText
+        })
+        .then((response) => {
+            MessageBoard.getMessages(searchCriteria.authors, searchCriteria.hashtags, searchCriteria.fromDate, searchCriteria.toDate);
+        })
+        .catch((error) => {
+            console.log(error);
+            alert(error);
+        });
     }
 };
 
@@ -62,13 +106,19 @@ const MessageBoard = {
 //             placeholderMsg.remove();
 
 //         let chatListItem = document.createElement('li');
-//         chatListItem.className = "chat-msg chat-left list-group-item border-0";
+//         chatListItem.className = "chat-msg chat-left list-group-item border-0 mb-3";
 //         chatListItem.innerHTML = "" +
 //             "<h6>" + 
 //                 "<strong class='chat-msg-username'>" + username + "</strong>" +
 //                 "<small class='chat-msg-time text-muted ml-2'>" + date + "</small>" +
 //             "</h6>" +
-//             "<p class='chat-msg-text'>" + msgText + "</p>";
+//             "<p class='chat-msg-text'>" + msgText + "</p>" +
+//             "<div>";
+
+//         // loop over attachments
+//         // chatListItem.innerHTML += "<button class="btn btn-sm btn-secondary">attachment 1</button>";
+
+//         chatListItem.innerHTML += "</div>";
         
 //         document.querySelector("#ul-chat").appendChild(chatListItem);
 //     },

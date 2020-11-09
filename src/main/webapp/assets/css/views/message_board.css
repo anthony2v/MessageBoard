@@ -1,33 +1,43 @@
 
 
-#chat-form {
+#msgboard-form {
     position: fixed;
     bottom: 0;
     left: 0;
     background-color: #fff;
 }
-#chat-form [name="name"] {
+.app-dark #msgboard-form { background-color: #212121; }
+#msgboard-form [name="name"] {
 flex: 0.2 1 auto;
 }
 @media (min-width: 992px) {
-    #chat-form [name="name"] { flex: 0.15 1 auto; }
+    #msgboard-form [name="name"] { flex: 0.15 1 auto; }
 }
 @media (max-width: 991px) {
-    #chat-form [name="name"] { flex: 0.25 1 auto; }
+    #msgboard-form [name="name"] { flex: 0.25 1 auto; }
 }
 @media (max-width: 768px) {
-    #chat-form [name="name"] { flex: 0.35 1 auto; }
+    #msgboard-form [name="name"] { flex: 0.35 1 auto; }
 }
-#chat-form [name="message"] {
+#msgboard-form [name="message"] {
     resize: none;
     max-height: 50vh;
 }
 
-#ul-chat {
+#ul-msgboard {
+    padding-top: 10px;
     margin-bottom: 38px;
 }
+#ul-msgboard li {
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,0.5);
+}
 
-.chat-msg p {
+.msgboard-msg p {
     word-break: break-word;
     white-space: pre-wrap;
+}
+
+#msgboard-search-form {
+    padding-bottom: 10px;
+    border-bottom: 1px solid gray;
 }

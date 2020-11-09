@@ -1,14 +1,21 @@
 const Login = {
-    errorMessages = [],
-    errorElement = null,
+    errorMessages: [],
+    errorElement: null,
 
     onReady: () => {
-        errorElement = document.querySelector("div-error");
+        Login.errorElement = document.querySelector("#div-error");
+
+        document.querySelector("form.login-form #btn-login").addEventListener("click", () => {
+            Login.login(document.querySelector("form.login-form [name='username']").value, document.querySelector("form.login-form [name='password']").value); 
+        });
     },
 
     login: (username, pass) => {
-        username = String(username).trim().length == 0 ? "" : username;
-        pass = String(pass).length == 0 ? "" : pass;
+        let loginButton = document.querySelector("form.login-form #btn-login");
+        loginButton.disabled = true;
+
+        username = String(username).trim().length == 0 ? "" : String(username);
+        pass = String(pass).length == 0 ? "" : String(pass);
 
         if (username.length == 0)
         {
@@ -21,7 +28,10 @@ const Login = {
         }
 
         if (Login.errorMessages.length > 0)
+        {
             Login.showErrors();
+            loginButton.disabled = false;
+        }
         else
         {
             axios.post('/api/login', {
@@ -30,22 +40,36 @@ const Login = {
             })
             .then((response) => {
                 window.location.href = "/message_board";
+                loginButton.disabled = false;
             })
             .catch((error) => {
-                console.log(error);
-                alert(error);
+                console.log(error.response);
+                Login.errorMessages.push(error.response.data.message);
+                Login.showErrors();
+                loginButton.disabled = false;
             });
         }
     },
 
     showErrors: () => {
-        if (errorElement == null) return;
+        if (Login.errorElement == null) return;
+
+        if (Login.errorMessages.length == 0)
+        {
+            Login.errorElement.classList.remove("display-none");
+            Login.errorElement.classList.add("display-none");
+        }
+        else
+        {
+            if (Login.errorElement.classList.contains("display-none"))
+                Login.errorElement.classList.remove("display-none");
+        }
 
         let errorHTML = "";
-        for (let i = 0; i < errorMessages.length; ++i)
-            errorHTML += errorHTML + errorMessages[i] + "<br />";
+        for (let i = 0; i < Login.errorMessages.length; ++i)
+            errorHTML += Login.errorMessages[i] + "<br />";
 
-        errorElement.innerHTML = errorHTML;
+        Login.errorElement.innerHTML = errorHTML;
         Login.errorMessages = [];
     }
 };
