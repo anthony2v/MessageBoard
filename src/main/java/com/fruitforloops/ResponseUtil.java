@@ -9,18 +9,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import com.fruitforloops.model.ResponseBean;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public final class ResponseUtil
 {
-	public static Gson gson;
-
-	static
-	{
-		gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-	}
-
 	private ResponseUtil()
 	{
 		// do not instantiate
@@ -41,7 +32,7 @@ public final class ResponseUtil
 		ResponseBean jsonResponse = new ResponseBean(response.getStatus(), message, data);
 
 		PrintWriter out = response.getWriter();
-		out.print(gson.toJson(jsonResponse));
+		out.print(JSONUtil.gson.toJson(jsonResponse));
 		out.flush();
 		out.close();
 	}

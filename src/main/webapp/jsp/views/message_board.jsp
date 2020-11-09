@@ -11,25 +11,39 @@
 	<main>
 		<section>
 			<div class="container-fluid">
-				<ul id="ul-chat" class="list-group list-group-flush">
-					<li class='chat-msg chat-msg-placeholder list-group-item text-center'>There are no messages to display...</li>
-				</ul>
-				<form id="chat-form" class="container-fluid" onsubmit="return false;">
-					<input name="username" type="hidden" />
-					<div class="form-group input-group">
-						<input name="name" type="text" class="form-control input-group-prepend rounded-left shadow-none" placeholder="Anon" />
-						<textarea name="message" class="form-control shadow-none" rows="1" placeholder="Type your message here..."></textarea>
-						<div class="input-group-append">
-							<button type="button" class="btn btn-primary rounded-right shadow-none" data-toggle="dropdown">
-								<i class="fas fa-ellipsis-v"></i>
-							</button>
-							<div class="dropdown-menu">
-								<button type="button" id="btn-download-text" class="btn rounded-0 dropdown-item"><i class="fas fa-file-alt mr-2 text-uppercase"></i>Download Text</button>
-								<button type="button" id="btn-download-xml" class="btn rounded-0 dropdown-item"><i class="fas fa-file-code mr-2 text-uppercase"></i>Download XML</button>
-								<button type="button" id="btn-clear-chat" class="btn btn-danger bg-danger rounded-0 dropdown-item"><i class="fas fa-trash-alt mr-2 text-uppercase"></i>Clear</button>
-							</div>
+				<form id="msgboard-search-form" onsubmit="return false;">
+					<div class="form-row align-items-center">
+						<div class="col-lg-4 my-1">
+							<input class="form-control form-control-sm" type="text" name="author" placeholder="author(s)" />
+						</div>
+						<div class="col-lg-5 my-1">
+							<input class="form-control form-control-sm" type="text" name="hashtags" placeholder="#tag1 #tag2 ..." />
+						</div>
+						<div class="col-lg-1 my-1">
+							<input class="form-control form-control-sm flatpickr flatpickr-input active" type="text" name="fromDate" placeholder="fromDate" readonly="readonly" />
+						</div>
+						<div class="col-lg-1 my-1">
+							<input class="form-control form-control-sm flatpickr flatpickr-input active" type="text" name="toDate" placeholder="toDate" readonly="readonly" />
+						</div>
+						<div class="col-lg-1 my-1">
+							<button class="btn btn-primary btn-block"><i class="fas fa-search mr-2"></i>Search</button>
 						</div>
 					</div>
+				</form>
+				<ul id="ul-msgboard" class="list-group list-group-flush">
+					<li class='msgboard-msg msgboard-msg-placeholder list-group-item text-center border-0 mb-3'>There are no messages to display...</li>
+				</ul>
+				<form id="msgboard-form" class="container-fluid" onsubmit="return false;">
+					<div class="form-group input-group">
+						<textarea name="message" class="form-control shadow-none" rows="1" placeholder="Type your message here..."></textarea>
+						<div class="input-group-append">
+							<label for="upload" class="btn btn-primary rounded-right shadow-none m-0">
+								<i class="fas fa-paperclip"></i>
+								<input type="file" id="upload" multiple class="display-none">
+							</label>
+						</div>
+					</div>
+					<input type="file" class="display-none" name="fileToUpload" id="fileToUpload">
 				</form>
 			</div>
 		</section>

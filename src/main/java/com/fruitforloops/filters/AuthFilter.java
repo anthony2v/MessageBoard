@@ -7,7 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.fruitforloops.Constants;
 import com.fruitforloops.model.User;
@@ -20,10 +22,10 @@ public class AuthFilter implements Filter
 	{
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		
-		// extract user from request data
-		User user = new User(); // TODO
+		HttpSession session = ((HttpServletRequest)request).getSession(false);
+		User user = session != null ? (User)session.getAttribute("user") : null;
 		
-		if (user.authenticate())
+		if (user != null && user.authenticate())
 		{
 			// user is authenticated, continue the chain
 			chain.doFilter(request, response);

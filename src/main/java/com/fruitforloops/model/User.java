@@ -1,6 +1,11 @@
 package com.fruitforloops.model;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.Serializable;
+
+import com.fruitforloops.JSONUtil;
+import com.google.gson.stream.JsonReader;
 
 public class User implements Serializable
 {
@@ -29,13 +34,33 @@ public class User implements Serializable
 	
 	public boolean authenticate()
 	{
-		// TODO 
-		return true;
+		JsonReader reader = null;
+		try
+		{
+			reader = new JsonReader(new FileReader(getClass().getClassLoader().getResource("/WEB-INF/users.json").getPath()));
+		}
+		catch (FileNotFoundException e)
+		{
+			System.err.println("'users.json' file is missing.\n" + e.getMessage());
+			return false;
+		}
+		User[] userList = JSONUtil.gson.fromJson(reader, User[].class);
+		
+		for (User userEntry : userList)
+		{
+			if (userEntry.username.equals(username))
+			{
+				if (userEntry.password.equals(password))
+					return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	@Override
 	public String toString() 
 	{
-		return "LoginRequest: {username:\"" + username + "\"}";
+		return "{username:\"" + username + "\"}";
 	}
 }
