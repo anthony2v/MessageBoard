@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,7 +39,7 @@ public class Message implements Serializable
 	@Column(name = "last_modified_date")
 	private Date lastModifiedDate;
 	
-	@OneToMany(mappedBy = "message", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "message", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
 	private Set<MessageAttachment> attachments;
 	
 	@ManyToMany(fetch = FetchType.EAGER)

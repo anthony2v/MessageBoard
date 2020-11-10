@@ -32,7 +32,7 @@ public class RequestFilter implements Filter
 		{
 			if (path.equals("/") || path.isBlank()) path = "/index";
 			
-		    request.getRequestDispatcher(Constants.WEBAPP_JSP_VIEW_PATH + path + ".jsp").forward(request, response);
+		    request.getRequestDispatcher(Constants.JSP_VIEW_PATH + path + ".jsp").forward(request, response);
 		}
 	}
 }

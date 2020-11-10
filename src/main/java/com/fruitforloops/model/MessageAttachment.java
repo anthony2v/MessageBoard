@@ -29,8 +29,16 @@ public class MessageAttachment implements Serializable
 	private Message message;
 	
 	@Lob
-	@Column
+	@Column(columnDefinition = "BLOB")
 	private byte[] data;
+	
+	public MessageAttachment() {}
+	
+	public MessageAttachment(String filename, byte[] data)
+	{
+		this.filename = filename;
+		this.data = data;
+	}
 	
 	public long getId()
 	{

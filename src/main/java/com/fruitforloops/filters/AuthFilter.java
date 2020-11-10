@@ -34,7 +34,7 @@ public class AuthFilter implements Filter
 		{
 			// authentication failed
 			httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			request.getRequestDispatcher(Constants.WEBAPP_JSP_VIEW_PATH + "401.jsp").forward(request, httpResponse);
+			request.getRequestDispatcher(Constants.JSP_VIEW_PATH + "401.jsp").forward(request, httpResponse);
 		}
 	}
 }

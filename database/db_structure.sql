@@ -48,7 +48,7 @@ CREATE TABLE `message` (
   `author` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -80,11 +80,11 @@ CREATE TABLE `message_attachment` (
   `id` int NOT NULL AUTO_INCREMENT,
   `message_id` int NOT NULL,
   `filename` varchar(300) DEFAULT NULL,
-  `data` blob,
+  `data` longblob,
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `fk_message_id_idx` (`message_id`),
   CONSTRAINT `fk_message_id` FOREIGN KEY (`message_id`) REFERENCES `message` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,4 +122,4 @@ CREATE TABLE `message_hashtag` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-02 15:05:37
+-- Dump completed on 2020-11-10  1:12:16
