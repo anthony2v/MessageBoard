@@ -14,7 +14,13 @@ import javax.servlet.http.HttpSession;
 import com.fruitforloops.Constants;
 import com.fruitforloops.model.User;
 
-@WebFilter(filterName="AuthFilter", urlPatterns = {Constants.API_PATH + "auth", Constants.API_PATH + "auth/*"})
+@WebFilter(
+		filterName = "AuthFilter", 
+		urlPatterns = {
+				Constants.API_PATH + "auth", Constants.API_PATH + "auth/*",
+				"/message_board"
+			}
+		)
 public class AuthFilter implements Filter
 {
 	@Override

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fruitforloops.Constants;
-import com.fruitforloops.model.MessageService;
+import com.fruitforloops.model.MessageManager;
 
 
 @WebServlet(Constants.API_PATH + "auth/message/attachment")
@@ -16,12 +16,12 @@ public class MessageAttachmentController extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	
-	private MessageService messageService;
+	private MessageManager messageManager;
 	
 	public MessageAttachmentController()
 	{
 		super();
-		messageService = new MessageService();
+		messageManager = new MessageManager();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
