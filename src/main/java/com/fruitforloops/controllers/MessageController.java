@@ -47,8 +47,8 @@ public class MessageController extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// extract parameters (request data)
-		String authors = request.getParameter("authors");
-		String hashtags = request.getParameter("hashtags");
+		String[] authors = request.getParameterValues("authors");
+		String[] hashtags = request.getParameterValues("hashtags");
 		String toDateStr = request.getParameter("toDate");
 		String fromDateStr = request.getParameter("fromDate");
 		
@@ -115,6 +115,9 @@ public class MessageController extends HttpServlet
 			while (it.hasNext()) 
 			{
 				FileItem temp = (FileItem) it.next();
+				
+				total_attachments_size += temp.getSize();
+				
 				if (temp.isFormField())
 				{
 					if (temp.getFieldName().equals("json"))
@@ -125,7 +128,6 @@ public class MessageController extends HttpServlet
 				}
 				else 
 				{
-					total_attachments_size += temp.getSize();
 					if (temp.getSize() < Long.valueOf(appConfig.getProperty("messages.max_attachment_size").trim()) && total_attachments_size < Long.valueOf(appConfig.getProperty("messages.max_total_attachments_size").trim()))
 					{
 						if (temp.getFieldName().equals("files[]"))
