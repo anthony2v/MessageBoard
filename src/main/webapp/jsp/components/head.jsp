@@ -8,9 +8,7 @@ const Server = {
 <%          
 			User user = session != null ? (User) session.getAttribute("user") : null;
 			if (user != null)
-			{
 			    out.println("username: '" + user.getUsername() + "'");
-			}
 %>
         }
     }
@@ -37,6 +35,7 @@ const Server = {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.2.20180112/classList.min.js" integrity="sha512-ISyiBXwG69Utm2wNP5ex+4P5+JmPaXmBMV82Uq/Yuck54FnOC4ZIJ9vDIT9TzHzZZC/xdYgivc2wmKuJkAZHmQ==" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.6/flatpickr.min.js" integrity="sha512-Nc36QpQAS2BOjt0g/CqfIi54O6+UWTI3fmqJsnXoU6rNYRq8vIQQkZmkrRnnk4xKgMC3ESWp69ilLpDm6Zu8wQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.19.2/URI.min.js" integrity="sha512-YQAqeLT4VuAZV80lmk6OE3XtmMW3eDxUtNf2V2w16eypX21CDtelaVsFD1QLUBCQuJEenK3jPqYPmpNUasdktA==" crossorigin="anonymous"></script>
 <script type="text/javascript" src="/assets/js/core/shim.js?r=<% out.print(new File(application.getRealPath("assets/js/core/shim.js")).lastModified()); %>"></script>
 <script type="text/javascript" src="/assets/js/core/app.js?r=<% out.print(new File(application.getRealPath("assets/js/core/app.js")).lastModified()); %>"></script>
 <script type="text/javascript" src="/assets/js/core/utils/common_util.js?r=<% out.print(new File(application.getRealPath("assets/js/core/utils/common_util.js")).lastModified()); %></script>"></script>
