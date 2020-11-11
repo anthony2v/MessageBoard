@@ -14,7 +14,13 @@ import javax.servlet.http.HttpSession;
 import com.fruitforloops.Constants;
 import com.fruitforloops.model.User;
 
-@WebFilter(filterName="AuthFilter", urlPatterns = {Constants.API_PATH + "auth", Constants.API_PATH + "auth/*"})
+@WebFilter(
+		filterName = "AuthFilter", 
+		urlPatterns = {
+				Constants.API_PATH + "auth", Constants.API_PATH + "auth/*",
+				"/message_board"
+			}
+		)
 public class AuthFilter implements Filter
 {
 	@Override
@@ -34,7 +40,7 @@ public class AuthFilter implements Filter
 		{
 			// authentication failed
 			httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			request.getRequestDispatcher(Constants.WEBAPP_JSP_VIEW_PATH + "401.jsp").forward(request, httpResponse);
+			request.getRequestDispatcher(Constants.JSP_VIEW_PATH + "401.jsp").forward(request, httpResponse);
 		}
 	}
 }

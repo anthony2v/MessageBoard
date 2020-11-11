@@ -5,12 +5,17 @@ const Login = {
     onReady: () => {
         Login.errorElement = document.querySelector("#div-error");
 
-        document.querySelector("form.login-form #btn-login").addEventListener("click", () => {
-            Login.login(document.querySelector("form.login-form [name='username']").value, document.querySelector("form.login-form [name='password']").value); 
+        document.querySelector("form.login-form [name='password']").addEventListener("keydown", (event) => { 
+            if (event.keyCode == 13)
+                Login.login(); 
         });
+        document.querySelector("form.login-form #btn-login").addEventListener("click", () => { Login.login(); });
     },
 
-    login: (username, pass) => {
+    login: () => {
+        let username = document.querySelector("form.login-form [name='username']").value;
+        let pass = document.querySelector("form.login-form [name='password']").value;
+
         let loginButton = document.querySelector("form.login-form #btn-login");
         loginButton.disabled = true;
 

@@ -38,14 +38,16 @@ public class UserDAO implements IDAO<User>
 	}
 
 	@Override
-	public void update(User object)
+	public boolean update(User object)
 	{
 		//
+		return false;
 	}
 
 	@Override
-	public void delete(User object)
+	public boolean delete(User object)
 	{
 		//
+		return false;
 	}
 }

@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 
 public final class Constants
 {
-	public static final String WEBAPP_JSP_VIEW_PATH = "/jsp/views/";
+	public static final String JSP_VIEW_PATH = "/jsp/views/";
 	
 	public static final String API_PATH = "/api/";
 	public static final String ASSETS_PATH = "/assets/";

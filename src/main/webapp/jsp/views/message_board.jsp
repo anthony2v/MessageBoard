@@ -35,7 +35,7 @@
 				</ul>
 				<form id="msgboard-form" class="container-fluid" onsubmit="return false;">
 					<div class="form-group input-group">
-						<textarea name="message" class="form-control shadow-none" rows="1" placeholder="Type your message here..."></textarea>
+						<textarea name="messageText" class="form-control shadow-none" rows="1" placeholder="Type your message here..."></textarea>
 						<div class="input-group-append">
 							<label for="upload" class="btn btn-primary rounded-right shadow-none m-0">
 								<i class="fas fa-paperclip"></i>

@@ -1,9 +1,10 @@
 
 const MessageBoard = {
     searchCriteria: {},
+    messageList: [],
 
     onReady: () => {
-        let msgBox = document.querySelector("#msgboard-form [name='message']");
+        let msgBox = document.querySelector("#msgboard-form [name='messageText']");
         msgBox.addEventListener("keydown", MessageBoard.msgBoxKeyPressHandler);
         msgBox.addEventListener("keydown", () => { MessageBoard.resizeTextArea(msgBox) });
         msgBox.addEventListener("keyup", () => { MessageBoard.resizeTextArea(msgBox) });
@@ -34,13 +35,28 @@ const MessageBoard = {
     },
 
     postMessage: (msgText) => {
-        username = String(username).trim().length == 0 ? "Anon" : username;
+        let formData = new FormData();
 
-        axios.post('/api/auth/message', {
-            message: msgText
-        })
+        formData.append("json", CommonUtil.formToJson(document.querySelector("#msgboard-form")));
+
+        let txtMessageAttachments = document.querySelector("#msgboard-form #upload");
+        if (txtMessageAttachments.files) {
+            for(var i = 0; i < txtMessageAttachments.files.length; i++) {
+                if(txtMessageAttachments.files[i])
+                    formData.append("files[]", txtMessageAttachments.files[i]);
+            }
+        }
+
+        axios.post('/api/auth/message', 
+            formData,
+            { 
+                headers: { 
+                    'Content-Type': 'multipart/form-data' 
+                }
+            }
+        )
         .then((response) => {
-            MessageBoard.getMessages(searchCriteria.authors, searchCriteria.hashtags, searchCriteria.fromDate, searchCriteria.toDate);
+            //MessageBoard.getMessages(MessageBoard.searchCriteria.authors, MessageBoard.searchCriteria.hashtags, MessageBoard.searchCriteria.fromDate, MessageBoard.searchCriteria.toDate);
         })
         .catch((error) => {
             console.log(error);

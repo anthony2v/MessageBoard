@@ -61,14 +61,16 @@ public class MessageDAO implements IDAO<Message>
 	}
 
 	@Override
-	public void update(Message object)
+	public boolean update(Message object)
 	{
-		// TODO
+		//
+		return false;
 	}
 
 	@Override
-	public void delete(Message object)
+	public boolean delete(Message object)
 	{
 		//
+		return false;
 	}
 }
