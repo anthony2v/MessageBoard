@@ -10,7 +10,7 @@ public interface IDAO<T>
      
     public boolean save(T object);
      
-    public void update(T object);
+    public boolean update(T object);
      
-    public void delete(T object);
+    public boolean delete(T object);
 }
