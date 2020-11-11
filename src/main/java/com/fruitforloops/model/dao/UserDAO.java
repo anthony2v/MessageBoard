@@ -1,26 +1,34 @@
 package com.fruitforloops.model.dao;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.fruitforloops.JSONUtil;
 import com.fruitforloops.model.User;
+import com.google.gson.stream.JsonReader;
 
 public class UserDAO implements IDAO<User>
 {
 	@Override
 	public List<User> getAll()
 	{
-		List<User> messageList = new ArrayList<User>();
+		JsonReader reader = null;
 		try
 		{
-			// get Users from json file
+			reader = new JsonReader(new FileReader(getClass().getClassLoader().getResource("/WEB-INF/users.json").getPath()));
 		}
-		catch (Exception e)
+		catch (FileNotFoundException e)
 		{
-			System.err.println("Unable to get list of users.\n" + e.getMessage());
+			System.err.println("'users.json' file is missing.\n" + e.getMessage());
+			return new ArrayList<User>();
 		}
 		
-		return messageList;
+		User[] userArray = JSONUtil.gson.fromJson(reader, User[].class);
+		
+		return Arrays.asList(userArray);
 	}
 
 	@Override

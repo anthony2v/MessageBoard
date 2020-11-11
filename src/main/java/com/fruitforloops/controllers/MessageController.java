@@ -47,8 +47,8 @@ public class MessageController extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// extract parameters (request data)
-		String authors = request.getParameter("authors");
-		String hashtags = request.getParameter("hashtags");
+		String[] authors = request.getParameterValues("authors");
+		String[] hashtags = request.getParameterValues("hashtags");
 		String toDateStr = request.getParameter("toDate");
 		String fromDateStr = request.getParameter("fromDate");
 		

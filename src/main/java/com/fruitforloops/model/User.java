@@ -3,8 +3,10 @@ package com.fruitforloops.model;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Serializable;
+import java.util.List;
 
 import com.fruitforloops.JSONUtil;
+import com.fruitforloops.model.dao.UserDAO;
 import com.google.gson.stream.JsonReader;
 
 public class User implements Serializable
@@ -34,17 +36,9 @@ public class User implements Serializable
 	
 	public boolean authenticate()
 	{
-		JsonReader reader = null;
-		try
-		{
-			reader = new JsonReader(new FileReader(getClass().getClassLoader().getResource("/WEB-INF/users.json").getPath()));
-		}
-		catch (FileNotFoundException e)
-		{
-			System.err.println("'users.json' file is missing.\n" + e.getMessage());
-			return false;
-		}
-		User[] userList = JSONUtil.gson.fromJson(reader, User[].class);
+		UserDAO userDAO = new UserDAO();
+		
+		List<User> userList = userDAO.getAll();
 		
 		for (User userEntry : userList)
 		{
