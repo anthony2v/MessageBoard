@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -28,6 +29,7 @@ import com.fruitforloops.ResponseUtil;
 import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageAttachment;
 import com.fruitforloops.model.MessageManager;
+import com.fruitforloops.model.User;
 
 @WebServlet(Constants.API_PATH + "auth/message")
 public class MessageController extends HttpServlet
@@ -97,6 +99,7 @@ public class MessageController extends HttpServlet
 		{
 			long total_attachments_size = 0;
 			Message message = null;
+			long[] filesToDelete = null;
 			List<FileItem> multipartList = null;
 			Set<MessageAttachment> attachments = new HashSet<MessageAttachment>();
 			ServletFileUpload servletFileUpload = new ServletFileUpload(new DiskFileItemFactory());
@@ -125,6 +128,13 @@ public class MessageController extends HttpServlet
 						// extract json message data
 						message = JSONUtil.gson.fromJson(temp.getString(), Message.class);
 					}
+					else if (temp.getFieldName().equals("filesToDelete"))
+					{
+						String[] strFilesToDelete = temp.getString().split("\\/");
+						filesToDelete = new long[strFilesToDelete.length];
+						for (int i = 0; i < filesToDelete.length; ++i)
+							filesToDelete[i] = Long.valueOf(strFilesToDelete[i]);
+					}
 				}
 				else 
 				{
@@ -150,19 +160,32 @@ public class MessageController extends HttpServlet
 					for (MessageAttachment a : attachments)
 						a.setMessage(message);
 					
-					if (postOrPut.equals("POST"))
+					HttpSession session = request.getSession(false);
+					if (session == null)
 					{
+						ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not logged in or your session timed out.", null);
+					}
+					else if (postOrPut.equals("POST"))
+					{
+						message.setAuthor(((User)session.getAttribute("user")).getUsername());
+						
 						System.out.println("Saving message: " + message);
 						
 						// create Message using MessageManager (business layer)
-						// messageManager.createMessage(...);
+						// messageManager.createMessage(message);
 					}
 					else if (postOrPut.equals("PUT"))
 					{
-						System.out.println("Updating message: " + message);
-						
-						// update Message using MessageManager (business layer)
-						// messageManager.updateMessage(...);
+						User currentUser = (User)session.getAttribute("user");
+//						if (messageManager.userOwnsMessage(currentUser.getUsername(), message.getId()))
+//						{
+//							System.out.println("Updating message: " + message);
+//							
+//							// update Message using MessageManager (business layer)
+//							// messageManager.updateMessage(message, filesToDelete);
+//						}
+//						else
+//							ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
 					}
 				}
 			}
