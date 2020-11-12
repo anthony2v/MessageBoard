@@ -55,9 +55,10 @@ a:focus { color: #444; }
 /*** anchor - end ***/
 
 /*** dropdown ***/
-.dropdown-item { color: #fafafa; }
-.dropdown-item.btn:not(.btn-warning):not(.btn-light):not(.btn-link):focus, 
-.dropdown-item.btn:not(.btn-warning):not(.btn-light):not(.btn-link):hover { 
+.dropdown-item { color: #212121; }
+.dropdown-item.btn.btn-danger,
+.dropdown-item.btn.btn-danger:focus, 
+.dropdown-item.btn.btn-danger:hover { 
     color: #fafafa; 
 }
 /*** dropdown - end ***/
