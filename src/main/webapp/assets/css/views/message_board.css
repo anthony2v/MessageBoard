@@ -25,6 +25,16 @@
     white-space: pre-wrap;
 }
 
+.msgboard-msg .edit-mode {
+    display: none;
+}
+.msgboard-msg.edit-mode .edit-mode {
+    display: block;
+}
+.msgboard-msg.edit-mode .read-mode {
+    display: none;
+}
+
 #msgboard-search-form {
     padding-bottom: 10px;
     border-bottom: 1px solid gray;

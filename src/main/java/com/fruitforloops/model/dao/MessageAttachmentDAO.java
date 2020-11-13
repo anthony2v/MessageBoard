@@ -36,7 +36,7 @@ public class MessageAttachmentDAO implements IDAO<MessageAttachment>
 	}
 
 	@Override
-	public boolean delete(MessageAttachment object)
+	public boolean delete(long id)
 	{
 		// TODO Auto-generated method stub
 		return false;

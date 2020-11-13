@@ -49,9 +49,9 @@
 						<form class="edit-mode display-none" onsubmit="return false;">
 							<textarea name="messageText" class="form-control shadow-none mb-2" rows="1" placeholder="Edit your message here..."></textarea>
 							<div class="msg-attachments mb-2">
-								<label for="upload" class="btn btn-primary btn-sm shadow-none mb-0 mr-2">
+								<label for="edit-upload" class="btn btn-primary btn-sm shadow-none mb-0 mr-2">
 									<i class="fas fa-paperclip"></i>
-									<input type="file" id="upload" multiple class="display-none" />
+									<input type="file" id="edit-upload" multiple class="display-none" />
 								</label>
 								<button id="attachment-1" class='btn btn-sm btn-danger shadow-none'>attachment 1</button>
 								<button id="attachment-7" class='btn btn-sm btn-danger shadow-none'>attachment 2</button>

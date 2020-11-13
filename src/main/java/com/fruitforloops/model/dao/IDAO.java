@@ -12,5 +12,5 @@ public interface IDAO<T>
      
     public boolean update(T object);
      
-    public boolean delete(T object);
+    public boolean delete(long id);
 }
