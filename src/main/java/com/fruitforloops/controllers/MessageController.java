@@ -172,7 +172,7 @@ public class MessageController extends HttpServlet
 						System.out.println("Saving message: " + message);
 						
 						// create Message using MessageManager (business layer)
-						// messageManager.createMessage(message);
+						messageManager.createMessage(message);
 					}
 					else if (postOrPut.equals("PUT"))
 					{

@@ -10,17 +10,16 @@ public class MessageManager
 	MessageDAO mdao = new MessageDAO();
 	public List<Message> getMessages(Date fromDate, Date toDate)
 	{
-		ArrayList<Message> messageList = new ArrayList<Message>();
+		ArrayList<Message> messageList = (ArrayList<Message>)mdao.getAll();
 		
 		// populate messageList with most recent messages
 		
 		return messageList;
 	}
 
-	public void createMessage(String user, String messageText)
+	public void createMessage(Message newMessage)
 	{
 		// create new message
-		Message newMessage = new Message(user, messageText);
 		mdao.save(newMessage);
 	}
 }
