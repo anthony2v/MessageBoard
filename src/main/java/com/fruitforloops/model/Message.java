@@ -25,7 +25,7 @@ public class Message implements Serializable
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
 	@Column
 	private String author;
@@ -42,7 +42,7 @@ public class Message implements Serializable
 	@OneToMany(mappedBy = "message", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
 	private Set<MessageAttachment> attachments;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
 	@JoinTable(name = "message_hashtag", joinColumns = @JoinColumn(name = "message_id"), inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
 	private Set<HashTag> hashtags;
 	
@@ -60,11 +60,11 @@ public class Message implements Serializable
 		this.setLastModifiedDate(lastModifiedDate);
 	}
 
-	public long getId()
+	public Long getId()
 	{
 		return id;
 	}
-	public void setId(long id)
+	public void setId(Long id)
 	{
 		this.id = id;
 	}

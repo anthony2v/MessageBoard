@@ -4,7 +4,9 @@ const CommonUtil = {
      * converts a form to a json object with key-value pairs being [name]:[value] for every input within the form
      * if an input element is to be excluded, simply do not provide the "name" attribute
      */
-    formToJson: (formElement) => {
+    formToJson: (formElement, stringify) => {
+		stringify = (stringify === undefined) ? true : stringify;
+
 		let output = {};
 		new FormData(formElement).forEach((value, key) => {
 			// Check if property already exist
@@ -21,7 +23,7 @@ const CommonUtil = {
 			}
 		});
 		
-		return JSON.stringify( output );
+		return stringify ? JSON.stringify(output) : output;
 	},
 	
 	includeStylesheet: (href) => {

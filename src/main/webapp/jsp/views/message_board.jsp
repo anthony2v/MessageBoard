@@ -26,50 +26,13 @@
 							<input class="form-control form-control-sm flatpickr flatpickr-input active" type="text" name="toDate" placeholder="toDate" readonly="readonly" />
 						</div>
 						<div class="col-lg-1 my-1">
-							<button class="btn btn-primary btn-block shadow-none"><i class="fas fa-search mr-2"></i>Search</button>
+							<button class="btn btn-search btn-primary btn-block shadow-none"><i class="fas fa-search mr-2"></i>Search</button>
 						</div>
 					</div>
 				</form>
 				<ul id="ul-msgboard" class="list-group list-group-flush">
-					<li class='msgboard-msg msgboard-msg-placeholder list-group-item text-center border-0 mb-3'>There are no messages to display...</li>
-					<li id="msg-1" class="msgboard-msg list-group-item border-0 mb-3">
-						<h6> 
-							<strong class='msgboard-msg-username'>Daniel</strong>
-							<small class='msgboard-msg-time text-muted ml-2'>2020-11-11 5:00:00</small>
-							<div class="msg-actions float-right read-mode">
-								<button type="button" class="btn btn-sm btn-secondary rounded-right shadow-none" data-toggle="dropdown">
-									<i class="fas fa-ellipsis-v"></i>
-								</button>
-								<div class="dropdown-menu">
-									<button type="button" class="btn-edit-message btn rounded-0 dropdown-item"><i class="fas fa-pencil-alt mr-2 text-uppercase"></i>Edit</button>
-									<button type="button" class="btn-delete-message btn btn-danger bg-danger rounded-0 dropdown-item"><i class="fas fa-trash-alt mr-2 text-uppercase"></i>Delete</button>
-								</div>
-							</div>
-						</h6>
-						<form class="edit-mode display-none" onsubmit="return false;">
-							<textarea name="messageText" class="form-control shadow-none mb-2" rows="1" placeholder="Edit your message here..."></textarea>
-							<div class="msg-attachments mb-2">
-								<label for="edit-upload" class="btn btn-primary btn-sm shadow-none mb-0 mr-2">
-									<i class="fas fa-paperclip"></i>
-									<input type="file" id="edit-upload" multiple class="display-none" />
-								</label>
-								<button id="attachment-1" class='btn btn-sm btn-danger shadow-none'>attachment 1</button>
-								<button id="attachment-7" class='btn btn-sm btn-danger shadow-none'>attachment 2</button>
-								<button id="attachment-8" class='btn btn-sm btn-danger shadow-none'>attachment 3</button>
-							</div>
-							<div>
-								<button class='btn btn-success shadow-none'>Save</button>
-								<button class='btn btn-danger shadow-none'>Cancel</button>
-							</div>
-						</form>
-						<div class="read-mode">
-							<p class='msgboard-msg-text'>Test</p>
-							<div class="msg-attachments">
-								<button id="attachment-1" class='btn btn-sm btn-secondary shadow-none'>attachment 1</button>
-								<button id="attachment-7" class='btn btn-sm btn-secondary shadow-none'>attachment 2</button>
-								<button id="attachment-8" class='btn btn-sm btn-secondary shadow-none'>attachment 3</button>
-							</div>
-						</div>
+					<li class='msgboard-msg msgboard-msg-placeholder list-group-item text-center border-0 mb-3'>
+						<div class="spinner"></div>
 					</li>
 				</ul>
 				<form id="msgboard-form" class="container-fluid" onsubmit="return false;">
