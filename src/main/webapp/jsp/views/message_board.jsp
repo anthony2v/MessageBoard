@@ -26,7 +26,7 @@
 							<input class="form-control form-control-sm flatpickr flatpickr-input active" type="text" name="toDate" placeholder="toDate" readonly="readonly" />
 						</div>
 						<div class="col-lg-1 my-1">
-							<button class="btn btn-primary btn-block shadow-none"><i class="fas fa-search mr-2"></i>Search</button>
+							<button class="btn btn-search btn-primary btn-block shadow-none"><i class="fas fa-search mr-2"></i>Search</button>
 						</div>
 					</div>
 				</form>
