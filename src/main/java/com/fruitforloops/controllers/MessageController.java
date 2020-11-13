@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -15,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -25,9 +27,15 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 import com.fruitforloops.Constants;
 import com.fruitforloops.JSONUtil;
 import com.fruitforloops.ResponseUtil;
+import com.fruitforloops.model.HashTag;
 import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageAttachment;
 import com.fruitforloops.model.MessageManager;
+import com.fruitforloops.model.User;
+import com.fruitforloops.model.dao.MessageDAO;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @WebServlet(Constants.API_PATH + "auth/message")
 public class MessageController extends HttpServlet
@@ -46,9 +54,14 @@ public class MessageController extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// -------------- TEST --------------------
+		ArrayList<Message> messages = (ArrayList<Message>) new MessageDAO().getAll();
+		ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
+		// ----------------------------------------
+		
 		// extract parameters (request data)
-		String[] authors = request.getParameterValues("authors");
-		String[] hashtags = request.getParameterValues("hashtags");
+		String[] authors = request.getParameterValues("authors[]");
+		String[] hashtags = request.getParameterValues("hashtags[]");
 		String toDateStr = request.getParameter("toDate");
 		String fromDateStr = request.getParameter("fromDate");
 		
@@ -93,104 +106,144 @@ public class MessageController extends HttpServlet
 		List<String> ignoredFiles = new ArrayList<String>();
 		
 		// extract request data
-		if (ServletFileUpload.isMultipartContent(request))
+		long total_attachments_size = 0;
+		Message message = null;
+		long[] filesToDelete = null;
+		Set<MessageAttachment> attachments = new HashSet<MessageAttachment>();
+		ServletFileUpload servletFileUpload = new ServletFileUpload(new DiskFileItemFactory());
+		
+		List<FileItem> multipartList = null;
+		try
 		{
-			long total_attachments_size = 0;
-			Message message = null;
-			List<FileItem> multipartList = null;
-			Set<MessageAttachment> attachments = new HashSet<MessageAttachment>();
-			ServletFileUpload servletFileUpload = new ServletFileUpload(new DiskFileItemFactory());
-			try
-			{
-				multipartList = servletFileUpload.parseRequest(new ServletRequestContext(request));
-			}
-			catch (FileUploadException e)
-			{
-				System.err.println("FileUploadException: " + e.getMessage());
-				ResponseUtil.sendJSON(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong with the request", null);
-				return;
-			}
+			multipartList = servletFileUpload.parseRequest(new ServletRequestContext(request));
+		}
+		catch (FileUploadException e)
+		{
+			System.err.println("FileUploadException: " + e.getMessage());
+			ResponseUtil.sendJSON(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong with the request", null);
+			return;
+		}
+		
+		Iterator<FileItem> it = multipartList.iterator();
+		while (it.hasNext()) 
+		{
+			FileItem temp = (FileItem) it.next();
 			
-			Iterator<FileItem> it = multipartList.iterator();
-			while (it.hasNext()) 
-			{
-				FileItem temp = (FileItem) it.next();
-				
-				total_attachments_size += temp.getSize();
-				
-				if (temp.isFormField())
-				{
-					if (temp.getFieldName().equals("json"))
-					{
-						// extract json message data
-						message = JSONUtil.gson.fromJson(temp.getString(), Message.class);
-					}
-				}
-				else 
-				{
-					if (temp.getSize() < Long.valueOf(appConfig.getProperty("messages.max_attachment_size").trim()) && total_attachments_size < Long.valueOf(appConfig.getProperty("messages.max_total_attachments_size").trim()))
-					{
-						if (temp.getFieldName().equals("files[]"))
-							attachments.add(new MessageAttachment(temp.getName(), temp.get()));
-					}
-					else
-					{
-						// ignore the file
-						ignoredFiles.add(temp.getName());
-						total_attachments_size -= temp.getSize();
-					}
-                }
-			}
+			total_attachments_size += temp.getSize();
 			
-			try
+			if (temp.isFormField())
 			{
-				if (message != null)
+				if (temp.getFieldName().equals("json"))
 				{
-					message.setAttachments(attachments);
-					for (MessageAttachment a : attachments)
-						a.setMessage(message);
+					// extract json message data
+					message = JSONUtil.gson.fromJson(temp.getString(), Message.class);
 					
-					if (postOrPut.equals("POST"))
+					if ("PUT".equals(postOrPut))
 					{
-						System.out.println("Saving message: " + message);
-						
-						// create Message using MessageManager (business layer)
-						// messageManager.createMessage(...);
-					}
-					else if (postOrPut.equals("PUT"))
-					{
-						System.out.println("Updating message: " + message);
-						
-						// update Message using MessageManager (business layer)
-						// messageManager.updateMessage(...);
+						JsonObject jsonObject = JsonParser.parseString(temp.getString()).getAsJsonObject();
+						JsonArray jsonArray = jsonObject.get("filesToDelete").getAsJsonArray();
+						filesToDelete = new long[jsonArray.size()];
+						for (int i = 0; i < filesToDelete.length; ++i)
+						{
+							if (jsonArray.get(i) != null && jsonArray.get(i).getAsString().trim().length() > 0)
+								filesToDelete[i] = Long.valueOf(jsonArray.get(i).getAsString());
+						}
 					}
 				}
 			}
-			catch (Exception e)
+			else 
 			{
-				System.err.println(e.getMessage());
-				ResponseUtil.sendJSON(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong with the request", null);
-			}
-			
-			if (ignoredFiles.size() > 0)
+				if (temp.getSize() < Long.valueOf(appConfig.getProperty("messages.max_attachment_size").trim()) && total_attachments_size < Long.valueOf(appConfig.getProperty("messages.max_total_attachments_size").trim()))
+				{
+					if (temp.getFieldName().equals("files[]"))
+						attachments.add(new MessageAttachment(temp.getName(), temp.get()));
+				}
+				else
+				{
+					// ignore the file
+					ignoredFiles.add(temp.getName());
+					total_attachments_size -= temp.getSize();
+				}
+            }
+		}
+		
+		try
+		{
+			if (message != null)
 			{
-				String responseMessage = "Some files were not uploaded: [ ";
-				for (String fname : ignoredFiles)
-					responseMessage += "'" + fname + "' ";
-				responseMessage += "]";
+				message.setAttachments(attachments);
+				for (MessageAttachment a : attachments)
+					a.setMessage(message);
 				
-				ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, responseMessage, null);
+				if (message.getHashtags() != null)
+				{
+					Set<Message> messageSet = new HashSet<Message>();
+					messageSet.add(message);
+					for (HashTag tag : message.getHashtags())
+						tag.setMessages(messageSet);
+				}
+				
+				HttpSession session = request.getSession(false);
+				if (session == null)
+				{
+					ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not logged in or your session timed out.", null);
+				}
+				else if (postOrPut.equals("POST"))
+				{
+					message.setAuthor(((User)session.getAttribute("user")).getUsername());
+					
+					// create Message using MessageManager (business layer)
+					// messageManager.createMessage(message);
+					
+					// -------------- TEST --------------------
+					//String consoleDebugInfo = "Saving message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
+					String consoleDebugInfo = "Saving message: " + message;
+					consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
+					System.out.println(consoleDebugInfo);
+					new MessageDAO().save(message);
+					// ----------------------------------------
+				}
+				else if (postOrPut.equals("PUT"))
+				{
+					User currentUser = (User)session.getAttribute("user");
+//					if (messageManager.userOwnsMessage(currentUser.getUsername(), message.getId()))
+//					{
+//						System.out.println("Updating message: " + message);
+//						
+//						// update Message using MessageManager (business layer)
+//						// messageManager.updateMessage(message, filesToDelete);
+//					}
+//					else
+//						ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
+					// -------------- TEST --------------------
+					//String consoleDebugInfo = "Updating message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
+					String consoleDebugInfo = "Updating message: " + message;
+					consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
+					System.out.println(consoleDebugInfo);
+					new MessageDAO().save(message);
+					// ----------------------------------------
+				}
 			}
-			else
-			{
-				// send appropriate response
-				ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, null);
-			}
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+			ResponseUtil.sendJSON(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong with the request", null);
+		}
+		
+		if (ignoredFiles.size() > 0)
+		{
+			String responseMessage = "Some files were not uploaded: [ ";
+			for (String fname : ignoredFiles)
+				responseMessage += "'" + fname + "' ";
+			responseMessage += "]";
+			
+			ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, responseMessage, null);
 		}
 		else
 		{
-			// bad request
-			ResponseUtil.sendJSON(response, HttpServletResponse.SC_BAD_REQUEST, null, null);
+			// send appropriate response
+			ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, null);
 		}
 	}
 
@@ -198,7 +251,7 @@ public class MessageController extends HttpServlet
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// extract parameters (request data)
-		long messageId = Long.valueOf(request.getParameter("id").trim());
+		Long messageId = Long.valueOf(request.getParameter("id").trim());
 
 		// delete messages using MessageManager (business layer)
 		// messageManager.deleteMessage(messageId);

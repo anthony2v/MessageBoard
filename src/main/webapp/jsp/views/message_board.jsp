@@ -14,7 +14,7 @@
 				<form id="msgboard-search-form" onsubmit="return false;">
 					<div class="form-row align-items-center">
 						<div class="col-lg-4 my-1">
-							<input class="form-control form-control-sm" type="text" name="author" placeholder="author(s)" />
+							<input class="form-control form-control-sm" type="text" name="authors" placeholder="author(s)" />
 						</div>
 						<div class="col-lg-5 my-1">
 							<input class="form-control form-control-sm" type="text" name="hashtags" placeholder="#tag1 #tag2 ..." />
@@ -26,12 +26,14 @@
 							<input class="form-control form-control-sm flatpickr flatpickr-input active" type="text" name="toDate" placeholder="toDate" readonly="readonly" />
 						</div>
 						<div class="col-lg-1 my-1">
-							<button class="btn btn-primary btn-block"><i class="fas fa-search mr-2"></i>Search</button>
+							<button class="btn btn-search btn-primary btn-block shadow-none"><i class="fas fa-search mr-2"></i>Search</button>
 						</div>
 					</div>
 				</form>
 				<ul id="ul-msgboard" class="list-group list-group-flush">
-					<li class='msgboard-msg msgboard-msg-placeholder list-group-item text-center border-0 mb-3'>There are no messages to display...</li>
+					<li class='msgboard-msg msgboard-msg-placeholder list-group-item text-center border-0 mb-3'>
+						<div class="spinner"></div>
+					</li>
 				</ul>
 				<form id="msgboard-form" class="container-fluid" onsubmit="return false;">
 					<div class="form-group input-group">
@@ -39,7 +41,7 @@
 						<div class="input-group-append">
 							<label for="upload" class="btn btn-primary rounded-right shadow-none m-0">
 								<i class="fas fa-paperclip"></i>
-								<input type="file" id="upload" multiple class="display-none">
+								<input type="file" id="upload" multiple class="display-none" />
 							</label>
 						</div>
 					</div>

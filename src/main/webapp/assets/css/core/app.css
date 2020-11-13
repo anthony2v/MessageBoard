@@ -55,9 +55,10 @@ a:focus { color: #444; }
 /*** anchor - end ***/
 
 /*** dropdown ***/
-.dropdown-item { color: #fafafa; }
-.dropdown-item.btn:not(.btn-warning):not(.btn-light):not(.btn-link):focus, 
-.dropdown-item.btn:not(.btn-warning):not(.btn-light):not(.btn-link):hover { 
+.dropdown-item { color: #212121; }
+.dropdown-item.btn.btn-danger,
+.dropdown-item.btn.btn-danger:focus, 
+.dropdown-item.btn.btn-danger:hover { 
     color: #fafafa; 
 }
 /*** dropdown - end ***/
@@ -81,3 +82,20 @@ a:focus { color: #444; }
 	box-shadow: 0 0 6px rgb(0,0,0);
 }
 /*** scrollbars - end ***/
+
+/*** load spinner ***/
+.spinner {
+    display: inline-block;
+    box-shadow: 0px 0px 3px rgba(0,0,0,0.5), 0px 0px 3px rgba(0,0,0,0.5) inset;
+    border: 8px solid #fafafa;
+    border-top: 8px solid #212121;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

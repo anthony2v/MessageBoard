@@ -53,7 +53,7 @@ public class UserDAO implements IDAO<User>
 	}
 
 	@Override
-	public boolean delete(User object)
+	public boolean delete(long id)
 	{
 		//
 		return false;
