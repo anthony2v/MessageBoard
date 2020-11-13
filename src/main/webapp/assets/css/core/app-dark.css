@@ -68,4 +68,9 @@
 	.app-dark .dropdown-menu { background-color: #000; }
 	.app-dark .dropdown-item { color: #fafafa; }
 	.app-dark .dropdown-item:focus, .app-dark .dropdown-item:hover { background-color: #424242; }
+
+	.app-dark .spinner {
+		border: 8px solid #212121;
+		border-top: 8px solid #fafafa;
+	}
 }
