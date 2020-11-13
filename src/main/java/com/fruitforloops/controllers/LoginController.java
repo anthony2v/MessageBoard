@@ -39,7 +39,6 @@ public class LoginController extends HttpServlet
 		User user = JSONUtil.gson.fromJson(request.getReader(), User.class);
 		
 		boolean authenticated = true;
-		String passwordHash = "";
 		try
 		{
 			MessageDigest digest = MessageDigest.getInstance("SHA1");
