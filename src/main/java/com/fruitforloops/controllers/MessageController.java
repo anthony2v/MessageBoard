@@ -155,7 +155,6 @@ public class MessageController extends HttpServlet
 			{
 				if (temp.getSize() < Long.valueOf(appConfig.getProperty("messages.max_attachment_size").trim()) && total_attachments_size < Long.valueOf(appConfig.getProperty("messages.max_total_attachments_size").trim()))
 				{
-<<<<<<< HEAD
 					message.setAttachments(attachments);
 					for (MessageAttachment a : attachments)
 						a.setMessage(message);
@@ -187,10 +186,8 @@ public class MessageController extends HttpServlet
 //						else
 //							ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
 					}
-=======
 					if (temp.getFieldName().equals("files[]"))
 						attachments.add(new MessageAttachment(temp.getName(), temp.get()));
->>>>>>> master
 				}
 				else
 				{
