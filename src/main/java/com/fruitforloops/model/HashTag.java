@@ -22,7 +22,7 @@ public class HashTag
 	@Column(unique = true)
 	private String tag;
 	
-	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.EAGER)
 	private Set<Message> messages;
 	
 	public long getId()

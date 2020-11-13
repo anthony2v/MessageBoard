@@ -68,7 +68,7 @@ public class MessageDAO implements IDAO<Message>
 	}
 
 	@Override
-	public boolean delete(Message object)
+	public boolean delete(long id)
 	{
 		//
 		return false;
