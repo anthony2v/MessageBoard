@@ -17,7 +17,7 @@ public class HashTagDeserializer implements JsonDeserializer<HashTag>
 		HashTag hashtag = new HashTag();
 		
 		JsonElement id = json.getAsJsonObject().get("id");
-		hashtag.setId(id == null ? -1 : id.getAsLong());
+		hashtag.setId(id == null ? null : id.getAsLong());
 		
 		JsonElement tag = json.getAsJsonObject().get("tag");
 		hashtag.setTag(tag == null ? null : tag.getAsString());

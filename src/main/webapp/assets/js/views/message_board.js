@@ -235,9 +235,17 @@ const MessageBoard = {
     },
 
     postMessage: () => {
-        let formData = new FormData();
+        let messageJSON = CommonUtil.formToJson(document.querySelector("#msgboard-form"), false);
 
-        formData.append("json", CommonUtil.formToJson(document.querySelector("#msgboard-form")));
+        let hashtag_regex = /\B\#\w\w+\b/g;
+        let hashtags = messageJSON.messageText.match(hashtag_regex);
+        messageJSON.hashtags = [];
+        for (let i = 0; i <hashtags.length; ++i) {
+            messageJSON.hashtags.push({tag: hashtags[i]});
+        }
+
+        let formData = new FormData();
+        formData.append("json", JSON.stringify(messageJSON));
 
         let txtMessageAttachments = document.querySelector("#msgboard-form #upload");
         if (txtMessageAttachments.files) {
@@ -256,7 +264,7 @@ const MessageBoard = {
             }
         )
         .then((response) => {
-            //MessageBoard.search();
+            MessageBoard.search();
         })
         .catch((error) => {
             console.error(error);

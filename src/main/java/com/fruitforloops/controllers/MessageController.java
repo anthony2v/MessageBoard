@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -26,6 +27,7 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 import com.fruitforloops.Constants;
 import com.fruitforloops.JSONUtil;
 import com.fruitforloops.ResponseUtil;
+import com.fruitforloops.model.HashTag;
 import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageAttachment;
 import com.fruitforloops.model.MessageManager;
@@ -52,8 +54,10 @@ public class MessageController extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// -------------- TEST --------------------
 		ArrayList<Message> messages = (ArrayList<Message>) new MessageDAO().getAll();
 		ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
+		// ----------------------------------------
 		
 		// extract parameters (request data)
 		String[] authors = request.getParameterValues("authors[]");
@@ -134,13 +138,16 @@ public class MessageController extends HttpServlet
 					// extract json message data
 					message = JSONUtil.gson.fromJson(temp.getString(), Message.class);
 					
-					JsonObject jsonObject = JsonParser.parseString(temp.getString()).getAsJsonObject();
-					JsonArray jsonArray = jsonObject.get("filesToDelete").getAsJsonArray();
-					filesToDelete = new long[jsonArray.size()];
-					for (int i = 0; i < filesToDelete.length; ++i)
+					if ("PUT".equals(postOrPut))
 					{
-						if (jsonArray.get(i) != null && jsonArray.get(i).getAsString().trim().length() > 0)
-							filesToDelete[i] = Long.valueOf(jsonArray.get(i).getAsString());
+						JsonObject jsonObject = JsonParser.parseString(temp.getString()).getAsJsonObject();
+						JsonArray jsonArray = jsonObject.get("filesToDelete").getAsJsonArray();
+						filesToDelete = new long[jsonArray.size()];
+						for (int i = 0; i < filesToDelete.length; ++i)
+						{
+							if (jsonArray.get(i) != null && jsonArray.get(i).getAsString().trim().length() > 0)
+								filesToDelete[i] = Long.valueOf(jsonArray.get(i).getAsString());
+						}
 					}
 				}
 			}
@@ -168,6 +175,14 @@ public class MessageController extends HttpServlet
 				for (MessageAttachment a : attachments)
 					a.setMessage(message);
 				
+				if (message.getHashtags() != null)
+				{
+					Set<Message> messageSet = new HashSet<Message>();
+					messageSet.add(message);
+					for (HashTag tag : message.getHashtags())
+						tag.setMessages(messageSet);
+				}
+				
 				HttpSession session = request.getSession(false);
 				if (session == null)
 				{
@@ -177,10 +192,16 @@ public class MessageController extends HttpServlet
 				{
 					message.setAuthor(((User)session.getAttribute("user")).getUsername());
 					
-					System.out.println("Saving message: " + message);
-					
 					// create Message using MessageManager (business layer)
 					// messageManager.createMessage(message);
+					
+					// -------------- TEST --------------------
+					//String consoleDebugInfo = "Saving message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
+					String consoleDebugInfo = "Saving message: " + message;
+					consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
+					System.out.println(consoleDebugInfo);
+					new MessageDAO().save(message);
+					// ----------------------------------------
 				}
 				else if (postOrPut.equals("PUT"))
 				{
@@ -194,6 +215,13 @@ public class MessageController extends HttpServlet
 //					}
 //					else
 //						ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
+					// -------------- TEST --------------------
+					//String consoleDebugInfo = "Updating message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
+					String consoleDebugInfo = "Updating message: " + message;
+					consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
+					System.out.println(consoleDebugInfo);
+					new MessageDAO().save(message);
+					// ----------------------------------------
 				}
 			}
 		}
@@ -223,7 +251,7 @@ public class MessageController extends HttpServlet
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// extract parameters (request data)
-		long messageId = Long.valueOf(request.getParameter("id").trim());
+		Long messageId = Long.valueOf(request.getParameter("id").trim());
 
 		// delete messages using MessageManager (business layer)
 		// messageManager.deleteMessage(messageId);

@@ -17,7 +17,7 @@ public class HashTag
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
 	@Column(unique = true)
 	private String tag;
@@ -25,11 +25,11 @@ public class HashTag
 	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.EAGER)
 	private Set<Message> messages;
 	
-	public long getId()
+	public Long getId()
 	{
 		return id;
 	}
-	public void setId(long id)
+	public void setId(Long id)
 	{
 		this.id = id;
 	}
@@ -41,5 +41,20 @@ public class HashTag
 	public void setTag(String tag)
 	{
 		this.tag = tag;
+	}
+	
+	public Set<Message> getMessages()
+	{
+		return messages;
+	}
+	public void setMessages(Set<Message> messages)
+	{
+		this.messages = messages;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "HashTag [id=" + id + ", tag=" + tag + "]";
 	}
 }
