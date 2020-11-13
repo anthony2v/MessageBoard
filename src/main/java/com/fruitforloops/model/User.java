@@ -1,13 +1,9 @@
 package com.fruitforloops.model;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.Serializable;
 import java.util.List;
 
-import com.fruitforloops.JSONUtil;
 import com.fruitforloops.model.dao.UserDAO;
-import com.google.gson.stream.JsonReader;
 
 public class User implements Serializable
 {
