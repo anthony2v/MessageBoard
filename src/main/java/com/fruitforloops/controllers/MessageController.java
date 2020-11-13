@@ -155,37 +155,6 @@ public class MessageController extends HttpServlet
 			{
 				if (temp.getSize() < Long.valueOf(appConfig.getProperty("messages.max_attachment_size").trim()) && total_attachments_size < Long.valueOf(appConfig.getProperty("messages.max_total_attachments_size").trim()))
 				{
-					message.setAttachments(attachments);
-					for (MessageAttachment a : attachments)
-						a.setMessage(message);
-					
-					HttpSession session = request.getSession(false);
-					if (session == null)
-					{
-						ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not logged in or your session timed out.", null);
-					}
-					else if (postOrPut.equals("POST"))
-					{
-						message.setAuthor(((User)session.getAttribute("user")).getUsername());
-						
-						System.out.println("Saving message: " + message);
-						
-						// create Message using MessageManager (business layer)
-						messageManager.createMessage(message);
-					}
-					else if (postOrPut.equals("PUT"))
-					{
-						User currentUser = (User)session.getAttribute("user");
-//						if (messageManager.userOwnsMessage(currentUser.getUsername(), message.getId()))
-//						{
-//							System.out.println("Updating message: " + message);
-//							
-//							// update Message using MessageManager (business layer)
-//							// messageManager.updateMessage(message, filesToDelete);
-//						}
-//						else
-//							ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
-					}
 					if (temp.getFieldName().equals("files[]"))
 						attachments.add(new MessageAttachment(temp.getName(), temp.get()));
 				}
