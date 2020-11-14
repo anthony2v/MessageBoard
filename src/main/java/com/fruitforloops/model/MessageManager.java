@@ -53,11 +53,10 @@ public class MessageManager
 	public void updateMessage(Message message, long[] filesToDelete)
 	{
 		// update the desired message
-		mdao.update(message);
-		
-		// delete series of message attachments
-		for (long id: filesToDelete)
-			madao.delete(id);
+		if (mdao.update(message))
+			// delete series of message attachments
+			for (long id: filesToDelete)
+				madao.delete(id);
 	}
 	
 }
