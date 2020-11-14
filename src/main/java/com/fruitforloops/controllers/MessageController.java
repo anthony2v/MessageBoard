@@ -80,7 +80,7 @@ public class MessageController extends HttpServlet
 		}
 		
 		// get messages from MessageManager (business layer)
-		// ArrayList<Message> messages = messageManager.getMessages(fromDate, toDate, authors, hashtags);
+		 ArrayList<Message> messages = messageManager.getMessages(fromDate, toDate, authors, hashtags);
 
 		// send appropriate response
 		//ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);

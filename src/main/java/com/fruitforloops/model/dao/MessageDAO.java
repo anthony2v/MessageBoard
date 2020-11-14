@@ -56,8 +56,22 @@ public class MessageDAO implements IDAO<Message>
 	@Override
 	public Message get(long id)
 	{
+		List<Message> messageList = new ArrayList<Message>();
+		
+		try (Session session = HibernateUtil.getSessionFactory().openSession())
+		{
+			messageList = session.createQuery("FROM Message WHERE id = : messageId", Message.class)
+					.setParameter("messageId", id) // checks if id is a long. Therefore avoid sql injection
+					.list();
+		}
+		catch (IOException e)
+		{
+			System.err.println("Unable to get list of messages.\n" + e.getMessage());
+		}
+		
+		
 		//
-		return null;
+		return mess;
 	}
 
 	@Override
