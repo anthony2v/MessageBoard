@@ -80,7 +80,6 @@ public class MessageController extends HttpServlet
 		}
 		
 		// get messages from MessageManager (business layer)
-		//ArrayList<Message> messages = messageManager.getMessages(fromDate, toDate, authors, hashtags);
 		 ArrayList<Message> messages = messageManager.getMessages(fromDate, toDate, authors, hashtags);
 
 		// send appropriate response
@@ -194,7 +193,7 @@ public class MessageController extends HttpServlet
 					message.setAuthor(((User)session.getAttribute("user")).getUsername());
 					
 					// create Message using MessageManager (business layer)
-					messageManager.createMessage(message);
+					// messageManager.createMessage(message);
 					
 					// -------------- TEST --------------------
 					//String consoleDebugInfo = "Saving message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
