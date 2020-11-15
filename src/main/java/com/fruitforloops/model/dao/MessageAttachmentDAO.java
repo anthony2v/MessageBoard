@@ -12,7 +12,7 @@ public class MessageAttachmentDAO implements IDAO<MessageAttachment>
 {
 
 	@Override
-	public MessageAttachment get(long id)
+	public MessageAttachment get(Long id)
 	{
 		MessageAttachment attachment = null;
 		Transaction transaction = null;
@@ -58,7 +58,7 @@ public class MessageAttachmentDAO implements IDAO<MessageAttachment>
 	}
 
 	@Override
-	public boolean delete(long id)
+	public boolean delete(Long id)
 	{
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {

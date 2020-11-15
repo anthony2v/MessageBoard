@@ -84,8 +84,6 @@ public class MessageManager
 	public boolean userOwnsMessage(String currentUser, Long messageId) {
 		Message message = mdao.get(messageId);
 		
-		System.out.println(message==null);
-		
 		if (message != null && message.getAuthor().equals(currentUser))
 			return true;
 		
