@@ -13,17 +13,23 @@
 			<div class="container-fluid">
 				<form id="msgboard-search-form" onsubmit="return false;">
 					<div class="form-row align-items-center">
-						<div class="col-lg-4 my-1">
+						<div class="col-lg-3 my-1">
 							<input class="form-control form-control-sm" type="text" name="authors" placeholder="author(s)" />
 						</div>
-						<div class="col-lg-5 my-1">
+						<div class="col-lg-4 my-1">
 							<input class="form-control form-control-sm" type="text" name="hashtags" placeholder="#tag1 #tag2 ..." />
 						</div>
-						<div class="col-lg-1 my-1">
-							<input class="form-control form-control-sm flatpickr flatpickr-input active" type="text" name="fromDate" placeholder="fromDate" readonly="readonly" />
+						<div class="col-lg-2 my-1">
+							<div class="flatpickr input-group-append rounded-right">
+								<input class="form-control form-control-sm active" data-input type="text" name="fromDate" placeholder="fromDate" readonly="readonly" />
+								<a class="input-button btn btn-sm btn-outline-danger" title="clear" data-clear><i class="fas fa-times"></i></a>
+							</div>
 						</div>
-						<div class="col-lg-1 my-1">
-							<input class="form-control form-control-sm flatpickr flatpickr-input active" type="text" name="toDate" placeholder="toDate" readonly="readonly" />
+						<div class="col-lg-2 my-1">
+							<div class="flatpickr input-group-append rounded-right">
+								<input class="form-control form-control-sm active" data-input type="text" name="toDate" placeholder="toDate" readonly="readonly" />
+								<a class="input-button btn btn-sm btn-outline-danger" title="clear" data-clear><i class="fas fa-times"></i></a>
+							</div>
 						</div>
 						<div class="col-lg-1 my-1">
 							<button class="btn btn-search btn-primary btn-block shadow-none"><i class="fas fa-search mr-2"></i>Search</button>

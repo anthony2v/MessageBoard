@@ -53,24 +53,42 @@ public class MessageDAO implements IDAO<Message> {
 	 * @param hashtags
 	 * @return
 	 */
-	public ArrayList<Message> getMessages(Date fDate, Date tDate, List<String> authors, List<String> hashtags) {
+	public ArrayList<Message> getMessages(Date fDate, Date tDate, List<String> authors, List<String> hashtags, int limit) {
 
 		ArrayList<Message> messageList = new ArrayList<Message>();
+		
+		String query = "FROM Message";
+		List<String> whereList = new ArrayList<String>();
+		
+		if (fDate != null)
+			whereList.add("created_date >= :fDate");
+		
+		if (tDate != null)
+			whereList.add("created_date <= :tDate");
+		
+		if (authors != null && authors.size() > 0)
+			whereList.add("author IN (:authors)");
 
-		String query = "FROM Message WHERE created_date >= :fDate AND last_modified_date <= :tDate";
+		if (hashtags != null && hashtags.size() > 0)
+			whereList.add(createMultiHashTagsSql(hashtags));
 
-		if (authors != null && authors.size() > 0) {
-			query += " AND author IN (:authors)";
-		}
-
-		if (hashtags != null && hashtags.size() > 0) {
-			query += createMultiHashTagsSql(hashtags);
-		}
-
+		if (whereList.size() > 0)
+			query += " WHERE " + whereList.get(0);
+		
+		for (int i = 1; i < whereList.size(); ++i)
+			query += " AND " + whereList.get(i);
+		
+		query += " ORDER BY created_date DESC";
+		
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-			Query<Message> queryObj = session.createQuery(query, Message.class).setParameter("fDate", fDate)
-					.setParameter("tDate", tDate);
+			Query<Message> queryObj = session.createQuery(query, Message.class).setMaxResults(limit);
+			
+			if (fDate != null)
+				queryObj.setParameter("fDate", fDate);
+				
+			if (tDate != null)
+				queryObj.setParameter("tDate", tDate);
 
 			if (authors != null && authors.size() > 0) {
 				queryObj.setParameterList("authors", authors);
@@ -91,7 +109,7 @@ public class MessageDAO implements IDAO<Message> {
 
 		StringBuilder str = new StringBuilder();
 
-		str.append(" AND (");
+		str.append("(");
 
 		for (String s : hashtags) {
 
