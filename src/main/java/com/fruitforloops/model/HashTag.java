@@ -25,6 +25,15 @@ public class HashTag
 	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.EAGER)
 	private Set<Message> messages;
 	
+	//default constructor
+	public HashTag() {
+	}
+	
+	//single parameter constructor
+	public HashTag(String tag) {
+		this.tag = tag;
+	}
+	
 	public Long getId()
 	{
 		return id;
