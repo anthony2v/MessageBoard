@@ -186,11 +186,11 @@ public class MessageDAO implements IDAO<Message>
 			}
 
 			// get original HashTags in the message
-			List<String> originalHashtags = getHashTags(originalMessage.getMessageText()).stream().distinct()
+			List<String> originalHashtags = parseHashTags(originalMessage.getMessageText()).stream().distinct()
 					.collect(Collectors.toList());
 
 			// get new/updated hash tags. Note: We will treat updated as new hash tags
-			List<String> incomingHashtags = getHashTags(message.getMessageText()).stream().distinct()
+			List<String> incomingHashtags = parseHashTags(message.getMessageText()).stream().distinct()
 					.collect(Collectors.toList());
 
 			// Finding deleted hashTags
@@ -246,14 +246,6 @@ public class MessageDAO implements IDAO<Message>
 		return true;
 	}
 
-	/**
-	 * This private method processes deleted hash tags
-	 * 
-	 * @param session
-	 * @param message
-	 * @param deletedHashtags
-	 * @throws IOException
-	 */
 	private void processDeletedHashtags(Session session, Message message, List<String> deletedHashtags)
 			throws IOException
 	{
@@ -297,15 +289,6 @@ public class MessageDAO implements IDAO<Message>
 		}
 
 	}
-
-	/**
-	 * This private method processes new hast tags
-	 * 
-	 * @param session
-	 * @param message
-	 * @param newHashtags
-	 * @throws IOException
-	 */
 
 	private ArrayList<HashTag> processNewHashtags(Session session, Message message, List<String> newHashtags)
 			throws IOException
@@ -373,14 +356,21 @@ public class MessageDAO implements IDAO<Message>
 		return true;
 	}
 
-	/**
-	 * Private method to get the hash tag id, given an actual hash tag
-	 * 
-	 * @param session
-	 * @param messageTag
-	 * @return
-	 * @throws IOException
-	 */
+	private ArrayList<String> parseHashTags(String messageText)
+	{
+
+		Pattern MY_PATTERN = Pattern.compile("#(\\S+)");
+		Matcher mat = MY_PATTERN.matcher(messageText);
+
+		ArrayList<String> hashTagList = new ArrayList<String>();
+
+		while (mat.find())
+		{
+			hashTagList.add(mat.group(1));
+		}
+		return hashTagList;
+	}
+	
 	private Long getHashTagId(String messageTag) throws IOException
 	{
 
@@ -399,27 +389,6 @@ public class MessageDAO implements IDAO<Message>
 
 		}
 		return (hashTagList != null && hashTagList.size() == 1) ? hashTagList.get(0).getId() : null;
-	}
-
-	/**
-	 * Private method to get all the has tags in a message text
-	 * 
-	 * @param message
-	 * @return
-	 */
-	private ArrayList<String> getHashTags(String message)
-	{
-
-		Pattern MY_PATTERN = Pattern.compile("#(\\S+)");
-		Matcher mat = MY_PATTERN.matcher(message);
-
-		ArrayList<String> hashTagList = new ArrayList<String>();
-
-		while (mat.find())
-		{
-			hashTagList.add(mat.group(1));
-		}
-		return hashTagList;
 	}
 
 	@Override
