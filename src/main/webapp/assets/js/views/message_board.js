@@ -68,7 +68,7 @@ const MessageBoard = {
 
     messageDownloadFileClick: (e) => {
         msgListItem = $(e.currentTarget).closest("li.msgboard-msg")[0];
-        window.open("/api/auth/messsage/file_download?id="+e.currentTarget.id.substring(11));
+        window.open("/api/auth/messsage/attachment?id="+encodeURIComponent(e.currentTarget.id.substring(11))+"&msgId="+encodeURIComponent(msgListItem.id.substring(4)));
     },
 
     messageSaveClick: (e) => {
