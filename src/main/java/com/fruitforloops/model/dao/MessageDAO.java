@@ -1,15 +1,29 @@
 package com.fruitforloops.model.dao;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import com.fruitforloops.HibernateUtil;
+import com.fruitforloops.model.HashTag;
 import com.fruitforloops.model.Message;
+import com.fruitforloops.model.MessageHashtag;
+
 
 public class MessageDAO implements IDAO<Message> {
 	@Override
