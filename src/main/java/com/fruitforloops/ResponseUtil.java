@@ -8,8 +8,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import com.fruitforloops.model.ResponseBean;
-
 public final class ResponseUtil
 {
 	private ResponseUtil()
@@ -29,7 +27,7 @@ public final class ResponseUtil
 		response.setContentType(MediaType.APPLICATION_JSON);
 		response.setCharacterEncoding("UTF-8");
 
-		ResponseBean jsonResponse = new ResponseBean(response.getStatus(), message, data);
+		Response jsonResponse = new Response(response.getStatus(), message, data);
 
 		PrintWriter out = response.getWriter();
 		out.print(JSONUtil.gson.toJson(jsonResponse));
@@ -50,11 +48,11 @@ public final class ResponseUtil
 		response.setContentType(MediaType.TEXT_XML);
 		response.setCharacterEncoding("UTF-8");
 
-		ResponseBean xmlResponse = new ResponseBean(response.getStatus(), message, data);
+		Response xmlResponse = new Response(response.getStatus(), message, data);
 
 		int contextListLength = data != null ? 2 : 1;
 		Class<?>[] contexts = new Class<?>[contextListLength + additionalContexts.length];
-		contexts[0] = ResponseBean.class;
+		contexts[0] = Response.class;
 		if (data != null) contexts[1] = data.getClass();
 		for (int i = 0; i < additionalContexts.length; i++)
 			contexts[contextListLength + i] = additionalContexts[i];

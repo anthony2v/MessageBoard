@@ -72,7 +72,7 @@ public class MessageManager
 
 	public void updateMessage(String currentUser, Message message, long[] filesToDelete) throws AuthException
 	{
-		if (!userOwnsMessage(currentUser, message))
+		if (!userOwnsMessage(currentUser, message.getId()))
 			throw new AuthException("The current user did not write this message.");
 		// update the desired message
 		if (mdao.update(message))
@@ -81,8 +81,10 @@ public class MessageManager
 				madao.delete(id);
 	}
 	
-	public boolean userOwnsMessage(String currentUser, Message message) {
-		if (message.getAuthor().equals(currentUser))
+	public boolean userOwnsMessage(String currentUser, Long messageId) {
+		Message message = mdao.get(messageId);
+		
+		if (message != null && message.getAuthor().equals(currentUser))
 			return true;
 		return false;
 	}
