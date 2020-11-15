@@ -97,7 +97,7 @@ const MessageBoard = {
 
         axios.put('/api/auth/message', 
             formData,
-            { 
+            {
                 headers: { 
                     'Content-Type': 'multipart/form-data' 
                 }
@@ -240,6 +240,11 @@ const MessageBoard = {
 
     postMessage: () => {
         let messageJSON = CommonUtil.formToJson(document.querySelector("#msgboard-form"), false);
+        let txtMessageAttachments = document.querySelector("#msgboard-form #upload");
+
+        // check for empty message
+        if (messageJSON.messageText != undefined && messageJSON.messageText.trim() == "" && txtMessageAttachments.files.length == 0)
+            return;
 
         let hashtag_regex = /\B\#\w\w+\b/g;
         let hashtags = messageJSON.messageText.match(hashtag_regex);
@@ -251,7 +256,6 @@ const MessageBoard = {
         let formData = new FormData();
         formData.append("json", JSON.stringify(messageJSON));
 
-        let txtMessageAttachments = document.querySelector("#msgboard-form #upload");
         if (txtMessageAttachments.files) {
             for(var i = 0; i < txtMessageAttachments.files.length; i++) {
                 if(txtMessageAttachments.files[i])
