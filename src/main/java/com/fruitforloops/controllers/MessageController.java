@@ -196,7 +196,7 @@ public class MessageController extends HttpServlet
 						System.out.println("Updating message: " + message);
 						
 						// update Message using MessageManager (business layer)
-						// messageManager.updateMessage(message, filesToDelete);
+						messageManager.updateMessage(currentUser.getUsername(), message, filesToDelete);
 					}
 					else
 						ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
