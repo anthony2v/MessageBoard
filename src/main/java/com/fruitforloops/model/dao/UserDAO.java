@@ -28,8 +28,8 @@ public class UserDAO implements IDAO<User> {
 	}
 
 	@Override
-	public User get(long id) {
-		// TODO Auto-generated method stub
+	public User get(Long id) {
+		// 
 		return null;
 	}
 
@@ -46,7 +46,7 @@ public class UserDAO implements IDAO<User> {
 	}
 
 	@Override
-	public boolean delete(long id) {
+	public boolean delete(Long id) {
 		//
 		return false;
 	}

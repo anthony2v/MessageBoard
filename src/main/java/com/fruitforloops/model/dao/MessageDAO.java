@@ -3,16 +3,12 @@ package com.fruitforloops.model.dao;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -138,10 +134,19 @@ public class MessageDAO implements IDAO<Message>
 	}
 
 	@Override
-	public Message get(long id)
+	public Message get(Long id)
 	{
-		//
-		return null;
+		Message message = null;
+		try (Session session = HibernateUtil.getSessionFactory().openSession())
+		{
+			message = session.createQuery("from Message where id = :id", Message.class).setParameter("id", id).getSingleResult();
+		}
+		catch (Exception e)
+		{
+			System.err.println("Unable to get message with id = " + id + ".\n" + e.getMessage());
+		}
+
+		return message;
 	}
 
 	@Override
@@ -405,7 +410,7 @@ public class MessageDAO implements IDAO<Message>
 	}
 
 	@Override
-	public boolean delete(long id)
+	public boolean delete(Long id)
 	{
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession())
