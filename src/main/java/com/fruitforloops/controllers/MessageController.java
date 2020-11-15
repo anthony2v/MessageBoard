@@ -201,7 +201,7 @@ public class MessageController extends HttpServlet
 					// -------------- TEST --------------------
 					//String consoleDebugInfo = "Saving message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
 					String consoleDebugInfo = "Saving message: " + message;
-					consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
+					//consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
 					System.out.println(consoleDebugInfo);
 					new MessageDAO().save(message);
 					// ----------------------------------------
@@ -221,7 +221,7 @@ public class MessageController extends HttpServlet
 					// -------------- TEST --------------------
 					//String consoleDebugInfo = "Updating message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
 					String consoleDebugInfo = "Updating message: " + message;
-					consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
+					//consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
 					System.out.println(consoleDebugInfo);
 					new MessageDAO().save(message);
 					// ----------------------------------------

@@ -11,7 +11,6 @@ import org.hibernate.cfg.Configuration;
 import com.fruitforloops.model.HashTag;
 import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageAttachment;
-import com.fruitforloops.model.MessageHashtag;
 
 public final class HibernateUtil
 {
@@ -39,7 +38,6 @@ public final class HibernateUtil
 				configuration.addAnnotatedClass(Message.class);
 				configuration.addAnnotatedClass(MessageAttachment.class);
 				configuration.addAnnotatedClass(HashTag.class);
-				configuration.addAnnotatedClass(MessageHashtag.class);
 				
 				registry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
 				sessionFactory = configuration.buildSessionFactory(registry);
