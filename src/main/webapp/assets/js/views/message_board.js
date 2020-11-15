@@ -9,8 +9,8 @@ const MessageBoard = {
         msgBox.addEventListener("keyup", () => { MessageBoard.resizeTextArea(msgBox) });
         MessageBoard.resizeTextArea(msgBox);
 
-        flatpickr("#msgboard-search-form [name='fromDate']", {enableTime: true, dateFormat: "Y-m-d H:i:S"});
-        flatpickr("#msgboard-search-form [name='toDate']", {enableTime: true, dateFormat: "Y-m-d H:i:S"});
+        flatpickr("#msgboard-search-form [name='fromDate']", {enableTime: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S"});
+        flatpickr("#msgboard-search-form [name='toDate']", {enableTime: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S"});
 
         document.querySelector("#msgboard-search-form .btn-search").addEventListener('click', MessageBoard.search);
 
@@ -55,8 +55,8 @@ const MessageBoard = {
             msgListItem.remove();
         })
         .catch((error) => {
-            console.error(error);
-            alert(error);
+            console.error(error.response.data);
+            alert(error.response.data.message);
         });
     },
 
@@ -68,7 +68,7 @@ const MessageBoard = {
 
     messageDownloadFileClick: (e) => {
         msgListItem = $(e.currentTarget).closest("li.msgboard-msg")[0];
-        window.open("/api/auth/messsage/file_download?id="+e.currentTarget.id.substring(11));
+        window.open("/api/auth/messsage/attachment?id="+encodeURIComponent(e.currentTarget.id.substring(11))+"&msgId="+encodeURIComponent(msgListItem.id.substring(4)));
     },
 
     messageSaveClick: (e) => {
@@ -108,8 +108,8 @@ const MessageBoard = {
             window.location.reload();
         })
         .catch((error) => {
-            console.error(error);
-            alert(error);
+            console.error(error.response.data);
+            alert(error.response.data.message);
         });
     },
 
@@ -209,7 +209,12 @@ const MessageBoard = {
     search: () => {
         MessageBoard.searchCriteria = CommonUtil.formToJson(document.querySelector("#msgboard-search-form"), false);
 
-        let regexAuthors = /[^,| ]+/g;
+        if (MessageBoard.searchCriteria.fromDate != undefined && MessageBoard.searchCriteria.fromDate.trim() != "")
+            MessageBoard.searchCriteria.fromDate = MessageBoard.searchCriteria.fromDate + ".000";
+        if (MessageBoard.searchCriteria.toDate != undefined && MessageBoard.searchCriteria.toDate.trim() != "")
+            MessageBoard.searchCriteria.toDate = MessageBoard.searchCriteria.toDate + ".000";
+
+        let regexAuthors = /[^ ]+/g;
         MessageBoard.searchCriteria.authors = MessageBoard.searchCriteria.authors.match(regexAuthors);
         
         let hashtag_regex = /\B\#\w\w+\b/g;
@@ -229,8 +234,8 @@ const MessageBoard = {
             }
         })
         .catch(function (error) {
-            console.error(error);
-            alert(error);
+            console.error(error.response.data);
+            alert(error.response.data.message);
         })
     },
 
@@ -240,7 +245,7 @@ const MessageBoard = {
         let hashtag_regex = /\B\#\w\w+\b/g;
         let hashtags = messageJSON.messageText.match(hashtag_regex);
         messageJSON.hashtags = [];
-        for (let i = 0; i <hashtags.length; ++i) {
+        for (let i = 0; i < messageJSON.hashtags.length; ++i) {
             messageJSON.hashtags.push({tag: hashtags[i]});
         }
 
@@ -267,8 +272,8 @@ const MessageBoard = {
             MessageBoard.search();
         })
         .catch((error) => {
-            console.error(error);
-            alert(error);
+            console.error(error.response.data);
+            alert(error.response.data.message);
         });
     }
 };
