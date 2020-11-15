@@ -24,7 +24,6 @@ import com.fruitforloops.model.HashTag;
 import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageHashtag;
 
-
 public class MessageDAO implements IDAO<Message> {
 	@Override
 	public boolean save(Message postMessage) {
@@ -67,19 +66,20 @@ public class MessageDAO implements IDAO<Message> {
 	 * @param hashtags
 	 * @return
 	 */
-	public ArrayList<Message> getMessages(Date fDate, Date tDate, List<String> authors, List<String> hashtags, int limit) {
+	public ArrayList<Message> getMessages(Date fDate, Date tDate, List<String> authors, List<String> hashtags,
+			int limit) {
 
 		ArrayList<Message> messageList = new ArrayList<Message>();
-		
+
 		String query = "FROM Message";
 		List<String> whereList = new ArrayList<String>();
-		
+
 		if (fDate != null)
 			whereList.add("created_date >= :fDate");
-		
+
 		if (tDate != null)
 			whereList.add("created_date <= :tDate");
-		
+
 		if (authors != null && authors.size() > 0)
 			whereList.add("author IN (:authors)");
 
@@ -88,19 +88,19 @@ public class MessageDAO implements IDAO<Message> {
 
 		if (whereList.size() > 0)
 			query += " WHERE " + whereList.get(0);
-		
+
 		for (int i = 1; i < whereList.size(); ++i)
 			query += " AND " + whereList.get(i);
-		
+
 		query += " ORDER BY created_date DESC";
-		
+
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
 			Query<Message> queryObj = session.createQuery(query, Message.class).setMaxResults(limit);
-			
+
 			if (fDate != null)
 				queryObj.setParameter("fDate", fDate);
-				
+
 			if (tDate != null)
 				queryObj.setParameter("tDate", tDate);
 
@@ -116,9 +116,7 @@ public class MessageDAO implements IDAO<Message> {
 		return messageList;
 	}
 
-
-
-	//Private method to create OR hashtag statements
+	// Private method to create OR hash tag statements
 	private String createMultiHashTagsSql(List<String> hashtags) {
 
 		StringBuilder str = new StringBuilder();
@@ -135,7 +133,7 @@ public class MessageDAO implements IDAO<Message> {
 		return finalStr += ")";
 
 	}
-	
+
 	@Override
 	public Message get(long id) {
 		//
@@ -148,16 +146,17 @@ public class MessageDAO implements IDAO<Message> {
 		if (message == null)
 			return false;
 
-		Transaction transaction = null;
 		Message originalMessage = null;
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-			originalMessage = (Message) session.get(Message.class, message.getId());
+			originalMessage = (Message) session .get(Message.class, message.getId());
 
 		} catch (IOException e) {
 			System.err.println("Unable to retrieve.\n" + e.getMessage());
 		}
+
+		Transaction transaction = null;
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
@@ -184,36 +183,45 @@ public class MessageDAO implements IDAO<Message> {
 
 			Set<HashTag> newHashSet = new HashSet<HashTag>();
 
-			for (String str : newHashtags) {
-
-				newHashSet.add(new HashTag(str));
-			}
-
-			// message.setHashtags(newHashSet);
-
-			transaction = session.beginTransaction();
-
 			// Deal with deleted Hash tags
 			processDeletedHashtags(session, message, deletedHashtags);
 
 			// Deal with new Hash tags
-			// processNewHashtags(session, message, newHashtags);
+			processNewHashtags(session, message, newHashtags);
 
-			//TODO: Not working as expected
-			//session.update(message);
+			// Now that we have inserted all new hash tags with generated IDs, we can now
+			// add them to message
+
+			for (String tag : incomingHashtags) {
+
+				String messageTag = "#" + tag;
+
+				Long hashTagId = getHashTagId(messageTag);
+
+				newHashSet.add(new HashTag(hashTagId, messageTag));
+
+			}
+
+			message.setHashtags(newHashSet);
+
+			transaction = session.beginTransaction();
+			session.update(message);
 
 			transaction.commit();
 
-			System.out.println("hello");
 
-		} catch (IOException e) {
-			System.err.println("Unable to update.\n" + e.getMessage());
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+			System.err.println("An error occured when trying to update a Message-.\n" + e.getMessage());
 
 			if (transaction != null)
 				transaction.rollback();
+			
+			//TODO: Delete newly added hash tags??
 
 			return false;
 		}
+		
 		return true;
 	}
 
@@ -237,13 +245,15 @@ public class MessageDAO implements IDAO<Message> {
 
 			String messageTag = "#" + tag;
 
-			Long hashTagId = getHashTagId(session, messageTag);
+			Long hashTagId = getHashTagId(messageTag);
 
 			// If we can not figure out the hash tag id because of missing entry in
 			// [hashtag]
 			// then there is no way we can delete them
 			if (hashTagId != null) {
 
+				try
+				{
 				// (1) Remove entries from [message_hashtag]
 				session.createQuery("delete " + MessageHashtag.class.getSimpleName()
 						+ " WHERE message_id = :id AND hashtag_id = :hashId").setParameter("id", message.getId())
@@ -252,6 +262,11 @@ public class MessageDAO implements IDAO<Message> {
 				// (2) Remove entries from [hashtag] table if no one is using that hash tag
 				// anymore
 
+				}
+				catch(Exception ex)
+				{
+					System.out.println(ex.getStackTrace());
+				}
 				List<MessageHashtag> messageHashTagList = session
 						.createQuery("FROM MessageHashtag WHERE hashtag_id = :tagId", MessageHashtag.class)
 						.setParameter("tagId", hashTagId).list();
@@ -289,7 +304,7 @@ public class MessageDAO implements IDAO<Message> {
 
 			String messageTag = "#" + tag;
 
-			Long hashTagId = getHashTagId(session, messageTag);
+			Long hashTagId = getHashTagId(messageTag);
 
 			// Entirely new hash tag
 			if (hashTagId == null) {
@@ -311,14 +326,19 @@ public class MessageDAO implements IDAO<Message> {
 				newInsertedHashTags.add(hashTag);
 
 				// Get generated hash Tag
-				hashTagId = hashTag.getId();
+				// hashTagId = hashTag.getId();
 
 			}
 
-			EntityManager eniEntityManager = session.getEntityManagerFactory().createEntityManager();
-
-			eniEntityManager.createNativeQuery("INSERT INTO message_hashtag (message_id, hashtag_id) VALUES (?, ?)")
-					.setParameter(1, message.getId()).setParameter(2, hashTagId).executeUpdate();
+			/*
+			 * EntityManager eniEntityManager =
+			 * session.getEntityManagerFactory().createEntityManager();
+			 * 
+			 * eniEntityManager.
+			 * createNativeQuery("INSERT INTO message_hashtag (message_id, hashtag_id) VALUES (?, ?)"
+			 * ) .setParameter(1, message.getId()).setParameter(2,
+			 * hashTagId).executeUpdate();
+			 */
 
 			// MessageHashtag messageHashtag = new MessageHashtag(message.getId(),hashTagId
 			// );
@@ -359,12 +379,19 @@ public class MessageDAO implements IDAO<Message> {
 	 * @return
 	 * @throws IOException
 	 */
-	private Long getHashTagId(Session session, String messageTag) throws IOException {
+	private Long getHashTagId(String messageTag) throws IOException {
 
-		// Should always return size 1
-		List<HashTag> hashTagList = session.createQuery("FROM HashTag WHERE tag = :tag", HashTag.class)
-				.setParameter("tag", messageTag).list();
+		List<HashTag> hashTagList = null;
 
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			// Should always return size 1
+			hashTagList = session.createQuery("FROM HashTag WHERE tag = :tag", HashTag.class)
+					.setParameter("tag", messageTag).list();
+
+		} catch (Exception e) {
+			System.err.println("An error occured when trying to retrieve hashtag id-.\n" + e.getMessage());
+
+		}
 		return (hashTagList != null && hashTagList.size() == 1) ? hashTagList.get(0).getId() : null;
 	}
 
@@ -389,20 +416,16 @@ public class MessageDAO implements IDAO<Message> {
 	}
 
 	@Override
-	public boolean delete(long id) 
-	{
+	public boolean delete(long id) {
 		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) 
-		{
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
 
-			session.createQuery("delete " + Message.class.getSimpleName() + " where id = :id")
-				.setParameter("id", id).executeUpdate();
+			session.createQuery("delete " + Message.class.getSimpleName() + " where id = :id").setParameter("id", id)
+					.executeUpdate();
 
 			transaction.commit();
-		} 
-		catch (Exception e) 
-		{
+		} catch (Exception e) {
 			System.err.println("An error occured when trying to delete a Message.\n" + e.getMessage());
 
 			if (transaction != null)

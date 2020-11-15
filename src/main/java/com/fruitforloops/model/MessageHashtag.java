@@ -16,6 +16,9 @@ public class MessageHashtag {
 	@Column(name = "hashtag_id")
 	private Long hashtagId;
 	
+	public MessageHashtag() {
+	}
+
 	public MessageHashtag(Long hashId) {
 		hashtagId = hashId;
 	}
