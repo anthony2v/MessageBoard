@@ -14,14 +14,13 @@ import com.fruitforloops.MediaType;
 import com.fruitforloops.model.MessageAttachment;
 import com.fruitforloops.model.MessageManager;
 
-
 @WebServlet(Constants.API_PATH + "auth/message/attachment")
 public class MessageAttachmentController extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	private MessageManager messageManager;
-	
+
 	public MessageAttachmentController()
 	{
 		super();
@@ -32,16 +31,17 @@ public class MessageAttachmentController extends HttpServlet
 	{
 		// extract parameters (request data)
 		Long attachmentId = Long.valueOf(request.getParameter("id").trim());
-		
+
 		MessageAttachment attachment = messageManager.getMessageAttachment(attachmentId);
-		
+
 		response.setContentType(MediaType.TEXT_PLAIN);
 		response.setContentLength(attachment.getData().length);
-		response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", attachment.getFilename()));
-		
+		response.setHeader("Content-Disposition",
+				String.format("attachment; filename=\"%s\"", attachment.getFilename()));
+
 		OutputStream outputStream = response.getOutputStream();
 		outputStream.write(attachment.getData());
-		
+
 		outputStream.flush();
 		outputStream.close();
 	}
