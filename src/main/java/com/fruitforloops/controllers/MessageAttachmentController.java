@@ -29,7 +29,7 @@ public class MessageAttachmentController extends HttpServlet
 		// extract parameters (request data)
 		long attachmentId = Long.valueOf(request.getParameter("id"));
 		
-		//messageManager.getMessageAttachment(attachmentId);
+		messageManager.getMessageAttachment(attachmentId);
 	}
 	
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -37,6 +37,6 @@ public class MessageAttachmentController extends HttpServlet
 		// extract parameters (request data)
 		long attachmentId = Long.valueOf(request.getParameter("id"));
 		
-		//messageManager.deleteMessageAttachment(attachmentId);
+		messageManager.deleteMessageAttachment(attachmentId);
 	}
 }
