@@ -188,35 +188,20 @@ public class MessageController extends HttpServlet
 					message.setAuthor(((User)session.getAttribute("user")).getUsername());
 					
 					// create Message using MessageManager (business layer)
-					// messageManager.createMessage(message);
-					
-					// -------------- TEST --------------------
-					//String consoleDebugInfo = "Saving message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
-					String consoleDebugInfo = "Saving message: " + message;
-					consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
-					System.out.println(consoleDebugInfo);
-					new MessageDAO().save(message);
-					// ----------------------------------------
+					messageManager.createMessage(message);
 				}
 				else if (postOrPut.equals("PUT"))
 				{
 					User currentUser = (User)session.getAttribute("user");
-//					if (messageManager.userOwnsMessage(currentUser.getUsername(), message.getId()))
-//					{
-//						System.out.println("Updating message: " + message);
-//						
-//						// update Message using MessageManager (business layer)
-//						// messageManager.updateMessage(message, filesToDelete);
-//					}
-//					else
-//						ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
-					// -------------- TEST --------------------
-					//String consoleDebugInfo = "Updating message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
-					String consoleDebugInfo = "Updating message: " + message;
-					consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
-					System.out.println(consoleDebugInfo);
-					new MessageDAO().save(message);
-					// ----------------------------------------
+					if (messageManager.userOwnsMessage(currentUser.getUsername(), message.getId()))
+					{
+						System.out.println("Updating message: " + message);
+						
+						// update Message using MessageManager (business layer)
+						// messageManager.updateMessage(message, filesToDelete);
+					}
+					else
+						ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
 				}
 			}
 		}
