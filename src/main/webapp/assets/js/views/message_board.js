@@ -104,6 +104,7 @@ const MessageBoard = {
             }
         )
         .then((response) => {
+            if (response.data.message) alert(response.data.message);
             window.location.reload();
         })
         .catch((error) => {
@@ -272,7 +273,9 @@ const MessageBoard = {
             }
         )
         .then((response) => {
-            MessageBoard.search();
+            console.log(response);
+            if (response.data.message) alert(response.data.message);
+            window.location.reload();
         })
         .catch((error) => {
             console.error(error.response.data);

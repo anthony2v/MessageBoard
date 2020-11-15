@@ -222,6 +222,8 @@ public class MessageController extends HttpServlet
 			for (String fname : ignoredFiles)
 				responseMessage += "'" + fname + "' ";
 			responseMessage += "]";
+			
+			responseMessage += "\nThe maximum total size for file attachments must be less than 2MB.";
 
 			ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, responseMessage, null);
 		}
