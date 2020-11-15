@@ -55,8 +55,8 @@ public class MessageController extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// -------------- TEST --------------------
-		ArrayList<Message> messages = (ArrayList<Message>) new MessageDAO().getAll();
-		ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
+		//ArrayList<Message> messages = (ArrayList<Message>) new MessageDAO().getAll();
+		//ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
 		// ----------------------------------------
 		
 		// extract parameters (request data)
@@ -80,10 +80,10 @@ public class MessageController extends HttpServlet
 		}
 		
 		// get messages from MessageManager (business layer)
-		//ArrayList<Message> messages = messageManager.getMessages(fromDate, toDate, authors, hashtags);
+		ArrayList<Message> messages = messageManager.getMessages(fromDate, toDate, authors, hashtags);
 
 		// send appropriate response
-		//ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
+		ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
 	}
 
 	@Override

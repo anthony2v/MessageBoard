@@ -2,14 +2,25 @@ package com.fruitforloops.model;
 
 import com.fruitforloops.model.dao.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import javax.security.auth.message.AuthException;
 
 public class MessageManager
 {
-	MessageDAO mdao = new MessageDAO();
-	MessageAttachmentDAO madao = new MessageAttachmentDAO();
+	MessageDAO mdao = null;
+	MessageAttachmentDAO madao = null;
+	
+	public MessageManager() {
+		mdao = new MessageDAO();
+		madao = new MessageAttachmentDAO();
+//		Properties appConfig = new Properties();
+//		appConfig.load(getClass().getClassLoader().getResourceAsStream("/WEB-INF/app.config.properties"));
+//		int limit = Integer.valueOf(appConfig.getProperty("messages.pagination").trim());
+		//messageDao.filter(limit);
+	}
 
 	public void createMessage(Message newMessage)
 	{
@@ -37,27 +48,16 @@ public class MessageManager
 	
 	public ArrayList<Message> getMessages(Date fromDate, Date toDate, String[] authors, String[] hashtags)
 	{
-		ArrayList<Message> messageList = (ArrayList<Message>)mdao.getAll();
-		if (authors == null || hashtags == null)
-			return messageList;
-			
-		// populate messageList with message between fromDate and toDate, and includes the given authors and hashtags
-		messageList.removeIf((message) -> {
-			if (message.getCreatedDate().after(fromDate) && message.getCreatedDate().before(toDate))
-				for (String author: authors)
-					if (message.getAuthor().equals(author))
-						for (String hashtag: hashtags)
-							if (message.getHashtags().contains(hashtag))
-								return false;
-			return true;
-		});
-
-//		Properties appConfig = new Properties();
-//		appConfig.load(getClass().getClassLoader().getResourceAsStream("/WEB-INF/app.config.properties"));
-//		int limit = Integer.valueOf(appConfig.getProperty("messages.pagination").trim());
-//		ArrayList<Message> messageList = mdao.getAll(limit);
+		List<String> authorsList = null;
+		List<String> hashtagsList = null;
+		if (authors != null) {
+			authorsList = Arrays.asList(authors);
+		}
+		if (hashtags != null) {
+			hashtagsList = Arrays.asList(hashtags);
+		}
 		
-		return messageList;
+		return (ArrayList<Message>)mdao.getMessages(fromDate, toDate, authorsList, hashtagsList);
 	}
 
 	public void updateMessage(String currentUser, Message message, long[] filesToDelete) throws AuthException
