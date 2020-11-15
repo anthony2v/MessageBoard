@@ -37,8 +37,11 @@ public class MessageManager
 	
 	public ArrayList<Message> getMessages(Date fromDate, Date toDate, String[] authors, String[] hashtags)
 	{
-		// populate messageList with message between fromDate and toDate, and includes the given authors and hashtags
 		ArrayList<Message> messageList = (ArrayList<Message>)mdao.getAll();
+		if (authors == null || hashtags == null)
+			return messageList;
+			
+		// populate messageList with message between fromDate and toDate, and includes the given authors and hashtags
 		messageList.removeIf((message) -> {
 			if (message.getCreatedDate().after(fromDate) && message.getCreatedDate().before(toDate))
 				for (String author: authors)
