@@ -193,8 +193,6 @@ public class MessageController extends HttpServlet
 					User currentUser = (User)session.getAttribute("user");
 					if (messageManager.userOwnsMessage(currentUser.getUsername(), message.getId()))
 					{
-						System.out.println("Updating message: " + message);
-						
 						// update Message using MessageManager (business layer)
 						messageManager.updateMessage(currentUser.getUsername(), message, filesToDelete);
 					}

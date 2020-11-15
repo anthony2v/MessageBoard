@@ -214,7 +214,6 @@ public class MessageDAO implements IDAO<Message> {
 			transaction.commit();
 
 		} catch (Exception e) {
-			System.out.println(e.getStackTrace());
 			System.err.println("An error occured when trying to update a Message-.\n" + e.getMessage());
 
 			if (transaction != null)
@@ -380,7 +379,6 @@ public class MessageDAO implements IDAO<Message> {
 		ArrayList<String> hashTagList = new ArrayList<String>();
 
 		while (mat.find()) {
-			System.out.println(mat.group(1));
 			hashTagList.add(mat.group(1));
 		}
 		return hashTagList;
