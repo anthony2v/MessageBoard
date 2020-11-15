@@ -1,9 +1,21 @@
 package com.fruitforloops.model;
 
+import com.fruitforloops.model.dao.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
-import com.fruitforloops.model.dao.*;
+import javax.security.auth.message.AuthException;
+
+/**
+ * 
+ * @author Anthony
+ * getMessages(fromDate, toDate, authors, hashtags);
+ * createMessage(message);
+ * userOwnsMessage(currentUser.getUsername(), message.getId())
+ * updateMessage(message, filesToDelete);
+ * deleteMessage(messageId);
+ * getMessageAttachment(attachmentId, messageId);
+ */
 
 public class MessageManager
 {
@@ -56,13 +68,21 @@ public class MessageManager
 		return messageList;
 	}
 
-	public void updateMessage(Message message, long[] filesToDelete)
+	public void updateMessage(String currentUser, Message message, long[] filesToDelete) throws AuthException
 	{
+		if (!userOwnsMessage(currentUser, message))
+			throw new AuthException("The current user did not write this message.");
 		// update the desired message
 		if (mdao.update(message))
 			// delete series of message attachments
 			for (long id: filesToDelete)
 				madao.delete(id);
+	}
+	
+	public boolean userOwnsMessage(String currentUser, Message message) {
+		if (message.getAuthor().equals(currentUser))
+			return true;
+		return false;
 	}
 }
 
