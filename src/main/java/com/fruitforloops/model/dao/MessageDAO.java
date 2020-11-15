@@ -130,7 +130,7 @@ public class MessageDAO implements IDAO<Message> {
 	}
 
 	@Override
-	public Message get(long id) {
+	public Message get(Long id) {
 
 		Message message = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -387,7 +387,7 @@ public class MessageDAO implements IDAO<Message> {
 	}
 
 	@Override
-	public boolean delete(long id) {
+	public boolean delete(Long id) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
