@@ -55,25 +55,29 @@ public class MessageDAO implements IDAO<Message> {
 	 */
 	public ArrayList<Message> getMessages(Date fDate, Date tDate, List<String> authors, List<String> hashtags) {
 
-		ArrayList<Message> searchList = new ArrayList<Message>();
+		ArrayList<Message> messagesList = new ArrayList<Message>();
 
-		String query = "FROM Message WHERE author IN (:authors) AND"
-				+ " created_date >= :fDate AND last_modified_date <= :tDate";
+		String query = "FROM Message WHERE created_date >= :fDate AND last_modified_date <= :tDate";
+			
+		if(authors != null && authors.size() > 0)
+		{
+			query += " AND author IN (:authors)";
+		}
 
-		if (hashtags.size() > 0) {
+		if (hashtags != null && hashtags.size() > 0) {
 			query += createMultiHashTagsSql(hashtags);
 		}
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			searchList = (ArrayList<Message>) session.createQuery(query, Message.class)
+			messagesList = (ArrayList<Message>) session.createQuery(query, Message.class)
 					.setParameterList("authors", authors).setParameter("fDate", fDate).setParameter("tDate", tDate)
 					.list();
 		} catch (IOException e) {
 			System.err.println("Unable to get list of messages.\n" + e.getMessage());
 		}
-		return searchList;
-
+		return messagesList;
 	}
+
 
 	//Private method to create OR hashtag statements
 	private String createMultiHashTagsSql(List<String> hashtags) {
@@ -100,9 +104,40 @@ public class MessageDAO implements IDAO<Message> {
 	}
 
 	@Override
-	public boolean update(Message object) {
-		//
-		return false;
+	public boolean update(Message message) {
+		
+		if(message == null) return false;
+		
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+		
+			session.beginTransaction();
+			session.update(message);
+			session.getTransaction().commit();
+			
+		} catch (IOException e) {
+			System.err.println("Unable to update.\n" + e.getMessage());
+			return false;
+		}
+		return true;
+	}
+
+	public boolean delete_2(long id) {
+		
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+		
+			Message message = (Message)session.get(Message.class,id);
+			
+			if(message == null) return false;
+			
+			session.beginTransaction();
+		    session.delete(message);
+			session.getTransaction().commit();
+		 
+		} catch (IOException e) {
+			System.err.println("Unable to delete.\n" + e.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
