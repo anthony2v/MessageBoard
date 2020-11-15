@@ -60,6 +60,14 @@ public class MessageDAO implements IDAO<Message> {
 
 		String query = "FROM Message WHERE created_date >= :fDate AND last_modified_date <= :tDate";
 
+		if (fDate == null) {
+			fDate = new Date(0);
+		}
+		
+		if (tDate == null) {
+			tDate = new Date(9999, 12, 31, 23, 59, 59);
+		}
+		
 		if (authors != null && authors.size() > 0) {
 			query += " AND author IN (:authors)";
 		}
