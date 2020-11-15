@@ -10,14 +10,19 @@ import com.fruitforloops.JSONUtil;
 import com.fruitforloops.model.User;
 import com.google.gson.stream.JsonReader;
 
-public class UserDAO implements IDAO<User> {
+public class UserDAO implements IDAO<User>
+{
 	@Override
-	public List<User> getAll() {
+	public List<User> getAll()
+	{
 		JsonReader reader = null;
-		try {
+		try
+		{
 			reader = new JsonReader(
 					new FileReader(getClass().getClassLoader().getResource("/WEB-INF/users.json").getPath()));
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e)
+		{
 			System.err.println("'users.json' file is missing.\n" + e.getMessage());
 			return new ArrayList<User>();
 		}
@@ -28,25 +33,29 @@ public class UserDAO implements IDAO<User> {
 	}
 
 	@Override
-	public User get(Long id) {
-		// 
+	public User get(Long id)
+	{
+		//
 		return null;
 	}
 
 	@Override
-	public boolean save(User object) {
+	public boolean save(User object)
+	{
 		//
 		return false;
 	}
 
 	@Override
-	public boolean update(User object) {
+	public boolean update(User object)
+	{
 		//
 		return false;
 	}
 
 	@Override
-	public boolean delete(Long id) {
+	public boolean delete(Long id)
+	{
 		//
 		return false;
 	}

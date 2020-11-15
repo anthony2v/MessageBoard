@@ -16,19 +16,19 @@ public class MessageAttachmentDAO implements IDAO<MessageAttachment>
 	{
 		MessageAttachment attachment = null;
 		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+		try (Session session = HibernateUtil.getSessionFactory().openSession())
+		{
 			transaction = session.beginTransaction();
 
 			attachment = session.get(MessageAttachment.class, id);
 
 			transaction.commit();
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			System.err.println("An error occured when trying to save a Message.\n" + e.getMessage());
 
-			if (transaction != null)
-				transaction.rollback();
+			if (transaction != null) transaction.rollback();
 
 			return attachment;
 		}
@@ -61,20 +61,20 @@ public class MessageAttachmentDAO implements IDAO<MessageAttachment>
 	public boolean delete(Long id)
 	{
 		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+		try (Session session = HibernateUtil.getSessionFactory().openSession())
+		{
 			transaction = session.beginTransaction();
 
 			session.createQuery("delete " + MessageAttachment.class.getSimpleName() + " where id = :id")
-				.setParameter("id", id).executeUpdate();
+					.setParameter("id", id).executeUpdate();
 
 			transaction.commit();
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			System.err.println("An error occured when trying to delete a Message Attachment.\n" + e.getMessage());
 
-			if (transaction != null)
-				transaction.rollback();
+			if (transaction != null) transaction.rollback();
 
 			return false;
 		}
