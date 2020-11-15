@@ -9,8 +9,7 @@ const MessageBoard = {
         msgBox.addEventListener("keyup", () => { MessageBoard.resizeTextArea(msgBox) });
         MessageBoard.resizeTextArea(msgBox);
 
-        flatpickr("#msgboard-search-form [name='fromDate']", {enableTime: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S"});
-        flatpickr("#msgboard-search-form [name='toDate']", {enableTime: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S"});
+        flatpickr("#msgboard-search-form .flatpickr", {wrap:true, enableTime: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S"});
 
         document.querySelector("#msgboard-search-form .btn-search").addEventListener('click', MessageBoard.search);
 

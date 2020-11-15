@@ -62,15 +62,18 @@ public class MessageController extends HttpServlet
 		// extract parameters (request data)
 		String[] authors = request.getParameterValues("authors[]");
 		String[] hashtags = request.getParameterValues("hashtags[]");
-		String toDateStr = request.getParameter("toDate");
 		String fromDateStr = request.getParameter("fromDate");
+		String toDateStr = request.getParameter("toDate");
+		
+		System.out.println(fromDateStr);
+		System.out.println(toDateStr);
 		
 		// parse and validate dates
 		Date fromDate, toDate;
 		try
 		{
 			fromDate = fromDateStr == null || fromDateStr.isBlank() ? null : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(fromDateStr);
-			toDate = toDateStr == null || fromDateStr.isBlank() ? null : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(toDateStr);
+			toDate = toDateStr == null || toDateStr.isBlank() ? null : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(toDateStr);
 		}
 		catch (ParseException e)
 		{

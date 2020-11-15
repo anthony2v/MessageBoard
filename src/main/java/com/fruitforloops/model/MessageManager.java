@@ -1,6 +1,8 @@
 package com.fruitforloops.model;
 
 import com.fruitforloops.model.dao.*;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -16,10 +18,6 @@ public class MessageManager
 	public MessageManager() {
 		mdao = new MessageDAO();
 		madao = new MessageAttachmentDAO();
-//		Properties appConfig = new Properties();
-//		appConfig.load(getClass().getClassLoader().getResourceAsStream("/WEB-INF/app.config.properties"));
-//		int limit = Integer.valueOf(appConfig.getProperty("messages.pagination").trim());
-		//messageDao.filter(limit);
 	}
 
 	public void createMessage(Message newMessage)
@@ -57,7 +55,19 @@ public class MessageManager
 			hashtagsList = Arrays.asList(hashtags);
 		}
 		
-		return (ArrayList<Message>)mdao.getMessages(fromDate, toDate, authorsList, hashtagsList);
+		Properties appConfig = new Properties();
+		int limit = 10;
+		try
+		{
+			appConfig.load(getClass().getClassLoader().getResourceAsStream("/WEB-INF/app.config.properties"));
+			limit = Integer.valueOf(appConfig.getProperty("messages.pagination").trim());
+		}
+		catch (IOException e)
+		{
+			System.err.println("could not read app config. Using default of 10 instead.");
+		}
+		
+		return (ArrayList<Message>)mdao.getMessages(fromDate, toDate, authorsList, hashtagsList, limit);
 	}
 
 	public void updateMessage(String currentUser, Message message, long[] filesToDelete) throws AuthException
