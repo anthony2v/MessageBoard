@@ -163,6 +163,7 @@ public class MessageDAO implements IDAO<Message>
 			System.err.println("Unable to retrieve.\n" + e.getMessage());
 		}
 
+		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession())
 		{
 
@@ -203,7 +204,7 @@ public class MessageDAO implements IDAO<Message>
 
 				String messageTag = "#" + tag;
 
-				Long hashTagId = getHashTagId(messageTag);
+				Long hashTagId = getHashTagId(session, messageTag);
 
 				newHashSet.add(new HashTag(hashTagId, messageTag));
 
@@ -291,7 +292,7 @@ public class MessageDAO implements IDAO<Message>
 
 			String messageTag = "#" + tag;
 
-			Long hashTagId = getHashTagId(messageTag);
+			Long hashTagId = getHashTagId(session, messageTag);
 
 			// Entirely new hash tag
 			if (hashTagId == null)
@@ -375,15 +376,9 @@ public class MessageDAO implements IDAO<Message>
 
 		List<HashTag> hashTagList = null;
 
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			// Should always return size 1
-			hashTagList = session.createQuery("FROM HashTag WHERE tag = :tag", HashTag.class)
-					.setParameter("tag", messageTag).list();
-
-		} catch (Exception e) {
-			System.err.println("An error occured when trying to retrieve hashtag id-.\n" + e.getMessage());
-
-		}
+		hashTagList = session.createQuery("FROM HashTag WHERE tag = :tag", HashTag.class)
+				.setParameter("tag", messageTag).list();
+		
 		return (hashTagList != null && hashTagList.size() == 1) ? hashTagList.get(0).getId() : null;
 	}
 

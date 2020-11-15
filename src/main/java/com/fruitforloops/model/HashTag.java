@@ -34,6 +34,11 @@ public class HashTag
 		this.tag = tag;
 	}
 	
+	public HashTag(Long id, String tag) {
+		this.id = id;
+		this.tag = tag;
+	}
+	
 	public Long getId()
 	{
 		return id;
