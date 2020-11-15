@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -32,7 +31,6 @@ import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageAttachment;
 import com.fruitforloops.model.MessageManager;
 import com.fruitforloops.model.User;
-import com.fruitforloops.model.dao.MessageDAO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
