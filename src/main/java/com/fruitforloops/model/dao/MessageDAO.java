@@ -1,6 +1,7 @@
 package com.fruitforloops.model.dao;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -18,25 +19,21 @@ import com.fruitforloops.HibernateUtil;
 import com.fruitforloops.model.HashTag;
 import com.fruitforloops.model.Message;
 
-public class MessageDAO implements IDAO<Message>
-{
+public class MessageDAO implements IDAO<Message> {
 	@Override
-	public boolean save(Message postMessage)
-	{
+	public boolean save(Message postMessage) {
 		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession())
-		{
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
 
 			session.save(postMessage);
 
 			transaction.commit();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			System.err.println("An error occured when trying to save a Message-.\n" + e.getMessage());
 
-			if (transaction != null) transaction.rollback();
+			if (transaction != null)
+				transaction.rollback();
 
 			return false;
 		}
@@ -45,15 +42,11 @@ public class MessageDAO implements IDAO<Message>
 	}
 
 	@Override
-	public List<Message> getAll()
-	{
+	public List<Message> getAll() {
 		List<Message> messageList = new ArrayList<Message>();
-		try (Session session = HibernateUtil.getSessionFactory().openSession())
-		{
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			messageList = session.createQuery("from Message", Message.class).list();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			System.err.println("Unable to get list of messages.\n" + e.getMessage());
 		}
 
@@ -69,64 +62,67 @@ public class MessageDAO implements IDAO<Message>
 	 * @return
 	 */
 	public ArrayList<Message> getMessages(Date fDate, Date tDate, List<String> authors, List<String> hashtags,
-			int limit)
-	{
+			int limit) {
 
 		ArrayList<Message> messageList = new ArrayList<Message>();
 
 		String query = "FROM Message";
 		List<String> whereList = new ArrayList<String>();
 
-		if (fDate != null) whereList.add("created_date >= :fDate");
+		if (fDate != null)
+			whereList.add("created_date >= :fDate");
 
-		if (tDate != null) whereList.add("created_date <= :tDate");
+		if (tDate != null)
+			whereList.add("created_date <= :tDate");
 
-		if (authors != null && authors.size() > 0) whereList.add("author IN (:authors)");
+		if (authors != null && authors.size() > 0)
+			whereList.add("author IN (:authors)");
 
-		if (hashtags != null && hashtags.size() > 0) whereList.add(createMultiHashTagsSql(hashtags));
+		if (hashtags != null && hashtags.size() > 0)
+			whereList.add(createMultiHashTagsSql(hashtags));
 
-		if (whereList.size() > 0) query += " WHERE " + whereList.get(0);
+		if (whereList.size() > 0)
+			query += " WHERE " + whereList.get(0);
 
 		for (int i = 1; i < whereList.size(); ++i)
 			query += " AND " + whereList.get(i);
 
 		query += " ORDER BY created_date DESC";
 
-		try (Session session = HibernateUtil.getSessionFactory().openSession())
-		{
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
 			Query<Message> queryObj = session.createQuery(query, Message.class).setMaxResults(limit);
 
-			if (fDate != null) queryObj.setParameter("fDate", fDate);
+			if (fDate != null)
+				queryObj.setParameter("fDate", fDate);
 
-			if (tDate != null) queryObj.setParameter("tDate", tDate);
+			if (tDate != null)
+				queryObj.setParameter("tDate", tDate);
 
-			if (authors != null && authors.size() > 0)
-			{
+			if (authors != null && authors.size() > 0) {
 				queryObj.setParameterList("authors", authors);
 			}
 
 			messageList = (ArrayList<Message>) queryObj.list();
 
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			System.err.println("Unable to get list of messages.\n" + e.getMessage());
 		}
 		return messageList;
 	}
 
-	// Private method to create OR hashtag statements
-	private String createMultiHashTagsSql(List<String> hashtags)
-	{
+	// Private method to create OR hash tag statements
+	private String createMultiHashTagsSql(List<String> hashtags) {
 
 		StringBuilder str = new StringBuilder();
 
 		str.append("(");
 
-		for (String s : hashtags)
+		for (String s : hashtags) {
+
 			str.append("message_text LIKE '%" + s + "%' OR ");
-		
+
+		}
 		String finalStr = str.toString();
 		finalStr = (String) finalStr.subSequence(0, finalStr.length() - 3);
 		return finalStr += ")";
@@ -134,15 +130,13 @@ public class MessageDAO implements IDAO<Message>
 	}
 
 	@Override
-	public Message get(Long id)
-	{
+	public Message get(long id) {
+
 		Message message = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession())
-		{
-			message = session.createQuery("from Message where id = :id", Message.class).setParameter("id", id).getSingleResult();
-		}
-		catch (Exception e)
-		{
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			message = session.createQuery("from Message where id = :id", Message.class).setParameter("id", id)
+					.getSingleResult();
+		} catch (Exception e) {
 			System.err.println("Unable to get message with id = " + id + ".\n" + e.getMessage());
 		}
 
@@ -150,31 +144,27 @@ public class MessageDAO implements IDAO<Message>
 	}
 
 	@Override
-	public boolean update(Message message)
-	{
+	public boolean update(Message message) {
 
-		if (message == null) return false;
+		if (message == null)
+			return false;
 
 		Message originalMessage = null;
 
-		try (Session session = HibernateUtil.getSessionFactory().openSession())
-		{
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-			originalMessage = (Message) session .get(Message.class, message.getId());
+			originalMessage = (Message) session.get(Message.class, message.getId());
 
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			System.err.println("Unable to retrieve.\n" + e.getMessage());
 		}
 
 		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession())
-		{
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
 			// If message to update does not exist
-			if (originalMessage == null)
-			{
+			if (originalMessage == null) {
 				return false;
 			}
 
@@ -196,6 +186,8 @@ public class MessageDAO implements IDAO<Message>
 
 			Set<HashTag> newHashSet = new HashSet<HashTag>();
 
+			transaction = session.beginTransaction();
+
 			// Deal with deleted Hash tags
 			processDeletedHashtags(session, message, deletedHashtags);
 
@@ -209,7 +201,7 @@ public class MessageDAO implements IDAO<Message>
 
 				String messageTag = "#" + tag;
 
-				Long hashTagId = getHashTagId(session, messageTag);
+				Long hashTagId = getHashTagId(messageTag);
 
 				newHashSet.add(new HashTag(hashTagId, messageTag));
 
@@ -217,11 +209,9 @@ public class MessageDAO implements IDAO<Message>
 
 			message.setHashtags(newHashSet);
 
-			transaction = session.beginTransaction();
 			session.update(message);
 
 			transaction.commit();
-
 
 		} catch (Exception e) {
 			System.out.println(e.getStackTrace());
@@ -229,12 +219,12 @@ public class MessageDAO implements IDAO<Message>
 
 			if (transaction != null)
 				transaction.rollback();
-			
-			//TODO: Delete newly added hash tags??
+
+			// TODO: Delete newly added hash tags??
 
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -246,31 +236,41 @@ public class MessageDAO implements IDAO<Message>
 	 * @param deletedHashtags
 	 * @throws IOException
 	 */
-	private void processDeletedHashtags(Session session, Message message, List<String> deletedHashtags) throws IOException
-	{
-		for (String tag : deletedHashtags)
-		{
+	private void processDeletedHashtags(Session session, Message message, List<String> deletedHashtags)
+			throws IOException {
+
+		/*
+		 * (1) Remove entries from [message_hashtag] (2) Find if others are using hash
+		 * tags. NO: Remove entries from [hashtag]
+		 */
+
+		for (String tag : deletedHashtags) {
 			String messageTag = "#" + tag;
 
-			Long hashTagId = getHashTagId(session, messageTag);
-			if (hashTagId != null)
-			{
-				session.createNativeQuery("delete from message_hashtag where message_id = :message_id and hashtag_id = :hashtag_id")
-						.setParameter("message_id", message.getId())
-						.setParameter("hashtag_id", hashTagId)
-						.executeUpdate();
-				
-				Long count = (Long) session.createNativeQuery("select Count(*) from message_hashtag where hashtag_id = :hashtag_id")
-					.setParameter("hashtag_id", hashTagId)
-					.getSingleResult();
-				
-				if (count == 0)
-				{
-					session.createQuery("delete from " + hashTagId.getClass().getSimpleName() + " where id = :hashtag_id")
-						.setParameter("hashtag_id", hashTagId);
+			Long hashTagId = getHashTagId(messageTag);
+			if (hashTagId != null) {
+				try {
+					session.createNativeQuery(
+							"delete from message_hashtag where message_id = :message_id and hashtag_id = :hashtag_id")
+							.setParameter("message_id", message.getId()).setParameter("hashtag_id", hashTagId)
+							.executeUpdate();
+
+					BigInteger count = (BigInteger) session
+							.createNativeQuery("select Count(*) from message_hashtag where hashtag_id = :hashtag_id")
+							.setParameter("hashtag_id", hashTagId).getSingleResult();
+
+					if (count.intValue() == 0) {
+						session.createQuery("delete from " + HashTag.class.getSimpleName() + " where id = :hashtag_id")
+								.setParameter("hashtag_id", hashTagId);
+					}
+
+				} catch (Exception x) {
+					x.printStackTrace();
 				}
+
 			}
 		}
+
 	}
 
 	/**
@@ -283,8 +283,7 @@ public class MessageDAO implements IDAO<Message>
 	 */
 
 	private ArrayList<HashTag> processNewHashtags(Session session, Message message, List<String> newHashtags)
-			throws IOException
-	{
+			throws IOException {
 
 		ArrayList<HashTag> newInsertedHashTags = new ArrayList<HashTag>();
 		/*
@@ -292,16 +291,14 @@ public class MessageDAO implements IDAO<Message>
 		 * [message_hashtag]
 		 */
 
-		for (String tag : newHashtags)
-		{
+		for (String tag : newHashtags) {
 
 			String messageTag = "#" + tag;
 
-			Long hashTagId = getHashTagId(session, messageTag);
+			Long hashTagId = getHashTagId(messageTag);
 
 			// Entirely new hash tag
-			if (hashTagId == null)
-			{
+			if (hashTagId == null) {
 
 				// Insert new entry into [hashtag]
 				HashTag hashTag = new HashTag();
@@ -319,48 +316,25 @@ public class MessageDAO implements IDAO<Message>
 				// Inserting the to the list to be sent back
 				newInsertedHashTags.add(hashTag);
 
-				// Get generated hash Tag
-				// hashTagId = hashTag.getId();
-
 			}
-
-			/*
-			 * EntityManager eniEntityManager =
-			 * session.getEntityManagerFactory().createEntityManager();
-			 * 
-			 * eniEntityManager.
-			 * createNativeQuery("INSERT INTO message_hashtag (message_id, hashtag_id) VALUES (?, ?)"
-			 * ) .setParameter(1, message.getId()).setParameter(2,
-			 * hashTagId).executeUpdate();
-			 */
-
-			// MessageHashtag messageHashtag = new MessageHashtag(message.getId(),hashTagId
-			// );
-
-			// Insert them into [message_hashtag
-			// session.save(new MessageHashtag(message.getId(),hashTagId));
-
 		}
 
 		return newInsertedHashTags;
 	}
 
-	public boolean saveHashTag(HashTag hashTag)
-	{
+	public boolean saveHashTag(HashTag hashTag) {
 		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession())
-		{
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
 
 			session.save(hashTag);
 
 			transaction.commit();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			System.err.println("An error occured when trying to save a HashTag Message-.\n" + e.getMessage());
 
-			if (transaction != null) transaction.rollback();
+			if (transaction != null)
+				transaction.rollback();
 
 			return false;
 		}
@@ -376,14 +350,19 @@ public class MessageDAO implements IDAO<Message>
 	 * @return
 	 * @throws IOException
 	 */
-	private Long getHashTagId(Session session, String messageTag) throws IOException
-	{
+	private Long getHashTagId(String messageTag) throws IOException {
 
 		List<HashTag> hashTagList = null;
 
-		hashTagList = session.createQuery("FROM HashTag WHERE tag = :tag", HashTag.class)
-				.setParameter("tag", messageTag).list();
-		
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			// Should always return size 1
+			hashTagList = session.createQuery("FROM HashTag WHERE tag = :tag", HashTag.class)
+					.setParameter("tag", messageTag).list();
+
+		} catch (Exception e) {
+			System.err.println("An error occured when trying to retrieve hashtag id-.\n" + e.getMessage());
+
+		}
 		return (hashTagList != null && hashTagList.size() == 1) ? hashTagList.get(0).getId() : null;
 	}
 
@@ -393,16 +372,14 @@ public class MessageDAO implements IDAO<Message>
 	 * @param message
 	 * @return
 	 */
-	private ArrayList<String> getHashTags(String message)
-	{
+	private ArrayList<String> getHashTags(String message) {
 
 		Pattern MY_PATTERN = Pattern.compile("#(\\S+)");
 		Matcher mat = MY_PATTERN.matcher(message);
 
 		ArrayList<String> hashTagList = new ArrayList<String>();
 
-		while (mat.find())
-		{
+		while (mat.find()) {
 			System.out.println(mat.group(1));
 			hashTagList.add(mat.group(1));
 		}
@@ -410,23 +387,20 @@ public class MessageDAO implements IDAO<Message>
 	}
 
 	@Override
-	public boolean delete(Long id)
-	{
+	public boolean delete(long id) {
 		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession())
-		{
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			transaction = session.beginTransaction();
 
-			session.createQuery("delete from " + Message.class.getSimpleName() + " where id = :id")
-				.setParameter("id", id).executeUpdate();
+			session.createQuery("delete " + Message.class.getSimpleName() + " where id = :id").setParameter("id", id)
+					.executeUpdate();
 
 			transaction.commit();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			System.err.println("An error occured when trying to delete a Message.\n" + e.getMessage());
 
-			if (transaction != null) transaction.rollback();
+			if (transaction != null)
+				transaction.rollback();
 
 			return false;
 		}
@@ -434,3 +408,4 @@ public class MessageDAO implements IDAO<Message>
 		return true;
 	}
 }
+
