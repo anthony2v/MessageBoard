@@ -106,8 +106,28 @@ public class MessageDAO implements IDAO<Message> {
 	}
 
 	@Override
-	public boolean delete(long id) {
-		//
-		return false;
+	public boolean delete(long id) 
+	{
+		Transaction transaction = null;
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) 
+		{
+			transaction = session.beginTransaction();
+
+			session.createQuery("delete " + Message.class.getSimpleName() + " where id = :id")
+				.setParameter("id", id).executeUpdate();
+
+			transaction.commit();
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("An error occured when trying to delete a Message.\n" + e.getMessage());
+
+			if (transaction != null)
+				transaction.rollback();
+
+			return false;
+		}
+
+		return true;
 	}
 }
