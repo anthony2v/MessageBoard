@@ -1,6 +1,5 @@
 package com.fruitforloops.model.dao;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +38,7 @@ public class MessageDAO implements IDAO<Message> {
 		List<Message> messageList = new ArrayList<Message>();
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			messageList = session.createQuery("from Message", Message.class).list();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.err.println("Unable to get list of messages.\n" + e.getMessage());
 		}
 
@@ -79,7 +78,7 @@ public class MessageDAO implements IDAO<Message> {
 
 			messageList = (ArrayList<Message>) queryObj.list();
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.err.println("Unable to get list of messages.\n" + e.getMessage());
 		}
 		return messageList;
@@ -122,7 +121,7 @@ public class MessageDAO implements IDAO<Message> {
 			session.update(message);
 			session.getTransaction().commit();
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.err.println("Unable to update.\n" + e.getMessage());
 			return false;
 		}
