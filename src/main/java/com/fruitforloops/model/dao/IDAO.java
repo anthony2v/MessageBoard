@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface IDAO<T> 
 {
-    public T get(long id);
+    public T get(Long id);
      
     public List<T> getAll();
      
@@ -12,5 +12,5 @@ public interface IDAO<T>
      
     public boolean update(T object);
      
-    public boolean delete(long id);
+    public boolean delete(Long id);
 }

@@ -9,8 +9,7 @@ const MessageBoard = {
         msgBox.addEventListener("keyup", () => { MessageBoard.resizeTextArea(msgBox) });
         MessageBoard.resizeTextArea(msgBox);
 
-        flatpickr("#msgboard-search-form [name='fromDate']", {enableTime: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S"});
-        flatpickr("#msgboard-search-form [name='toDate']", {enableTime: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S"});
+        flatpickr("#msgboard-search-form .flatpickr", {wrap:true, enableTime: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S"});
 
         document.querySelector("#msgboard-search-form .btn-search").addEventListener('click', MessageBoard.search);
 
@@ -68,7 +67,7 @@ const MessageBoard = {
 
     messageDownloadFileClick: (e) => {
         msgListItem = $(e.currentTarget).closest("li.msgboard-msg")[0];
-        window.open("/api/auth/messsage/attachment?id="+encodeURIComponent(e.currentTarget.id.substring(11))+"&msgId="+encodeURIComponent(msgListItem.id.substring(4)));
+        window.open("/api/auth/message/attachment?id="+encodeURIComponent(e.currentTarget.id.substring(11))+"&msgId="+encodeURIComponent(msgListItem.id.substring(4)));
     },
 
     messageSaveClick: (e) => {
@@ -98,7 +97,7 @@ const MessageBoard = {
 
         axios.put('/api/auth/message', 
             formData,
-            { 
+            {
                 headers: { 
                     'Content-Type': 'multipart/form-data' 
                 }
@@ -241,18 +240,22 @@ const MessageBoard = {
 
     postMessage: () => {
         let messageJSON = CommonUtil.formToJson(document.querySelector("#msgboard-form"), false);
+        let txtMessageAttachments = document.querySelector("#msgboard-form #upload");
+
+        // check for empty message
+        if (messageJSON.messageText != undefined && messageJSON.messageText.trim() == "" && txtMessageAttachments.files.length == 0)
+            return;
 
         let hashtag_regex = /\B\#\w\w+\b/g;
         let hashtags = messageJSON.messageText.match(hashtag_regex);
         messageJSON.hashtags = [];
-        for (let i = 0; i <hashtags.length; ++i) {
+        for (let i = 0; i < messageJSON.hashtags.length; ++i) {
             messageJSON.hashtags.push({tag: hashtags[i]});
         }
 
         let formData = new FormData();
         formData.append("json", JSON.stringify(messageJSON));
 
-        let txtMessageAttachments = document.querySelector("#msgboard-form #upload");
         if (txtMessageAttachments.files) {
             for(var i = 0; i < txtMessageAttachments.files.length; i++) {
                 if(txtMessageAttachments.files[i])

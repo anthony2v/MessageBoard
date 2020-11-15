@@ -1,4 +1,4 @@
-package com.fruitforloops.model;
+package com.fruitforloops;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -9,7 +9,7 @@ import com.fruitforloops.jaxb.XMLListWrapper;
 
 @XmlRootElement
 @XmlSeeAlso({XMLListWrapper.class})
-public class ResponseBean implements java.io.Serializable
+public class Response implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1L;
 
@@ -17,11 +17,11 @@ public class ResponseBean implements java.io.Serializable
 	private String message;
 	private Object data;
 
-	public ResponseBean()
+	public Response()
 	{
 	}
 
-	public ResponseBean(int status, String message, Object data)
+	public Response(int status, String message, Object data)
 	{
 		this.status = status;
 		this.message = message;

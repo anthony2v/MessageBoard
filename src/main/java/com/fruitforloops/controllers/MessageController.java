@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -32,7 +31,6 @@ import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageAttachment;
 import com.fruitforloops.model.MessageManager;
 import com.fruitforloops.model.User;
-import com.fruitforloops.model.dao.MessageDAO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -54,23 +52,18 @@ public class MessageController extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-//		// -------------- TEST --------------------
-//		ArrayList<Message> messages = (ArrayList<Message>) new MessageDAO().getAll();
-//		ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
-//		// ----------------------------------------
-		
 		// extract parameters (request data)
 		String[] authors = request.getParameterValues("authors[]");
 		String[] hashtags = request.getParameterValues("hashtags[]");
-		String toDateStr = request.getParameter("toDate");
 		String fromDateStr = request.getParameter("fromDate");
+		String toDateStr = request.getParameter("toDate");
 		
 		// parse and validate dates
 		Date fromDate, toDate;
 		try
 		{
-			fromDate = fromDateStr == null || fromDateStr.isBlank() ? new Date(0) : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(fromDateStr);
-			toDate = toDateStr == null || fromDateStr.isBlank() ? new Date(Long.MAX_VALUE) : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(toDateStr);
+			fromDate = fromDateStr == null || fromDateStr.isBlank() ? null : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(fromDateStr);
+			toDate = toDateStr == null || toDateStr.isBlank() ? null : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(toDateStr);
 		}
 		catch (ParseException e)
 		{
@@ -80,10 +73,10 @@ public class MessageController extends HttpServlet
 		}
 		
 		// get messages from MessageManager (business layer)
-		// ArrayList<Message> messages = messageManager.getMessages(fromDate, toDate, authors, hashtags);
+		ArrayList<Message> messages = messageManager.getMessages(fromDate, toDate, authors, hashtags);
 
 		// send appropriate response
-		//ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
+		ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
 	}
 
 	@Override
@@ -193,35 +186,20 @@ public class MessageController extends HttpServlet
 					message.setAuthor(((User)session.getAttribute("user")).getUsername());
 					
 					// create Message using MessageManager (business layer)
-					// messageManager.createMessage(message);
-					
-					// -------------- TEST --------------------
-					//String consoleDebugInfo = "Saving message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
-					String consoleDebugInfo = "Saving message: " + message;
-					consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
-					System.out.println(consoleDebugInfo);
-					new MessageDAO().save(message);
-					// ----------------------------------------
+					messageManager.createMessage(message);
 				}
 				else if (postOrPut.equals("PUT"))
 				{
 					User currentUser = (User)session.getAttribute("user");
-//					if (messageManager.userOwnsMessage(currentUser.getUsername(), message.getId()))
-//					{
-//						System.out.println("Updating message: " + message);
-//						
-//						// update Message using MessageManager (business layer)
-//						// messageManager.updateMessage(message, filesToDelete);
-//					}
-//					else
-//						ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
-					// -------------- TEST --------------------
-					//String consoleDebugInfo = "Updating message: " + ((HashTag)message.getHashtags().toArray()[0]).getMessages().toArray()[0];
-					String consoleDebugInfo = "Updating message: " + message;
-					consoleDebugInfo += "\n" + Arrays.toString(message.getHashtags().toArray());
-					System.out.println(consoleDebugInfo);
-					new MessageDAO().save(message);
-					// ----------------------------------------
+					if (messageManager.userOwnsMessage(currentUser.getUsername(), message.getId()))
+					{
+						System.out.println("Updating message: " + message);
+						
+						// update Message using MessageManager (business layer)
+						messageManager.updateMessage(currentUser.getUsername(), message, filesToDelete);
+					}
+					else
+						ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
 				}
 			}
 		}
@@ -254,8 +232,6 @@ public class MessageController extends HttpServlet
 		Long messageId = Long.valueOf(request.getParameter("id").trim());
 
 		// delete messages using MessageManager (business layer)
-		// messageManager.deleteMessage(messageId);
-		
-		ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, null);
+		messageManager.deleteMessage(messageId);
 	}
 }
