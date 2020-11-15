@@ -54,19 +54,11 @@ public class MessageController extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// -------------- TEST --------------------
-		//ArrayList<Message> messages = (ArrayList<Message>) new MessageDAO().getAll();
-		//ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
-		// ----------------------------------------
-		
 		// extract parameters (request data)
 		String[] authors = request.getParameterValues("authors[]");
 		String[] hashtags = request.getParameterValues("hashtags[]");
 		String fromDateStr = request.getParameter("fromDate");
 		String toDateStr = request.getParameter("toDate");
-		
-		System.out.println(fromDateStr);
-		System.out.println(toDateStr);
 		
 		// parse and validate dates
 		Date fromDate, toDate;
@@ -257,8 +249,6 @@ public class MessageController extends HttpServlet
 		Long messageId = Long.valueOf(request.getParameter("id").trim());
 
 		// delete messages using MessageManager (business layer)
-		// messageManager.deleteMessage(messageId);
-		
-		ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, null);
+		messageManager.deleteMessage(messageId);
 	}
 }
