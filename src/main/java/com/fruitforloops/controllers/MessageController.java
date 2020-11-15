@@ -69,8 +69,8 @@ public class MessageController extends HttpServlet
 		Date fromDate, toDate;
 		try
 		{
-			fromDate = fromDateStr == null ? new Date(0) : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(fromDateStr);
-			toDate = toDateStr == null ? new Date(Long.MAX_VALUE) : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(toDateStr);
+			fromDate = fromDateStr == null || fromDateStr.isBlank() ? null : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(fromDateStr);
+			toDate = toDateStr == null || fromDateStr.isBlank() ? null : Constants.DATE_FORMAT_yyyy_MM_dd_HH_mm_ss_SSS.parse(toDateStr);
 		}
 		catch (ParseException e)
 		{
