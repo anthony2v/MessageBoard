@@ -154,7 +154,7 @@ public class MessageDAO implements IDAO<Message> {
 		{
 			transaction = session.beginTransaction();
 
-			session.createQuery("delete " + Message.class.getSimpleName() + " where id = :id")
+			session.createQuery("delete from " + Message.class.getSimpleName() + " where id = :id")
 				.setParameter("id", id).executeUpdate();
 
 			transaction.commit();
