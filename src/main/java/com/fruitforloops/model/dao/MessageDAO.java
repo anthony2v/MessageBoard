@@ -71,7 +71,7 @@ public class MessageDAO implements IDAO<Message>
 		
 		
 		//
-		return mess;
+		return messageList.get(0);
 	}
 
 	@Override
