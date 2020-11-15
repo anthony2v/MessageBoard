@@ -56,15 +56,14 @@ public class MessageDAO implements IDAO<Message> {
 	public ArrayList<Message> getMessages(Date fDate, Date tDate, List<String> authors, List<String> hashtags) {
 
 		ArrayList<Message> messageList = new ArrayList<Message>();
-
-		String query = "FROM Message WHERE created_date >= :fDate AND last_modified_date <= :tDate";
-
-		if (fDate == null) {
-			fDate = new Date(0);
-		}
 		
-		if (tDate == null) {
-			tDate = new Date(9999, 12, 31, 23, 59, 59);
+		String query = null;
+		
+		if (fDate == null || tDate == null) {
+			query = "FROM Message";
+		}
+		else {
+			query = "FROM Message WHERE created_date >= :fDate AND last_modified_date <= :tDate";
 		}
 		
 		if (authors != null && authors.size() > 0) {
