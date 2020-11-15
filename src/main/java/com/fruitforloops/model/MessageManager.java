@@ -2,6 +2,7 @@ package com.fruitforloops.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 import com.fruitforloops.model.dao.*;
 
 public class MessageManager
@@ -47,6 +48,11 @@ public class MessageManager
 			return true;
 		});
 
+//		Properties appConfig = new Properties();
+//		appConfig.load(getClass().getClassLoader().getResourceAsStream("/WEB-INF/app.config.properties"));
+//		int limit = Integer.valueOf(appConfig.getProperty("messages.pagination").trim());
+//		ArrayList<Message> messageList = mdao.getAll(limit);
+		
 		return messageList;
 	}
 
