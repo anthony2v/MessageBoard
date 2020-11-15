@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import com.fruitforloops.HibernateUtil;
 import com.fruitforloops.model.Message;
@@ -55,12 +56,11 @@ public class MessageDAO implements IDAO<Message> {
 	 */
 	public ArrayList<Message> getMessages(Date fDate, Date tDate, List<String> authors, List<String> hashtags) {
 
-		ArrayList<Message> messagesList = new ArrayList<Message>();
+		ArrayList<Message> messageList = new ArrayList<Message>();
 
 		String query = "FROM Message WHERE created_date >= :fDate AND last_modified_date <= :tDate";
-			
-		if(authors != null && authors.size() > 0)
-		{
+
+		if (authors != null && authors.size() > 0) {
 			query += " AND author IN (:authors)";
 		}
 
@@ -69,14 +69,22 @@ public class MessageDAO implements IDAO<Message> {
 		}
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			messagesList = (ArrayList<Message>) session.createQuery(query, Message.class)
-					.setParameterList("authors", authors).setParameter("fDate", fDate).setParameter("tDate", tDate)
-					.list();
+
+			Query<Message> queryObj = session.createQuery(query, Message.class).setParameter("fDate", fDate)
+					.setParameter("tDate", tDate);
+
+			if (authors != null && authors.size() > 0) {
+				queryObj.setParameterList("authors", authors);
+			}
+
+			messageList = (ArrayList<Message>) queryObj.list();
+
 		} catch (IOException e) {
 			System.err.println("Unable to get list of messages.\n" + e.getMessage());
 		}
-		return messagesList;
+		return messageList;
 	}
+
 
 
 	//Private method to create OR hashtag statements
@@ -116,25 +124,6 @@ public class MessageDAO implements IDAO<Message> {
 			
 		} catch (IOException e) {
 			System.err.println("Unable to update.\n" + e.getMessage());
-			return false;
-		}
-		return true;
-	}
-
-	public boolean delete_2(long id) {
-		
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-		
-			Message message = (Message)session.get(Message.class,id);
-			
-			if(message == null) return false;
-			
-			session.beginTransaction();
-		    session.delete(message);
-			session.getTransaction().commit();
-		 
-		} catch (IOException e) {
-			System.err.println("Unable to delete.\n" + e.getMessage());
 			return false;
 		}
 		return true;
