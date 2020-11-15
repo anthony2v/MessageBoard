@@ -6,17 +6,6 @@ import java.util.Date;
 import java.util.Properties;
 import javax.security.auth.message.AuthException;
 
-/**
- * 
- * @author Anthony
- * getMessages(fromDate, toDate, authors, hashtags);
- * createMessage(message);
- * userOwnsMessage(currentUser.getUsername(), message.getId())
- * updateMessage(message, filesToDelete);
- * deleteMessage(messageId);
- * getMessageAttachment(attachmentId, messageId);
- */
-
 public class MessageManager
 {
 	MessageDAO mdao = new MessageDAO();
