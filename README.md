@@ -1,13 +1,17 @@
-# SOEN 387 Assignment 2
+# SOEN 387 Assignment 3
 
-In this assignment we implement a small web application that simulates a simple Message Board System.
+This assignment is the second iteration on the MessageBoard System that was implemented in the previous assignment. It consists of the following sections: 
+1) HandlingUsersandGroups 
+2) TestDrivenDevelopment
+3) UsingPatterns
+4) UsingWebPresentationPatterns
 
-See `documentation/SOEN387_Assignment2.pdf` for more details.
+See `documentation/SOEN387_Assignment_3.pdf` for more details.
 
 <br/>
 
 ## Table of Contents
-- [SOEN 387 Assignment 2](#soen-387-assignment-2)
+- [SOEN 387 Assignment 3](#soen-387-assignment-3)
   - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
   - [Getting Started](#getting-started)

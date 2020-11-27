@@ -8,28 +8,55 @@ import java.util.List;
 
 import com.fruitforloops.JSONUtil;
 import com.fruitforloops.model.User;
+import com.fruitforloops.model.UserGroup;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
 public class UserDAO implements IDAO<User>
 {
+	public static final String usersDataStorePath = "/WEB-INF/users.json";
+	
 	@Override
 	public List<User> getAll()
 	{
 		JsonReader reader = null;
 		try
 		{
-			reader = new JsonReader(
-					new FileReader(getClass().getClassLoader().getResource("/WEB-INF/users.json").getPath()));
+			reader = new JsonReader(new FileReader(getClass().getClassLoader().getResource(usersDataStorePath).getPath()));
 		}
 		catch (FileNotFoundException e)
 		{
 			System.err.println("'users.json' file is missing.\n" + e.getMessage());
 			return new ArrayList<User>();
 		}
+		
+		JsonObject jsonObj = JSONUtil.gson.fromJson(reader, JsonObject.class);
+		
+		JsonArray usersJsonArray = jsonObj.get("users").getAsJsonArray();
+		User[] users = JSONUtil.gson.fromJson(usersJsonArray, User[].class);
+		
+		JsonArray groupsJsonArray = jsonObj.get("groups").getAsJsonArray();
+		UserGroup[] groups = JSONUtil.gson.fromJson(groupsJsonArray, UserGroup[].class);
+		
+		if (groups != null)
+		{
+			for (User u : users)
+			{
+				List<UserGroup> groupMembershipList = new ArrayList<UserGroup>();
+				for (int i = 0; i < groups.length; ++i)
+				{
+					groupMembershipList.add(groups[i]);
+				}
+				
+				UserGroup[] groupMembershipArray = new UserGroup[groupMembershipList.size()];
+				for (int i = 0; i < groupMembershipList.size(); ++i)
+					groupMembershipArray[i] = groupMembershipList.get(i);
+				u.setGroups(groupMembershipArray);
+			}
+		}
 
-		User[] userArray = JSONUtil.gson.fromJson(reader, User[].class);
-
-		return Arrays.asList(userArray);
+		return Arrays.asList(users);
 	}
 
 	@Override

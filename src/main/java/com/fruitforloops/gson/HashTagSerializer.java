@@ -16,7 +16,7 @@ public class HashTagSerializer implements JsonSerializer<HashTag>
 		JsonObject jsonObject = new JsonObject();
 		
         jsonObject.addProperty("id", src.getId());
-        jsonObject.addProperty("message_id", src.getTag() == null ? null : src.getTag());
+        jsonObject.addProperty("tag", src.getTag() == null ? null : src.getTag());
         
         return jsonObject;
 	}

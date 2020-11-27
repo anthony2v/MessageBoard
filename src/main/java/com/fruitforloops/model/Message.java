@@ -46,6 +46,9 @@ public class Message implements Serializable
 	@JoinTable(name = "message_hashtag", joinColumns = @JoinColumn(name = "message_id"), inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
 	private Set<HashTag> hashtags;
 
+	@Column(name = "group_id")
+	private Long groupId;
+	
 	public Message()
 	{
 		this(null, null);
@@ -150,6 +153,16 @@ public class Message implements Serializable
 		this.hashtags = hashtags;
 	}
 
+	public Long getGroupId()
+	{
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId)
+	{
+		this.groupId = groupId;
+	}
+	
 	@Override
 	public String toString()
 	{
