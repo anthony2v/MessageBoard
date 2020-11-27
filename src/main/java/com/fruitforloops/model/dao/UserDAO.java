@@ -8,17 +8,22 @@ import java.util.List;
 
 import com.fruitforloops.JSONUtil;
 import com.fruitforloops.model.User;
+import com.fruitforloops.model.UserGroup;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
 public class UserDAO implements IDAO<User>
 {
+	public static final String usersDataStorePath = "/WEB-INF/users.json";
+	
 	@Override
 	public List<User> getAll()
 	{
 		JsonReader reader = null;
 		try
 		{
-			reader = new JsonReader(new FileReader(getClass().getClassLoader().getResource("/WEB-INF/users.json").getPath()));
+			reader = new JsonReader(new FileReader(getClass().getClassLoader().getResource(usersDataStorePath).getPath()));
 		}
 		catch (FileNotFoundException e)
 		{
@@ -26,15 +31,38 @@ public class UserDAO implements IDAO<User>
 			return new ArrayList<User>();
 		}
 		
-		User[] userArray = JSONUtil.gson.fromJson(reader, User[].class);
+		JsonObject jsonObj = JSONUtil.gson.fromJson(reader, JsonObject.class);
 		
-		return Arrays.asList(userArray);
+		JsonArray usersJsonArray = jsonObj.get("users").getAsJsonArray();
+		User[] users = JSONUtil.gson.fromJson(usersJsonArray, User[].class);
+		
+		JsonArray groupsJsonArray = jsonObj.get("groups").getAsJsonArray();
+		UserGroup[] groups = JSONUtil.gson.fromJson(groupsJsonArray, UserGroup[].class);
+		
+		if (groups != null)
+		{
+			for (User u : users)
+			{
+				List<UserGroup> groupMembershipList = new ArrayList<UserGroup>();
+				for (int i = 0; i < groups.length; ++i)
+				{
+					groupMembershipList.add(groups[i]);
+				}
+				
+				UserGroup[] groupMembershipArray = new UserGroup[groupMembershipList.size()];
+				for (int i = 0; i < groupMembershipList.size(); ++i)
+					groupMembershipArray[i] = groupMembershipList.get(i);
+				u.setGroups(groupMembershipArray);
+			}
+		}
+
+		return Arrays.asList(users);
 	}
 
 	@Override
-	public User get(long id)
+	public User get(Long id)
 	{
-		// TODO Auto-generated method stub
+		//
 		return null;
 	}
 
@@ -53,7 +81,7 @@ public class UserDAO implements IDAO<User>
 	}
 
 	@Override
-	public boolean delete(long id)
+	public boolean delete(Long id)
 	{
 		//
 		return false;

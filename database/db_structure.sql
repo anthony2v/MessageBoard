@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `message_board` /*!40100 DEFAULT CHARACTER SET ut
 USE `message_board`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: message_board
+-- Host: localhost    Database: message_board
 -- ------------------------------------------------------
 -- Server version	8.0.22
 
@@ -30,7 +30,7 @@ CREATE TABLE `hashtag` (
   PRIMARY KEY (`id`,`tag`),
   UNIQUE KEY `tag_UNIQUE` (`tag`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,22 +46,22 @@ CREATE TABLE `message` (
   `created_date` datetime NOT NULL,
   `last_modified_date` datetime DEFAULT NULL,
   `author` varchar(45) DEFAULT NULL,
+  `group_id` int DEFAULT '-1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `message_AFTER_DELETE` AFTER DELETE ON `message` FOR EACH ROW BEGIN
-	DELETE FROM message_board.message_attachment
-    WHERE message_board.message_attachment.message_id = old.id;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `message_BEFORE_DELETE` BEFORE DELETE ON `message` FOR EACH ROW BEGIN
+	delete from `message_board`.`message_attachment` where message_id = OLD.`id`;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -84,7 +84,7 @@ CREATE TABLE `message_attachment` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `fk_message_id_idx` (`message_id`),
   CONSTRAINT `fk_message_id` FOREIGN KEY (`message_id`) REFERENCES `message` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +101,7 @@ CREATE TABLE `message_hashtag` (
   KEY `fk_message_idx` (`message_id`),
   KEY `fk_hashtag_idx` (`hashtag_id`),
   CONSTRAINT `fk_hashtag` FOREIGN KEY (`hashtag_id`) REFERENCES `hashtag` (`id`),
-  CONSTRAINT `fk_message` FOREIGN KEY (`message_id`) REFERENCES `message` (`id`)
+  CONSTRAINT `fk_message` FOREIGN KEY (`message_id`) REFERENCES `message` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,4 +122,4 @@ CREATE TABLE `message_hashtag` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-10  1:12:16
+-- Dump completed on 2020-11-27  1:14:07

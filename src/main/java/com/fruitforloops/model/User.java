@@ -9,8 +9,28 @@ public class User implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
+	private Long id;
+	private UserGroup[] groups;
 	private String username;
 	private String password;
+	
+	public Long getId()
+	{
+		return id;
+	}
+	public void setId(Long id)
+	{
+		this.id = id;
+	}
+	
+	public UserGroup[] getGroups()
+	{
+		return groups;
+	}
+	public void setGroups(UserGroup[] groups)
+	{
+		this.groups = groups;
+	}
 	
 	public String getUsername()
 	{

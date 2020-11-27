@@ -17,60 +17,66 @@ import javax.persistence.Table;
 public class MessageAttachment implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+
 	@Column
 	private String filename;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Message message;
-	
+
 	@Lob
 	@Column(columnDefinition = "BLOB")
 	private byte[] data;
-	
-	public MessageAttachment() {}
-	
+
+	public MessageAttachment()
+	{
+	}
+
 	public MessageAttachment(String filename, byte[] data)
 	{
 		this.filename = filename;
 		this.data = data;
 	}
-	
+
 	public Long getId()
 	{
 		return id;
 	}
+
 	public void setId(Long id)
 	{
 		this.id = id;
 	}
-	
+
 	public String getFilename()
 	{
 		return filename;
 	}
+
 	public void setFilename(String filename)
 	{
 		this.filename = filename;
 	}
-	
+
 	public Message getMessage()
 	{
 		return message;
 	}
+
 	public void setMessage(Message message)
 	{
 		this.message = message;
 	}
-	
+
 	public byte[] getData()
 	{
 		return data;
 	}
+
 	public void setData(byte[] data)
 	{
 		this.data = data;

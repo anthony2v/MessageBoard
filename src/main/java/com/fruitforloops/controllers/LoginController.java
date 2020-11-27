@@ -31,46 +31,48 @@ public class LoginController extends HttpServlet
 		else
 			ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, false);
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// user sign in
 		User user = JSONUtil.gson.fromJson(request.getReader(), User.class);
-		
+
 		boolean authenticated = true;
 		try
 		{
 			MessageDigest digest = MessageDigest.getInstance("SHA1");
-	        digest.reset();
-	        digest.update(user.getPassword().getBytes());
-	        user.setPassword( String.format("%040x", new BigInteger(1, digest.digest())) );
+			digest.reset();
+			digest.update(user.getPassword().getBytes());
+			user.setPassword(String.format("%040x", new BigInteger(1, digest.digest())));
 		}
 		catch (NoSuchAlgorithmException e)
 		{
 			System.err.println(e.getMessage());
 			authenticated = false;
 		}
-		
+
 		authenticated = authenticated && user.authenticate();
-		
-		if(authenticated)
+
+		if (authenticated)
 		{
 			// user is authenticated
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
-			
+
 			ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, null);
 		}
 		else
 		{
 			// user failed authentication
-			ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "Error logging in. Either username or password is incorrect.", null);
+			ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED,
+					"Error logging in. Either username or password is incorrect.", null);
 		}
 	}
-	
+
 	@Override
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException
 	{
 		// user sign out
 		HttpSession session = request.getSession(false);

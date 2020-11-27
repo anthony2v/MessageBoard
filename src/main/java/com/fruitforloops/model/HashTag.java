@@ -12,23 +12,41 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="hashtag")
+@Table(name = "hashtag")
 public class HashTag
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(unique = true)
 	private String tag;
-	
+
 	@ManyToMany(mappedBy = "hashtags", fetch = FetchType.EAGER)
 	private Set<Message> messages;
-	
+
+	// default constructor
+	public HashTag()
+	{
+	}
+
+	// single parameter constructor
+	public HashTag(String tag)
+	{
+		this.tag = tag;
+	}
+
+	public HashTag(Long id, String tag)
+	{
+		this.id = id;
+		this.tag = tag;
+	}
+
 	public Long getId()
 	{
 		return id;
 	}
+
 	public void setId(Long id)
 	{
 		this.id = id;
@@ -38,20 +56,22 @@ public class HashTag
 	{
 		return tag;
 	}
+
 	public void setTag(String tag)
 	{
 		this.tag = tag;
 	}
-	
+
 	public Set<Message> getMessages()
 	{
 		return messages;
 	}
+
 	public void setMessages(Set<Message> messages)
 	{
 		this.messages = messages;
 	}
-	
+
 	@Override
 	public String toString()
 	{
