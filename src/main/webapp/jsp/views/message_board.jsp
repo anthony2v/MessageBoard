@@ -45,10 +45,16 @@
 					<div class="form-group input-group">
 						<textarea name="messageText" class="form-control shadow-none" rows="1" placeholder="Type your message here..."></textarea>
 						<div class="input-group-append">
-							<label for="upload" class="btn btn-primary rounded-right shadow-none m-0">
+							<label for="upload" class="btn btn-primary rounded-0 shadow-none m-0">
 								<i class="fas fa-paperclip"></i>
 								<input type="file" id="upload" multiple class="display-none" />
 							</label>
+							<button type="button" class="btn btn-primary rounded-right shadow-none" data-toggle="dropdown">
+								<i class="fas fa-ellipsis-v"></i>
+							</button>
+							<div class="dropdown-menu">
+								<button type="button" id="btn-download-xml" class="btn rounded-0 dropdown-item"><i class="fas fa-file-code mr-2 text-uppercase"></i>Download XML</button>
+							</div>
 						</div>
 					</div>
 					<input type="file" class="display-none" name="fileToUpload" id="fileToUpload">

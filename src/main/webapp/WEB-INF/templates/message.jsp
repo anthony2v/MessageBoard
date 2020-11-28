@@ -2,31 +2,24 @@
 <%@ page import="com.fruitforloops.model.User" %>
 <%@ page import="com.fruitforloops.model.UserGroup" %>
 <%@ page import="com.fruitforloops.model.MessageAttachment" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.*" %>
 
 <%
-    Message message = (Message) request.getAttribute("message");
 	User user = session != null ? (User) session.getAttribute("user") : null;
+	Message message = (Message) request.getAttribute("message");
+	Boolean editable = (Boolean) request.getAttribute("userMessagePermission");
 %>
 
-<div id="msg-<%= message.getId() %>" >
+<li id="msg-<%= message.getId() %>" class='msgboard-msg list-group-item border-0 mb-3'>
 	<h6>
 		<strong class='msgboard-msg-username' data-val='<%= message.getAuthor() %>'><%= message.getAuthor() %></strong>
 		<small class='msgboard-msg-time text-muted ml-2' data-val='<%= message.getCreatedDate() %>'><%= message.getCreatedDate() %></small>
 <%
-	if (user != null)
-        {
-	UserGroup[] groups = user.getGroups(); 
-	if (groups == null) groups = new UserGroup[0];
-	
-	boolean editable = true;//false;
-	for (UserGroup g : groups)
-	{
-		if (g.getId() == message.getGroupId())
-			editable = true;
-	}
-	
-	if (editable)
-	{
+		if (user != null)
+		{
+			if (editable)
+			{
 %>
 		<div class='msg-actions float-right read-mode'>
 			<button type='button' class='btn btn-sm btn-secondary rounded-right shadow-none' data-toggle='dropdown'>
@@ -38,7 +31,7 @@
 			</div>
 		</div>
 <%
-			}
+	    	}
 %>
 	</h6>
 <%
@@ -59,7 +52,7 @@
 					for (MessageAttachment attachment : message.getAttachments()) 
 					{
 %>
-				<button id='del-attachment-<%= attachment.getId() %>' class='btn-file_to_delete btn btn-sm btn-outline-danger shadow-none mr-2'><i class='fas fa-times-circle mr-2'></i><%= attachment.getFilename() %></button>;
+				<button id='del-attachment-<%= attachment.getId() %>' class='btn-file_to_delete btn btn-sm btn-outline-danger shadow-none mr-2'><i class='fas fa-times-circle mr-2'></i><%= attachment.getFilename() %></button>
 <%
 					}
 				}
@@ -72,24 +65,23 @@
         </div>
 	</form>
 <%
-			}
-        }
+	   		}
+    	}
 %>
 	<div class='read-mode'>
        	<p class='msgboard-msg-text'><%= message.getMessageText() %></p>
     	<div class='msg-attachments'>
 <%
-				if (message.getAttachments() != null)
-				{
-					for (MessageAttachment attachment : message.getAttachments()) 
-					{
+		if (message.getAttachments() != null)
+		{
+			for (MessageAttachment attachment : message.getAttachments()) 
+			{
 %>
 		<button id='attachment-<%= attachment.getId() %>' class='btn-file_download btn btn-sm btn-secondary shadow-none mr-2'><i class='fas fa-file mr-2'></i><%= attachment.getFilename() %></button>
 <%
-					}
-				}
+			}
+		}
 %>
         </div>
 	</div>
-</div>
-
+</li>

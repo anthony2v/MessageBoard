@@ -3,6 +3,8 @@ const MessageBoard = {
     searchCriteria: {},
 
     onReady: () => {
+        document.querySelector("#msgboard-form #btn-download-xml").addEventListener("click", () => { MessageBoard.search("xml") });
+
         let msgBox = document.querySelector("#msgboard-form [name='messageText']");
         msgBox.addEventListener("keydown", MessageBoard.msgBoxKeyPressHandler);
         msgBox.addEventListener("keydown", () => { MessageBoard.resizeTextArea(msgBox) });
@@ -11,9 +13,9 @@ const MessageBoard = {
 
         flatpickr("#msgboard-search-form .flatpickr", {wrap:true, enableTime: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S"});
 
-        document.querySelector("#msgboard-search-form .btn-search").addEventListener('click', MessageBoard.search);
+        document.querySelector("#msgboard-search-form .btn-search").addEventListener('click', () => { MessageBoard.search("html"); });
 
-        MessageBoard.search();
+        MessageBoard.search("html");
     },
 
     msgBoxKeyPressHandler: (event) => {
@@ -119,94 +121,38 @@ const MessageBoard = {
         msgListItem.classList.add('read-mode');
     },
 
-    createMessageDOM: (message) => {
-        //console.log(message);
+    loadMessageDOM: (messagesDOM) => {
+        //console.log(messagesDOM);
         let placeholderMsg = document.querySelector("#ul-msgboard .msgboard-msg-placeholder");
         if (placeholderMsg != null)
             placeholderMsg.remove();
 
-        let editable = (Server.session.user.username == message.author);
-        
-        let msgboardListItem = document.createElement('li');
-        msgboardListItem.className = "msgboard-msg list-group-item border-0 mb-3";
-        msgboardListItem.id = "msg-"+message.id;
-        let innerHTML = "" +
-        "<h6>" +
-            "<strong class='msgboard-msg-username' data-val='" + message.author + "'>" + message.author + "</strong>" +
-            "<small class='msgboard-msg-time text-muted ml-2' data-val='" + message.createdDate + "'>" + message.createdDate + "</small>";
-        if (editable)
+        let ul_msgboard = document.querySelector("#ul-msgboard");
+        ul_msgboard.innerHTML = messagesDOM;
+
+        for (let i = 0; i < ul_msgboard.children.length; ++i)
         {
-            innerHTML += "" +
-            "<div class='msg-actions float-right read-mode'>" +
-                "<button type='button' class='btn btn-sm btn-secondary rounded-right shadow-none' data-toggle='dropdown'>" +
-                    "<i class='fas fa-ellipsis-v'></i>" +
-                "</button>" +
-                "<div class='dropdown-menu'>" +
-                    "<button type='button' class='btn-edit-message btn rounded-0 dropdown-item'><i class='fas fa-pencil-alt mr-2 text-uppercase'></i>Edit</button>" +
-                    "<button type='button' class='btn-delete-message btn btn-danger bg-danger rounded-0 dropdown-item'><i class='fas fa-trash-alt mr-2 text-uppercase'></i>Delete</button>" +
-                "</div>" +
-            "</div>";
-        }
-        innerHTML += "</h6>";
-        if (editable)
-        {
-        innerHTML += "" +
-        "<form class='edit-mode' onsubmit='return false;'>" +
-            "<textarea name='messageText' class='form-control shadow-none mb-2' rows='1' placeholder='Edit your message here...'>" + message.messageText + "</textarea>" +
-            "<div class='msg-attachments mb-2'>" +
-                "<label for='msg-li-upload-" + message.id + "' class='btn btn-primary btn-sm shadow-none mb-0 mr-2'>" +
-                    "<i class='fas fa-paperclip'></i>" +
-                    "<input type='file' id='msg-li-upload-" + message.id + "' multiple class='display-none' />" +
-                "</label>" + 
-                "<input name='filesToDelete' type='hidden' />";
-                
-                if (message.attachments != undefined) {
-                    for (let i = 0; i < message.attachments.length; ++i)
-                        innerHTML += "<button id='del-attachment-"+ message.attachments[i].id +"' class='btn-file_to_delete btn btn-sm btn-outline-danger shadow-none mr-2'><i class='fas fa-times-circle mr-2'></i>" + message.attachments[i].filename + "</button>";
-                }
-
-            innerHTML += "" + 
-            "</div>" +
-            "<div>" +
-                "<button class='btn-save-message btn btn-success shadow-none mr-2'>Save</button>" +
-                "<button class='btn-cancel-message btn btn-danger shadow-none mr-2'>Cancel</button>" +
-            "</div>" +
-        "</form>";
-        }
-        innerHTML += "" +
-        "<div class='read-mode'>" +
-            "<p class='msgboard-msg-text'>" + message.messageText + "</p>" +
-            "<div class='msg-attachments'>";
+            let li_msg = ul_msgboard.children[i];
+            let editable = li_msg.querySelector(".edit-mode") != undefined;
             
-                if (message.attachments != undefined) {
-                    for (let i = 0; i < message.attachments.length; ++i)
-                        innerHTML += "<button id='attachment-"+ message.attachments[i].id +"' class='btn-file_download btn btn-sm btn-secondary shadow-none mr-2'><i class='fas fa-file mr-2'></i>" + message.attachments[i].filename + "</button>";
-                }
-            
-            innerHTML += "" +
-            "</div>" +
-        "</div>";
-
-        msgboardListItem.innerHTML = innerHTML;
-        document.querySelector("#ul-msgboard").appendChild(msgboardListItem);
-
-        if (editable) {
-            document.querySelector("#msg-"+message.id+" .btn-edit-message").addEventListener('click', (e) => { MessageBoard.messageEditClick(e); });
-            document.querySelector("#msg-"+message.id+" .btn-delete-message").addEventListener('click', (e) => { MessageBoard.messageDeleteClick(e); });
-            document.querySelector("#msg-"+message.id+" .btn-save-message").addEventListener('click', (e) => { MessageBoard.messageSaveClick(e); });
-            document.querySelector("#msg-"+message.id+" .btn-cancel-message").addEventListener('click', (e) => { MessageBoard.messageCancelClick(e); });
-
-            let fileDownloadBtns = document.querySelectorAll("#msg-"+message.id+" .btn-file_download");
-            for (let i = 0; i < fileDownloadBtns.length; ++i)
-            fileDownloadBtns[i].addEventListener('click', (e) => { MessageBoard.messageDownloadFileClick(e); });
-
-            let fileDeletionBtns = document.querySelectorAll("#msg-"+message.id+" .btn-file_to_delete");
-            for (let i = 0; i < fileDeletionBtns.length; ++i)
-                fileDeletionBtns[i].addEventListener('click', (e) => { MessageBoard.messageRemoveFileClick(e); });
+            if (editable) {
+                li_msg.querySelector(".btn-edit-message").addEventListener('click', (e) => { MessageBoard.messageEditClick(e); });
+                li_msg.querySelector(".btn-delete-message").addEventListener('click', (e) => { MessageBoard.messageDeleteClick(e); });
+                li_msg.querySelector(".btn-save-message").addEventListener('click', (e) => { MessageBoard.messageSaveClick(e); });
+                li_msg.querySelector(".btn-cancel-message").addEventListener('click', (e) => { MessageBoard.messageCancelClick(e); });
+    
+                let fileDownloadBtns = li_msg.querySelectorAll(".btn-file_download");
+                for (let i = 0; i < fileDownloadBtns.length; ++i)
+                        fileDownloadBtns[i].addEventListener('click', (e) => { MessageBoard.messageDownloadFileClick(e); });
+    
+                let fileDeletionBtns = li_msg.querySelectorAll(".btn-file_to_delete");
+                for (let i = 0; i < fileDeletionBtns.length; ++i)
+                    fileDeletionBtns[i].addEventListener('click', (e) => { MessageBoard.messageRemoveFileClick(e); });
+            }
         }
     },
     
-    search: () => {
+    search: (format) => {
         MessageBoard.searchCriteria = CommonUtil.formToJson(document.querySelector("#msgboard-search-form"), false);
 
         if (MessageBoard.searchCriteria.fromDate != undefined && MessageBoard.searchCriteria.fromDate.trim() != "")
@@ -220,23 +166,24 @@ const MessageBoard = {
         let hashtag_regex = /\B\#\w\w+\b/g;
         MessageBoard.searchCriteria.hashtags = MessageBoard.searchCriteria.hashtags.match(hashtag_regex);
 
-        axios.get('/api/auth/message', {
-            params: MessageBoard.searchCriteria,
-            paramsSerializer: (params) => $.param(params),
-        })
-        .then(function (response) {
-            //console.log(response.data.data);
-            MessageBoard.clearMessageBoardDOM(response.data.data == undefined || response.data.data.length <= 0);
-
-            if (response.data.data != undefined) {
-            for (let i = 0; i < response.data.data.length; ++i)
-                MessageBoard.createMessageDOM(response.data.data[i]);
-            }
-        })
-        .catch(function (error) {
-            console.error(error.response.data);
-            alert(error.response.data.message);
-        })
+        if (format == "xml")
+        {
+            window.open("/api/auth/message?format="+format, "_blank");
+        }
+        else
+        {
+            axios.get('/api/auth/message', {
+                params: Object.assign({}, MessageBoard.searchCriteria, {"format": format}),
+                paramsSerializer: (params) => $.param(params),
+            })
+            .then(function (response) {
+                MessageBoard.clearMessageBoardDOM(response.data == undefined);
+                MessageBoard.loadMessageDOM(response.data);
+            })
+            .catch(function (error) {
+                console.error(error.response);
+            })
+        }
     },
 
     postMessage: () => {

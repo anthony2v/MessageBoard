@@ -61,7 +61,13 @@ public class User implements Serializable
 			if (userEntry.username.equals(username))
 			{
 				if (userEntry.password.equals(password))
+				{
+					// user credentials match
+					// load user data
+					groups = userEntry.getGroups();
+					
 					return true;
+				}
 			}
 		}
 		

@@ -16,7 +16,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.fruitforloops.jaxb.XMLDateAdapter;
+
+@XmlRootElement
 @Entity
 @Table(name = "message")
 public class Message implements Serializable
@@ -83,6 +90,7 @@ public class Message implements Serializable
 		this.setLastModifiedDate(lastModifiedDate);
 	}
 
+	@XmlElement
 	public Long getId()
 	{
 		return id;
@@ -93,6 +101,7 @@ public class Message implements Serializable
 		this.id = id;
 	}
 
+	@XmlElement
 	public String getAuthor()
 	{
 		return author;
@@ -103,6 +112,7 @@ public class Message implements Serializable
 		this.author = author;
 	}
 
+	@XmlElement
 	public String getMessageText()
 	{
 		return messageText;
@@ -113,6 +123,8 @@ public class Message implements Serializable
 		this.messageText = messageText;
 	}
 
+	@XmlElement
+	@XmlJavaTypeAdapter(value = XMLDateAdapter.class)
 	public Date getCreatedDate()
 	{
 		return createdDate;
@@ -123,6 +135,8 @@ public class Message implements Serializable
 		this.createdDate = createdDate;
 	}
 
+	@XmlElement
+	@XmlJavaTypeAdapter(value = XMLDateAdapter.class)
 	public Date getLastModifiedDate()
 	{
 		return lastModifiedDate;
@@ -133,31 +147,31 @@ public class Message implements Serializable
 		this.lastModifiedDate = lastModifiedDate;
 	}
 
+	@XmlTransient
 	public Set<MessageAttachment> getAttachments()
 	{
 		return attachments;
 	}
-
 	public void setAttachments(Set<MessageAttachment> attachments)
 	{
 		this.attachments = attachments;
 	}
 
+	@XmlTransient
 	public Set<HashTag> getHashtags()
 	{
 		return hashtags;
 	}
-
 	public void setHashtags(Set<HashTag> hashtags)
 	{
 		this.hashtags = hashtags;
 	}
 
+	@XmlElement
 	public Long getGroupId()
 	{
 		return groupId;
 	}
-
 	public void setGroupId(Long groupId)
 	{
 		this.groupId = groupId;
