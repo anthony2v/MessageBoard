@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.security.auth.message.AuthException;
 
@@ -91,5 +93,58 @@ public class MessageManager
 		if (message != null && message.getAuthor().equals(currentUser)) return true;
 
 		return false;
+	}
+
+	public Boolean userCanEdit(Message message, User user)
+	{
+		boolean editable = false;
+		
+		if (user != null && message != null)
+		{
+			UserGroupDAO ugDAO = new UserGroupDAO();
+			List<UserGroup> temp = ugDAO.getAll();
+			Map<Long, UserGroup> groupsMap = new HashMap<Long, UserGroup>();
+			for (UserGroup g : temp)
+				groupsMap.putIfAbsent(g.getId(), g);
+			
+			UserGroup[] groups = user.getGroups();
+			if (groups == null) groups = new UserGroup[0];
+			
+			for (UserGroup g : groups)
+			{
+				if ( (g.getName().equals("admin") || g.getId() == message.getGroupId()) || (message.getGroupId() == -1 && user.getUsername().equals(message.getAuthor())) )
+				{
+					editable = true;
+					break;
+				}
+				else
+				{
+					Long itr = message.getGroupId();
+					while (groupsMap.get(itr) != null)
+					{
+						if (g.getId() == groupsMap.get(itr).getId())
+						{
+							editable = true;
+							break;
+						}
+						
+						itr = g.getParentId();
+					}
+					
+					if (editable) break;
+				}
+			}
+		}
+		
+		return editable;
+	}
+
+	public boolean userCanEdit(Long messageId, User user)
+	{
+		Message message = mdao.get(messageId);
+		if (message == null)
+			return false;
+		else
+			return userCanEdit(message, user);
 	}
 }

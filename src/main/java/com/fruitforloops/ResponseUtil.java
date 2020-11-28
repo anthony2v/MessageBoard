@@ -3,6 +3,8 @@ package com.fruitforloops;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -66,5 +68,10 @@ public final class ResponseUtil
 		marshaller.marshal(xmlResponse, out);
 		out.flush();
 		out.close();
+	}
+	
+	public static void loadTemplate(HttpServletResponse response, HttpServletRequest request, String templatePath) throws ServletException, IOException
+	{
+		request.getRequestDispatcher(Constants.TEMPLATES_PATH + templatePath).forward(request, response);
 	}
 }

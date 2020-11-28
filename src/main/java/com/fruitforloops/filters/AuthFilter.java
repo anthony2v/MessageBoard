@@ -18,7 +18,7 @@ import com.fruitforloops.model.User;
 		filterName = "AuthFilter", 
 		urlPatterns = {
 				Constants.API_PATH + "auth", Constants.API_PATH + "auth/*",
-				"/message_board", "/message_board/file_download", "/message_board/message"
+				"/message_board", "/message_board/file_download"
 			}
 		)
 public class AuthFilter implements Filter

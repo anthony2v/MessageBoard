@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBException;
 
 import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -26,6 +27,7 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 import com.fruitforloops.Constants;
 import com.fruitforloops.JSONUtil;
 import com.fruitforloops.ResponseUtil;
+import com.fruitforloops.jaxb.XMLListWrapper;
 import com.fruitforloops.model.HashTag;
 import com.fruitforloops.model.Message;
 import com.fruitforloops.model.MessageAttachment;
@@ -57,6 +59,7 @@ public class MessageController extends HttpServlet
 		String[] hashtags = request.getParameterValues("hashtags[]");
 		String fromDateStr = request.getParameter("fromDate");
 		String toDateStr = request.getParameter("toDate");
+		String format = request.getParameter("format");
 
 		// parse and validate dates
 		Date fromDate, toDate;
@@ -76,9 +79,36 @@ public class MessageController extends HttpServlet
 
 		// get messages from MessageManager (business layer)
 		ArrayList<Message> messages = messageManager.getMessages(fromDate, toDate, authors, hashtags);
-
-		// send appropriate response
-		ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, messages);
+		
+		if (format == null || "html".equals(format))
+		{
+			HttpSession session = request.getSession(false);
+			User user = session != null ? (User) session.getAttribute("user") : null;
+			
+			List<Boolean> userMessagePermissions = new ArrayList<Boolean>();
+			for (Message message : messages)
+			{
+				userMessagePermissions.add(messageManager.userCanEdit(message, user));
+			}
+			
+			request.setAttribute("messages", messages);
+			request.setAttribute("userMessagePermissions", userMessagePermissions);
+			
+			ResponseUtil.loadTemplate(response, request, "messages.jsp");
+		}
+		else if ("xml".equals(format))
+		{
+			try
+			{
+				response.setHeader("Content-disposition", "attachment; filename=messages.xml");
+				ResponseUtil.sendXML(response, null, new XMLListWrapper<Message>(messages), Message.class);
+			}
+			catch (JAXBException e)
+			{
+				System.err.println("Error: " + e.getMessage());
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			}
+		}
 	}
 
 	@Override
@@ -93,8 +123,7 @@ public class MessageController extends HttpServlet
 		processPostOrPut(request, response, "PUT");
 	}
 
-	private void processPostOrPut(HttpServletRequest request, HttpServletResponse response, String postOrPut)
-			throws ServletException, IOException
+	private void processPostOrPut(HttpServletRequest request, HttpServletResponse response, String postOrPut) throws ServletException, IOException
 	{
 		Properties appConfig = new Properties();
 		appConfig.load(getClass().getClassLoader().getResourceAsStream("/WEB-INF/app.config.properties"));
@@ -198,7 +227,7 @@ public class MessageController extends HttpServlet
 				else if (postOrPut.equals("PUT"))
 				{
 					User currentUser = (User) session.getAttribute("user");
-					if (messageManager.userOwnsMessage(currentUser.getUsername(), message.getId()))
+					if (messageManager.userCanEdit(message, currentUser))
 					{
 						// update Message using MessageManager (business layer)
 						messageManager.updateMessage(currentUser.getUsername(), message, filesToDelete);
@@ -235,13 +264,27 @@ public class MessageController extends HttpServlet
 	}
 
 	@Override
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// extract parameters (request data)
 		Long messageId = Long.valueOf(request.getParameter("id").trim());
 
-		// delete messages using MessageManager (business layer)
-		messageManager.deleteMessage(messageId);
+		HttpSession session = request.getSession(false);
+		if (session == null)
+		{
+			ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not logged in or your session timed out.", null);
+			return;
+		}
+		
+		User currentUser = (User) session.getAttribute("user");
+		if (messageManager.userCanEdit(messageId, currentUser))
+		{
+			// delete messages using MessageManager (business layer)
+			messageManager.deleteMessage(messageId);
+		}
+		else
+		{
+			ResponseUtil.sendJSON(response, HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to update this resource.", null);
+		}
 	}
 }

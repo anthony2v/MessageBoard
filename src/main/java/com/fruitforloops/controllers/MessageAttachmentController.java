@@ -36,8 +36,7 @@ public class MessageAttachmentController extends HttpServlet
 
 		response.setContentType(MediaType.TEXT_PLAIN);
 		response.setContentLength(attachment.getData().length);
-		response.setHeader("Content-Disposition",
-				String.format("attachment; filename=\"%s\"", attachment.getFilename()));
+		response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", attachment.getFilename()));
 
 		OutputStream outputStream = response.getOutputStream();
 		outputStream.write(attachment.getData());
