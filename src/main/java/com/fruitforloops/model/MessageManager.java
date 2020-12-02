@@ -107,10 +107,10 @@ public class MessageManager
 			for (UserGroup g : temp)
 				groupsMap.putIfAbsent(g.getId(), g);
 			
-			UserGroup[] groups = user.getGroups();
-			if (groups == null) groups = new UserGroup[0];
+			UserGroup[] usergroups = user.getGroups();
+			if (usergroups == null) usergroups = new UserGroup[0];
 			
-			for (UserGroup g : groups)
+			for (UserGroup g : usergroups)
 			{
 				if (g.getName().equals("admin") || g.getId() == message.getGroupId() || message.getGroupId() == -1)
 				{

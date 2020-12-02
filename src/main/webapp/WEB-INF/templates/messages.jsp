@@ -9,7 +9,6 @@
 	List<Message> messages = (List<Message>) request.getAttribute("messages");
 	List<Boolean> userEditPermissions = (List<Boolean>) request.getAttribute("userEditPermissions");
 	List<Boolean> userViewPermissions = (List<Boolean>) request.getAttribute("userViewPermissions");
-	User user = session != null ? (User) session.getAttribute("user") : null;
 
 	for (int i = 0; i < messages.size(); ++i)
 	{
@@ -18,7 +17,7 @@
 		request.setAttribute("userEditPermission", userEditPermissions.get(i));
 		request.setAttribute("userViewPermission", userViewPermissions.get(i));
 %>
-	<jsp:include page="message.jsp"></jsp:include>
+		<jsp:include page="message.jsp"></jsp:include>
 <%
 	}
 %>
