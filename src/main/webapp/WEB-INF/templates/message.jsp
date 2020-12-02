@@ -8,7 +8,11 @@
 <%
 	User user = session != null ? (User) session.getAttribute("user") : null;
 	Message message = (Message) request.getAttribute("message");
-	Boolean editable = (Boolean) request.getAttribute("userMessagePermission");
+	Boolean editable = (Boolean) request.getAttribute("userEditPermission");
+	Boolean viewable = (Boolean) request.getAttribute("userViewPermission");
+	
+	if (viewable)
+	{
 %>
 
 <li id="msg-<%= message.getId() %>" class='msgboard-msg list-group-item border-0 mb-3'>
@@ -85,3 +89,6 @@
         </div>
 	</div>
 </li>
+<%
+	}
+%>

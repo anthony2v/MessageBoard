@@ -85,14 +85,17 @@ public class MessageController extends HttpServlet
 			HttpSession session = request.getSession(false);
 			User user = session != null ? (User) session.getAttribute("user") : null;
 			
-			List<Boolean> userMessagePermissions = new ArrayList<Boolean>();
+			List<Boolean> userEditPermissions = new ArrayList<Boolean>();
+			List<Boolean> userViewPermissions = new ArrayList<Boolean>();
 			for (Message message : messages)
 			{
-				userMessagePermissions.add(messageManager.userCanEdit(message, user));
+				userEditPermissions.add(messageManager.userCanEdit(message, user));
+				userViewPermissions.add(messageManager.userCanView(message, user));
 			}
 			
 			request.setAttribute("messages", messages);
-			request.setAttribute("userMessagePermissions", userMessagePermissions);
+			request.setAttribute("userViewPermissions", userViewPermissions);
+			request.setAttribute("userEditPermissions", userEditPermissions);
 			
 			ResponseUtil.loadTemplate(response, request, "messages.jsp");
 		}

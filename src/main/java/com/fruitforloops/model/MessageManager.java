@@ -95,6 +95,59 @@ public class MessageManager
 		return false;
 	}
 
+	public Boolean userCanView(Message message, User user)
+	{
+		boolean viewable = false;
+		
+		if (user != null && message != null)
+		{
+			UserGroupDAO ugDAO = new UserGroupDAO();
+			List<UserGroup> temp = ugDAO.getAll();
+			Map<Long, UserGroup> groupsMap = new HashMap<Long, UserGroup>();
+			for (UserGroup g : temp)
+				groupsMap.putIfAbsent(g.getId(), g);
+			
+			UserGroup[] groups = user.getGroups();
+			if (groups == null) groups = new UserGroup[0];
+			
+			for (UserGroup g : groups)
+			{
+				if (g.getName().equals("admin") || g.getId() == message.getGroupId() || message.getGroupId() == -1)
+				{
+					viewable = true;
+					break;
+				}
+				else
+				{
+					Long itr = g.getId();
+					while (groupsMap.get(itr) != null)
+					{
+						if (groupsMap.get(itr).getId() == message.getGroupId())
+						{
+							viewable = true;
+							break;
+						}
+						
+						itr = groupsMap.get(itr).getParentId();
+					}
+					
+					if (viewable) break;
+				}
+			}
+		}
+		
+		return viewable;
+	}
+
+	public boolean userCanView(Long messageId, User user)
+	{
+		Message message = mdao.get(messageId);
+		if (message == null)
+			return false;
+		else
+			return userCanView(message, user);
+	}
+
 	public Boolean userCanEdit(Message message, User user)
 	{
 		boolean editable = false;
@@ -112,34 +165,18 @@ public class MessageManager
 			
 			for (UserGroup g : groups)
 			{
-				if ( (g.getName().equals("admin") || g.getId() == message.getGroupId()) || (message.getGroupId() == -1 && user.getUsername().equals(message.getAuthor())) )
+				if (g.getName().equals("admin") || user.getUsername().equals(message.getAuthor()))
 				{
 					editable = true;
 					break;
-				}
-				else
-				{
-					Long itr = message.getGroupId();
-					while (groupsMap.get(itr) != null)
-					{
-						if (g.getId() == groupsMap.get(itr).getId())
-						{
-							editable = true;
-							break;
-						}
-						
-						itr = g.getParentId();
-					}
-					
-					if (editable) break;
 				}
 			}
 		}
 		
 		return editable;
 	}
-
-	public boolean userCanEdit(Long messageId, User user)
+	
+	public Boolean userCanEdit(Long messageId, User user)
 	{
 		Message message = mdao.get(messageId);
 		if (message == null)

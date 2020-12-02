@@ -77,6 +77,6 @@ public class User implements Serializable
 	@Override
 	public String toString() 
 	{
-		return "{username:\"" + username + "\"}";
+		return "{username:\"" + username + " : " + (groups==null?"":groups[0].getId()) + "\"}";
 	}
 }
