@@ -9,7 +9,7 @@ public class UserManagerFactory
 		//
 	}
 	
-	public UserManagerFactory Instance()
+	public UserManagerFactory getInstance()
 	{
 		if (instance == null)
 			instance = new UserManagerFactory();

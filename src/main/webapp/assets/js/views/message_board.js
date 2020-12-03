@@ -15,6 +15,8 @@ const MessageBoard = {
 
         document.querySelector("#msgboard-search-form .btn-search").addEventListener('click', () => { MessageBoard.search("html"); });
 
+        MessageBoard.populateGroupsList();
+
         MessageBoard.search("html");
     },
 
@@ -34,6 +36,17 @@ const MessageBoard = {
         el.style.height = 'auto';
         el.style.height = (el.scrollHeight + borderTop + borderBottom) + 'px';
         document.documentElement.scrollTop = prevScrollTop;
+    },
+
+    populateGroupsList: () => {
+        let groupSelect = document.querySelector("#msgboard-form select[name='groupId']");
+        for (let i = 0; i < Server.user_groups.length; ++i)
+        {
+            let option = document.createElement("option");
+            option.value = Server.user_groups[i].id;
+            option.text = Server.user_groups[i].name;
+            groupSelect.appendChild(option);
+        }
     },
 
     clearMessageBoardDOM: (showPlaceholder) => {

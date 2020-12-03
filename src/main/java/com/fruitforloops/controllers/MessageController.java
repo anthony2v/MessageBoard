@@ -87,6 +87,7 @@ public class MessageController extends HttpServlet
 			
 			List<Boolean> userEditPermissions = new ArrayList<Boolean>();
 			List<Boolean> userViewPermissions = new ArrayList<Boolean>();
+			
 			for (Message message : messages)
 			{
 				userEditPermissions.add(messageManager.userCanEdit(message, user));

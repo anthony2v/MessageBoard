@@ -1,5 +1,7 @@
 <%@ page import="java.io.File" %>
 <%@ page import="com.fruitforloops.model.User" %>
+<%@ page import="com.fruitforloops.model.UserGroup" %>
+<%@ page import="java.util.List" %>
 
 <script type="text/javascript">
 const Server = {
@@ -8,10 +10,23 @@ const Server = {
 <%          
 			User user = session != null ? (User) session.getAttribute("user") : null;
 			if (user != null)
-			    out.println("username: '" + user.getUsername() + "'");
+                out.println("username: '" + user.getUsername() + "'");
 %>
         }
-    }
+    },
+    user_groups: [
+<%          
+		List<UserGroup> groups = session != null ? (List<UserGroup>) session.getAttribute("usergroups") : null;
+        if (groups != null)
+        {
+            for (int i = 0; i < groups.size(); ++i)
+            {
+            	if (i != 0) out.println(",");
+                out.println("{ id: " + groups.get(i).getId() + ", name: '" + groups.get(i).getName() + "', parentId: '" + groups.get(i).getParentId() + "' }");
+            }
+        }
+%>
+    ]
 };
 </script>
 

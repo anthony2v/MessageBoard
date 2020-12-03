@@ -43,6 +43,8 @@
 				</ul>
 				<form id="msgboard-form" class="container-fluid" onsubmit="return false;">
 					<div class="form-group input-group">
+						<select name="groupId">
+						</select>
 						<textarea name="messageText" class="form-control shadow-none" rows="1" placeholder="Type your message here..."></textarea>
 						<div class="input-group-append">
 							<label for="upload" class="btn btn-primary rounded-0 shadow-none m-0">

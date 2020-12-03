@@ -26,6 +26,7 @@
 	</h6>
 		<c:if test="${requestScope.userEditPermission}">
 	<form class='edit-mode' onsubmit='return false;'>
+		<input name='groupId' type='hidden' value="${requestScope.message.getGroupId()}" />
        	<textarea name='messageText' class='form-control shadow-none mb-2' rows='1' placeholder='Edit your message here...'>${requestScope.message.getMessageText()}</textarea>
        	<div class='msg-attachments mb-2'>
             <label for='msg-li-upload-${requestScope.message.getId()}' class='btn btn-primary btn-sm shadow-none mb-0 mr-2'>

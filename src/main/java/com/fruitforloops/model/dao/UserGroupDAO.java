@@ -41,7 +41,11 @@ public class UserGroupDAO implements IDAO<UserGroup>
 		JsonArray groupsJsonArray = jsonObj.get("groups").getAsJsonArray();
 		UserGroup[] groups = JSONUtil.gson.fromJson(groupsJsonArray, UserGroup[].class);
 		
-		return Arrays.asList(groups);
+		List<UserGroup> groupsList = new ArrayList<UserGroup>();
+		for (UserGroup g : groups)
+			groupsList.add(g);
+		
+		return groupsList;
 	}
 
 	@Override

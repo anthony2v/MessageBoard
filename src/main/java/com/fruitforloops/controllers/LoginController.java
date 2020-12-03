@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +18,8 @@ import com.fruitforloops.Constants;
 import com.fruitforloops.JSONUtil;
 import com.fruitforloops.ResponseUtil;
 import com.fruitforloops.model.User;
+import com.fruitforloops.model.UserGroup;
+import com.fruitforloops.model.dao.UserGroupDAO;
 
 @WebServlet(Constants.API_PATH + "login")
 public class LoginController extends HttpServlet
@@ -59,6 +63,11 @@ public class LoginController extends HttpServlet
 			// user is authenticated
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
+			
+			List<UserGroup> usergroups = new ArrayList<UserGroup>();
+			usergroups = new UserGroupDAO().getAll();
+			usergroups.add(0, new UserGroup(-1l, "public", null));
+			session.setAttribute("usergroups", usergroups);
 
 			ResponseUtil.sendJSON(response, HttpServletResponse.SC_OK, null, null);
 		}
