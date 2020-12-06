@@ -88,4 +88,45 @@ public class UserDAO implements IDAO<User>
 		//
 		return false;
 	}
+	
+	public boolean noErrors(User[] users, UserGroup[] groups)
+	{		
+		Map<Long, UserGroup> groupMap = new HashMap<Long, UserGroup>();
+		for (int i = 0; i < groups.length; i++)
+			groupMap.put(groups[i].getId(), groups[i]);
+
+		// Check for undefined groups in users
+		for (User user : users)
+			for (UserGroup group : user.getGroups())
+				if (!groupMap.containsKey(group.getId()))
+					return false;
+		
+		// Check for a group definition with a non-existing parent
+		for (UserGroup group : groups) {
+			// Also check if group ID is -1, reserved for public
+			if (group.getId() == -1)
+				return false;
+			if (!groupMap.containsKey(group.getParentId()))
+				return false;
+		}
+		
+		// Check for circular parent-child definitions
+		ArrayList<Long> descendants = new ArrayList<Long>();
+		for (UserGroup group : groups)
+		{
+			Long currentId = group.getId();
+			while (currentId != null)
+			{
+				if (descendants.contains(currentId))
+					return false;
+				else
+				{
+					descendants.add(currentId);
+					currentId = groupMap.get(currentId).getParentId();
+				}
+			}
+		}
+		
+		return true;
+	}
 }
