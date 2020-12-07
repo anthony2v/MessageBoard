@@ -1,6 +1,10 @@
 package com.fruitforloops.usermanagement;
 
+import java.util.List;
+
 import com.fruitforloops.model.User;
+import com.fruitforloops.model.UserGroup;
+import com.fruitforloops.model.dao.UserDAO;
 
 public class UserManager implements IUserManager {
 
@@ -9,11 +13,23 @@ public class UserManager implements IUserManager {
 		user.setUsername(userName);
 		user.setPassword(password);
 
-		if (user.authenticate() == true) {
+		UserDAO userDAO = new UserDAO();
 
-			return user;
-		} else {
-			return null;
+		List<User> userList = userDAO.getAll();
+
+		for (User userEntry : userList) {
+			if (userEntry.getUsername().equals(user.getUsername())) {
+				if (userEntry.getPassword().equals(user.getPassword())) {
+					// user credentials match
+					// load user data
+
+					user.setGroups(userEntry.getGroups());
+					return user;
+
+				}
+			}
 		}
+		return null;
+
 	}
 }
