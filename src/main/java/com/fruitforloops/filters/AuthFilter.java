@@ -36,7 +36,7 @@ public class AuthFilter implements Filter
 		User user = session != null ? (User)session.getAttribute("user") : null;
 		
 		Properties appConfig = new Properties();
-		appConfig.load(UserManagerFactory.class.getClassLoader().getResourceAsStream(Constants.APP_CONFIG_PATH));
+		appConfig.load(AuthFilter.class.getClassLoader().getResourceAsStream(Constants.APP_CONFIG_PATH));
 		IUserManager um = UserManagerFactory.getInstance().getUserManager(appConfig.getProperty("usermanager"));
 		
 		if (user != null && um.authenticate(user.getUsername(), user.getPassword()) != null)

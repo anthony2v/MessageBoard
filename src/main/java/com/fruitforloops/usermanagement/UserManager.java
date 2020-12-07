@@ -16,7 +16,6 @@ public class UserManager implements IUserManager
 	
 	public User authenticate(String userName, String password)
 	{
-		System.out.println("Test");
 		User user = new User();
 		user.setUsername(userName);
 		user.setPassword(password);

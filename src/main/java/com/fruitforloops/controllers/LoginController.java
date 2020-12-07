@@ -56,7 +56,7 @@ public class LoginController extends HttpServlet {
 		}
 		
 		Properties appConfig = new Properties();
-		appConfig.load(UserManagerFactory.class.getClassLoader().getResourceAsStream(Constants.APP_CONFIG_PATH));
+		appConfig.load(LoginController.class.getClassLoader().getResourceAsStream(Constants.APP_CONFIG_PATH));
 		IUserManager um = UserManagerFactory.getInstance().getUserManager(appConfig.getProperty("usermanager"));
 		
 		boolean flag = false;
