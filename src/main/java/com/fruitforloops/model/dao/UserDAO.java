@@ -26,16 +26,23 @@ public class UserDAO implements IDAO<User>
 	
 	public List<User> getAll(String datastorePath)
 	{
-		JsonReader reader = null;
+		FileReader reader = null;
 		try
 		{
-			reader = new JsonReader(new FileReader(getClass().getClassLoader().getResource(datastorePath).getPath()));
+			reader = new FileReader(getClass().getClassLoader().getResource(datastorePath).getPath());
 		}
 		catch (FileNotFoundException e)
 		{
 			System.err.println("'users.json' file is missing.\n" + e.getMessage());
 			return new ArrayList<User>();
 		}
+		
+		return getAll(reader);
+	}
+	
+	public List<User> getAll(FileReader usersFileReader)
+	{
+		JsonReader reader = new JsonReader(usersFileReader);
 		
 		JsonObject jsonObj = JSONUtil.gson.fromJson(reader, JsonObject.class);
 		
