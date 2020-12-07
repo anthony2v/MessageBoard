@@ -1,9 +1,6 @@
 package com.fruitforloops.model;
 
 import java.io.Serializable;
-import java.util.List;
-
-import com.fruitforloops.model.dao.UserDAO;
 
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;

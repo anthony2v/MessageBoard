@@ -6,6 +6,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +21,8 @@ import com.fruitforloops.ResponseUtil;
 import com.fruitforloops.model.User;
 import com.fruitforloops.model.UserGroup;
 import com.fruitforloops.model.dao.UserGroupDAO;
-import com.fruitforloops.usermanagement.UserManager;
+import com.fruitforloops.usermanagement.IUserManager;
+import com.fruitforloops.usermanagement.UserManagerFactory;
 
 @WebServlet(Constants.API_PATH + "login")
 public class LoginController extends HttpServlet {
@@ -52,8 +54,11 @@ public class LoginController extends HttpServlet {
 			System.err.println(e.getMessage());
 			authenticated = false;
 		}
-		// TODO replace this new by factory
-		UserManager um = new UserManager();
+		
+		Properties appConfig = new Properties();
+		appConfig.load(UserManagerFactory.class.getClassLoader().getResourceAsStream(Constants.APP_CONFIG_PATH));
+		IUserManager um = UserManagerFactory.getInstance().getUserManager(appConfig.getProperty("usermanager"));
+		
 		boolean flag = false;
 
 		user = um.authenticate(user.getUsername(), user.getPassword());

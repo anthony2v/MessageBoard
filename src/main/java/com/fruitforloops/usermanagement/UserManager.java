@@ -3,23 +3,34 @@ package com.fruitforloops.usermanagement;
 import java.util.List;
 
 import com.fruitforloops.model.User;
-import com.fruitforloops.model.UserGroup;
 import com.fruitforloops.model.dao.UserDAO;
 
-public class UserManager implements IUserManager {
-
-	public User authenticate(String userName, String password) {
+public class UserManager implements IUserManager
+{
+	private String usersDataStorePath;
+	
+	public UserManager(String usersDataStorePath)
+	{
+		this.usersDataStorePath = usersDataStorePath;
+	}
+	
+	public User authenticate(String userName, String password)
+	{
+		System.out.println("Test");
 		User user = new User();
 		user.setUsername(userName);
 		user.setPassword(password);
 
 		UserDAO userDAO = new UserDAO();
 
-		List<User> userList = userDAO.getAll();
+		List<User> userList = userDAO.getAll(usersDataStorePath);
 
-		for (User userEntry : userList) {
-			if (userEntry.getUsername().equals(user.getUsername())) {
-				if (userEntry.getPassword().equals(user.getPassword())) {
+		for (User userEntry : userList)
+		{
+			if (userEntry.getUsername().equals(user.getUsername()))
+			{
+				if (userEntry.getPassword().equals(user.getPassword()))
+				{
 					// user credentials match
 					// load user data
 

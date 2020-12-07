@@ -1,51 +1,43 @@
 package com.fruitforloops.usermanagement;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
-
-import org.apache.tomcat.util.json.ParseException ;
-import org.apache.tomcat.util.json.JSONParser;
-
+import com.fruitforloops.Constants;
 
 public class UserManagerFactory
 {
-	private UserManager instance;
-	//private static final String path = "com.fruitforloops.usermanagement.UserManager";
+	private static UserManagerFactory instance;
 
-	
-	private UserManagerFactory() 
+	private UserManagerFactory()
 	{
-	 //
+		//
 	}
 
-
-	 // Returns a UserManager instance based on the filename  and it will avoid making a new user each time
-	public UserManager getInstance(){    
-		try {
-			if (instance == null) {
-				Class<?> cl = Class.forName("com.fruitforloops.usermanagement.UserManager"); //The file path to userManager
-				Constructor<?> cons = cl.getConstructor();
-				instance = (UserManager) cons.newInstance();
-			}
-
-			return instance;
-		} 
-		catch(Exception e) {
-			e.printStackTrace();
+	public static UserManagerFactory getInstance()
+	{
+		if (instance == null)
+		{
+			instance = new UserManagerFactory();
 		}
-
-		return null;
+		
+		return instance;
 	}
-
 	
-//    private static String getpath() throws IOException, ParseException {
-//        InputStream inputStream = UserManagerFactory.class.getClassLoader().getResourceAsStream("users.json"); // Get resource
-//        Object objectFile = new InputStreamReader(inputStream); // Read file
-//        
-//
-//        return objectFile.toString();
-//    }
+	public IUserManager getUserManager(String usermanagerClazz)
+	{
+		IUserManager userManager = null;
+		try
+		{
+			Class<?> clazz = Class.forName(usermanagerClazz);
+			userManager = (IUserManager) clazz.getDeclaredConstructor(String.class).newInstance(Constants.USERS_DATASTORE_PATH);
+		}
+		catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException | ClassNotFoundException e)
+		{
+			System.err.println("Error trying to create UserManager using reflection.");
+			System.err.println(e.getMessage());
+		}
+		
+		return userManager;
+	}
 }
