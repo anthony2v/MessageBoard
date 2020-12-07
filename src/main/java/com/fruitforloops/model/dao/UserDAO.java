@@ -21,15 +21,15 @@ public class UserDAO implements IDAO<User>
 	@Override
 	public List<User> getAll()
 	{
-		return getAll(getClass().getClassLoader().getResource(Constants.USERS_DATASTORE_PATH).getPath());
+		return getAll(Constants.USERS_DATASTORE_PATH);
 	}
 	
-	public List<User> getAll(String fileName)
+	public List<User> getAll(String datastorePath)
 	{
 		JsonReader reader = null;
 		try
 		{
-			reader = new JsonReader(new FileReader(fileName));
+			reader = new JsonReader(new FileReader(getClass().getClassLoader().getResource(datastorePath).getPath()));
 		}
 		catch (FileNotFoundException e)
 		{

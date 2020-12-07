@@ -1,5 +1,6 @@
 package com.fruitforloops.model;
 
+import com.fruitforloops.Constants;
 import com.fruitforloops.model.dao.*;
 
 import java.io.IOException;
@@ -64,7 +65,7 @@ public class MessageManager
 		int limit = 10;
 		try
 		{
-			appConfig.load(getClass().getClassLoader().getResourceAsStream("/WEB-INF/app.config.properties"));
+			appConfig.load(getClass().getClassLoader().getResourceAsStream(Constants.APP_CONFIG_PATH));
 			limit = Integer.valueOf(appConfig.getProperty("messages.pagination").trim());
 		}
 		catch (IOException e)

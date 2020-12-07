@@ -1,6 +1,8 @@
 package com.fruitforloops.filters;
 
 import java.io.IOException;
+import java.util.Properties;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -13,6 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import com.fruitforloops.Constants;
 import com.fruitforloops.model.User;
+import com.fruitforloops.usermanagement.IUserManager;
+import com.fruitforloops.usermanagement.UserManagerFactory;
 
 @WebFilter(
 		filterName = "AuthFilter", 
@@ -31,7 +35,11 @@ public class AuthFilter implements Filter
 		HttpSession session = ((HttpServletRequest)request).getSession(false);
 		User user = session != null ? (User)session.getAttribute("user") : null;
 		
-		if (user != null && user.authenticate())
+		Properties appConfig = new Properties();
+		appConfig.load(UserManagerFactory.class.getClassLoader().getResourceAsStream(Constants.APP_CONFIG_PATH));
+		IUserManager um = UserManagerFactory.getInstance().getUserManager(appConfig.getProperty("usermanager"));
+		
+		if (user != null && um.authenticate(user.getUsername(), user.getPassword()) != null)
 		{
 			// user is authenticated, continue the chain
 			chain.doFilter(request, response);

@@ -130,7 +130,7 @@ public class MessageController extends HttpServlet
 	private void processPostOrPut(HttpServletRequest request, HttpServletResponse response, String postOrPut) throws ServletException, IOException
 	{
 		Properties appConfig = new Properties();
-		appConfig.load(getClass().getClassLoader().getResourceAsStream("/WEB-INF/app.config.properties"));
+		appConfig.load(getClass().getClassLoader().getResourceAsStream(Constants.APP_CONFIG_PATH));
 
 		List<String> ignoredFiles = new ArrayList<String>();
 
