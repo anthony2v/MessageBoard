@@ -21,10 +21,15 @@ public class UserDAO implements IDAO<User>
 	@Override
 	public List<User> getAll()
 	{
+		return getAll(getClass().getClassLoader().getResource(Constants.USERS_DATASTORE_PATH).getPath());
+	}
+	
+	public List<User> getAll(String fileName)
+	{
 		JsonReader reader = null;
 		try
 		{
-			reader = new JsonReader(new FileReader(getClass().getClassLoader().getResource(Constants.USERS_DATASTORE_PATH).getPath()));
+			reader = new JsonReader(new FileReader(fileName));
 		}
 		catch (FileNotFoundException e)
 		{
@@ -58,7 +63,9 @@ public class UserDAO implements IDAO<User>
 			}
 		}
 		
-		return Arrays.asList(users);
+		if (noErrors(users, groups))
+			return Arrays.asList(users);
+		return new ArrayList<User>();
 	}
 
 	@Override
@@ -106,14 +113,14 @@ public class UserDAO implements IDAO<User>
 			// Also check if group ID is -1, reserved for public
 			if (group.getId() == -1)
 				return false;
-			if (!groupMap.containsKey(group.getParentId()))
+			if (group.getParentId() != null && !groupMap.containsKey(group.getParentId()))
 				return false;
 		}
 		
 		// Check for circular parent-child definitions
-		ArrayList<Long> descendants = new ArrayList<Long>();
 		for (UserGroup group : groups)
 		{
+			ArrayList<Long> descendants = new ArrayList<Long>();
 			Long currentId = group.getId();
 			while (currentId != null)
 			{
