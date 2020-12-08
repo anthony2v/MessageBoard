@@ -77,13 +77,14 @@ public class MessageController extends HttpServlet
 			return;
 		}
 
+		HttpSession session = request.getSession(false);
+		User user = session != null ? (User) session.getAttribute("user") : null;
+		
 		// get messages from MessageManager (business layer)
-		ArrayList<Message> messages = messageManager.getMessages(fromDate, toDate, authors, hashtags);
+		ArrayList<Message> messages = messageManager.getMessages(user, fromDate, toDate, authors, hashtags);
 		
 		if (format == null || "html".equals(format))
 		{
-			HttpSession session = request.getSession(false);
-			User user = session != null ? (User) session.getAttribute("user") : null;
 			
 			List<Boolean> userEditPermissions = new ArrayList<Boolean>();
 			List<Boolean> userViewPermissions = new ArrayList<Boolean>();

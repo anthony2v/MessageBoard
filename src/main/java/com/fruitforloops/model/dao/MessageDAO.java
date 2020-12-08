@@ -69,8 +69,7 @@ public class MessageDAO implements IDAO<Message>
 	 * @param hashtags
 	 * @return
 	 */
-	public ArrayList<Message> getMessages(Date fDate, Date tDate, List<String> authors, List<String> hashtags,
-			int limit)
+	public ArrayList<Message> getMessages(Date fDate, Date tDate, List<String> authors, List<String> hashtags)
 	{
 
 		ArrayList<Message> messageList = new ArrayList<Message>();
@@ -96,7 +95,7 @@ public class MessageDAO implements IDAO<Message>
 		try (Session session = HibernateUtil.getSessionFactory().openSession())
 		{
 
-			Query<Message> queryObj = session.createQuery(query, Message.class).setMaxResults(limit);
+			Query<Message> queryObj = session.createQuery(query, Message.class);
 
 			if (fDate != null) queryObj.setParameter("fDate", fDate);
 

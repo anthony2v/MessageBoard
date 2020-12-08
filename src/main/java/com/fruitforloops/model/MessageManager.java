@@ -48,7 +48,7 @@ public class MessageManager
 		return madao.get(attachmentId);
 	}
 
-	public ArrayList<Message> getMessages(Date fromDate, Date toDate, String[] authors, String[] hashtags)
+	public ArrayList<Message> getMessages(User currentUser, Date fromDate, Date toDate, String[] authors, String[] hashtags)
 	{
 		List<String> authorsList = null;
 		List<String> hashtagsList = null;
@@ -62,18 +62,27 @@ public class MessageManager
 		}
 
 		Properties appConfig = new Properties();
-		int limit = 10;
 		try
 		{
 			appConfig.load(getClass().getClassLoader().getResourceAsStream(Constants.APP_CONFIG_PATH));
-			limit = Integer.valueOf(appConfig.getProperty("messages.pagination").trim());
 		}
 		catch (IOException e)
 		{
 			System.err.println("could not read app config. Using default of 10 instead.");
 		}
-
-		return (ArrayList<Message>) mdao.getMessages(fromDate, toDate, authorsList, hashtagsList, limit);
+		
+		ArrayList<Message> queryResult = (ArrayList<Message>) mdao.getMessages(fromDate, toDate, authorsList, hashtagsList);
+		ArrayList<Message> toReturn = new ArrayList<Message>();
+		int messageCount = 0;
+		for (Message message : queryResult)
+			if (userCanView(message, currentUser))
+			{				
+				toReturn.add(message);
+				if (++messageCount == 10)
+					break;
+			}
+		
+		return toReturn;
 	}
 
 	public void updateMessage(String currentUser, Message message, long[] filesToDelete) throws AuthException
