@@ -85,7 +85,6 @@ public class MessageController extends HttpServlet
 		
 		if (format == null || "html".equals(format))
 		{
-			
 			List<Boolean> userEditPermissions = new ArrayList<Boolean>();
 			List<Boolean> userViewPermissions = new ArrayList<Boolean>();
 			
