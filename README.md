@@ -53,16 +53,15 @@ We used Eclipse (STS) as our IDE. This project is a basic dynamic web project th
 <br/>
 
 ## Grading Scheme
-| Grading Criteria            | Points    |
-| :-------------------------- | --------: |
-| System Functionality        | 20        |
-| The Business Layer          | 15        |
-| The Download Servlet        | 15        |
-| Encoding & Error Handling   | 10        |
-| Front-End                   | 25        |
-| Source Control              | 5         |
-| Documentation               | 10        |
-| DAL [and BLOBs (bonus)]     | 10        |
-| Total                       | 100 (+10) |
+| Grading Criteria               | Points    |
+| :----------------------------- | --------: |
+| Users and Groups Functionality | 20        |
+| Processing Users andGroupsData | 15        |
+| TDD                            | 15        |
+| SeparatedInterface             | 10        |
+| UserManagerFactory             | 10        |
+| WebPresentationPatterns        | 20        |
+| Error Handling                 | 10        |
+| Total                          | 100       |
 
 <br/>

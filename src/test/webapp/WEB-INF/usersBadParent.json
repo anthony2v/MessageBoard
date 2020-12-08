@@ -1,0 +1,82 @@
+{
+	"groups": [
+		{
+			"id": 1,
+			"name": "admin"
+		},
+		{
+			"id": 2,
+			"name": "concordia"
+		},
+		{
+			"id": 3,
+			"name": "mcgill"
+		},
+		{
+			"id": 4,
+			"name": "encs",
+			"parentId": 2
+		},
+		{
+			"id": 5,
+			"name": "comp",
+			"parentId": 9
+		},
+		{
+			"id": 6,
+			"name": "soen",
+			"parentId": 4
+		}
+	],
+
+	"users": [
+		{
+			"id": 1,
+			"username": "Daniel",
+			"password": "cbfdac6008f9cab4083784cbd1874f76618d2a97",
+			"groupMembership": [1]
+		},
+		{
+			"id": 2,
+			"username": "Anthony",
+			"password": "cbfdac6008f9cab4083784cbd1874f76618d2a97",
+			"groupMembership": [1]
+		},
+		{
+			"id": 3,
+			"username": "Khadija",
+			"password": "cbfdac6008f9cab4083784cbd1874f76618d2a97",
+			"groupMembership": [1]
+		},
+		{
+			"id": 4,
+			"username": "Tiffany",
+			"password": "cbfdac6008f9cab4083784cbd1874f76618d2a97",
+			"groupMembership": [1]
+		},
+		{
+			"id": 5,
+			"username": "John",
+			"password": "cbfdac6008f9cab4083784cbd1874f76618d2a97",
+			"groupMembership": [2, 3]
+		},
+		{
+			"id": 6,
+			"username": "Jane",
+			"password": "cbfdac6008f9cab4083784cbd1874f76618d2a97",
+			"groupMembership": [4]
+		},
+		{
+			"id": 7,
+			"username": "Jack123",
+			"password": "cbfdac6008f9cab4083784cbd1874f76618d2a97",
+			"groupMembership": [5]
+		},
+		{
+			"id": 8,
+			"username": "Neo",
+			"password": "cbfdac6008f9cab4083784cbd1874f76618d2a97",
+			"groupMembership": [6]
+		}
+	]
+}
