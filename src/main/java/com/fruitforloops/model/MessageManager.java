@@ -194,4 +194,9 @@ public class MessageManager
 		else
 			return userCanEdit(message, user);
 	}
+
+	public Message getMessage(Long id)
+	{
+		return mdao.get(id);
+	}
 }

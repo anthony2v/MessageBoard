@@ -210,7 +210,7 @@ const MessageBoard = {
         let hashtag_regex = /\B\#\w\w+\b/g;
         let hashtags = messageJSON.messageText.match(hashtag_regex);
         messageJSON.hashtags = [];
-        for (let i = 0; i < messageJSON.hashtags.length; ++i) {
+        for (let i = 0; i < hashtags.length; ++i) {
             messageJSON.hashtags.push({tag: hashtags[i]});
         }
 

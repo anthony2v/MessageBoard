@@ -54,6 +54,24 @@ public class MessageController extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		HttpSession session = request.getSession(false);
+		User user = session != null ? (User) session.getAttribute("user") : null;
+		
+		String idStr = request.getParameter("id");
+		if (idStr != null && !idStr.isBlank())
+		{
+			Long id = Long.valueOf(idStr);
+			Message m = messageManager.getMessage(id);
+			
+			request.setAttribute("message", m);
+			request.setAttribute("userViewPermission", messageManager.userCanView(m, user));
+			request.setAttribute("userEditPermission", messageManager.userCanEdit(m, user));
+			
+			ResponseUtil.loadTemplate(response, request, "message.jsp");
+			
+			return;
+		}
+		
 		// extract parameters (request data)
 		String[] authors = request.getParameterValues("authors[]");
 		String[] hashtags = request.getParameterValues("hashtags[]");
@@ -76,9 +94,6 @@ public class MessageController extends HttpServlet
 			ResponseUtil.sendJSON(response, HttpServletResponse.SC_BAD_REQUEST, errorMessage, null);
 			return;
 		}
-
-		HttpSession session = request.getSession(false);
-		User user = session != null ? (User) session.getAttribute("user") : null;
 		
 		// get messages from MessageManager (business layer)
 		ArrayList<Message> messages = messageManager.getMessages(user, fromDate, toDate, authors, hashtags);
@@ -224,7 +239,7 @@ public class MessageController extends HttpServlet
 				else if (postOrPut.equals("POST"))
 				{
 					message.setAuthor(((User) session.getAttribute("user")).getUsername());
-
+					
 					// create Message using MessageManager (business layer)
 					messageManager.createMessage(message);
 				}
