@@ -22,7 +22,7 @@ import com.fruitforloops.usermanagement.UserManagerFactory;
 		filterName = "AuthFilter", 
 		urlPatterns = {
 				Constants.API_PATH + "auth", Constants.API_PATH + "auth/*",
-				"/message_board", "/message_board/file_download"
+				"/message_board", "/message_board/file_download", "/message"
 			}
 		)
 public class AuthFilter implements Filter

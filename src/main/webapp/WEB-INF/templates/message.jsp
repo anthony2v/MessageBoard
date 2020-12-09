@@ -22,6 +22,9 @@
 				<button type='button' class='btn-delete-message btn btn-danger bg-danger rounded-0 dropdown-item'><i class='fas fa-trash-alt mr-2 text-uppercase'></i>Delete</button>
 			</div>
 		</div>
+		<div class='float-right'>
+			<a class='btn btn-sm btn-link' href='/message?id=${requestScope.message.getId()}' target='_blank'><i class='fas fa-eye'></i></a>
+		</div>
 		</c:if>
 	</h6>
 		<c:if test="${requestScope.userEditPermission}">

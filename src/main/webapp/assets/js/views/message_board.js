@@ -119,7 +119,6 @@ const MessageBoard = {
             }
         )
         .then((response) => {
-            if (response.data.message) alert(response.data.message);
             window.location.reload();
         })
         .catch((error) => {

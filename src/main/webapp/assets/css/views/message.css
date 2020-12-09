@@ -1,0 +1,23 @@
+
+#ul-msgboard {
+    padding-top: 10px;
+    margin-bottom: 38px;
+}
+#ul-msgboard li {
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,0.5);
+}
+
+.msgboard-msg p {
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.msgboard-msg .edit-mode {
+    display: none;
+}
+.msgboard-msg.edit-mode .edit-mode {
+    display: block;
+}
+.msgboard-msg.edit-mode .read-mode {
+    display: none;
+}
